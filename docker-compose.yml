@@ -1,0 +1,87 @@
+version: '3.9'
+
+services:
+  # Streamlit UI Service
+  rag-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-locale-ui
+    ports:
+      - "8501:8501"      # Streamlit UI
+    environment:
+      # Gemini API Configuration
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+
+      # Application Configuration
+      - APP_ENV=${APP_ENV:-development}
+      - DEBUG=${DEBUG:-false}
+
+      # Performance Configuration
+      - PERF_SEMANTIC_SIMILARITY_THRESHOLD=0.85
+      - PERF_CACHE_TTL_SECONDS=7200
+      - PERF_TOP_K_DEFAULT=5
+
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      # Mount local directories for data persistence
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./documents:/app/documents
+      - ./rag_memory.db:/app/rag_memory.db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - rag-network
+
+  # Optional: FastAPI Backend Service (for API-only deployment)
+  rag-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-locale-api
+    command: >
+      python -m uvicorn
+      src.api:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+    ports:
+      - "8000:8000"      # FastAPI
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - APP_ENV=${APP_ENV:-development}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./documents:/app/documents
+      - ./rag_memory.db:/app/rag_memory.db
+    depends_on:
+      - rag-ui
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - rag-network
+    profiles:
+      - with-api
+
+networks:
+  rag-network:
+    driver: bridge
+
+volumes:
+  # Named volumes for persistent storage
+  rag-data:
+  rag-logs:
