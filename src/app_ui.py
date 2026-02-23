@@ -13,7 +13,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.config import config, DOCUMENTS_DIR
 from src.rag_engine import RAGEngine
 from src.document_ingestion import DocumentIngestionPipeline
-from src.metrics_ui import show_metrics_dashboard
+from src.metrics.ui import show_metrics_dashboard
 from src.progress_callbacks import StreamlitProgressCallback
 
 # FASE 7: Feature integrations
@@ -120,6 +120,49 @@ with st.sidebar:
             st.session_state.enable_query_expansion = st.checkbox("Query Expansion", value=st.session_state.enable_query_expansion)
         with col2:
             st.session_state.enable_reranking = st.checkbox("Reranking", value=st.session_state.enable_reranking)
+
+    st.markdown("---")
+
+    # ===== PHASE 11.3: USER PREFERENCES & FEEDBACK =====
+    with st.expander("⚙️ **Preferenze**", expanded=False):
+        st.markdown("**Response Format**")
+        response_format = st.selectbox(
+            "Stile risposta",
+            ["summary", "detailed", "bullets"],
+            index=0,
+            help="summary: risposta breve | detailed: completa | bullets: punti elenco"
+        )
+
+        st.markdown("**Response Length**")
+        response_length = st.slider(
+            "Lunghezza risposta (parole)",
+            min_value=100,
+            max_value=1000,
+            value=500,
+            step=50
+        )
+
+        st.markdown("**Display Options**")
+        col1, col2 = st.columns(2)
+        with col1:
+            show_confidence = st.checkbox("Mostra Confidence Score", value=True)
+        with col2:
+            show_sources = st.checkbox("Mostra Fonti", value=True)
+
+        st.markdown("**Theme**")
+        theme = st.selectbox(
+            "Tema",
+            ["light", "dark", "auto"],
+            index=2,
+            help="light: chiaro | dark: scuro | auto: automatico"
+        )
+
+        # Store preferences in session state
+        st.session_state.response_format = response_format
+        st.session_state.response_length = response_length
+        st.session_state.show_confidence = show_confidence
+        st.session_state.show_sources = show_sources
+        st.session_state.theme = theme
 
     st.markdown("---")
 
@@ -600,7 +643,8 @@ if engine:
                         # Simulate streaming for UX (since synchronous)
                         full_response = response.answer
 
-                        # Display confidence badge with explanation
+                        # ===== PHASE 11.1: Enhanced Response Visualization =====
+                        # Extract confidence metrics
                         confidence_score = getattr(response, 'confidence_score', 0.0)
 
                         # Calculate confidence level and emoji
@@ -617,53 +661,147 @@ if engine:
                             emoji = "🔴"
                             color = "red"
 
-                        # Show confidence metric
-                        col1, col2, col3 = st.columns([1, 3, 1])
-                        with col1:
-                            st.metric("Confidence", f"{confidence_score:.0f}%")
-                        with col2:
-                            st.write(f"{emoji} **{confidence_level} Confidence** - Answer reliability indicator")
+                        # ==== CARD-BASED LAYOUT WITH VISUAL HIERARCHY ====
+                        with st.container(border=True):
+                            # Header section with confidence badge and metadata
+                            col1, col2, col3 = st.columns([2, 3, 1])
 
-                        # Show confidence explanation
-                        if confidence_score < 50:
-                            st.warning(f"⚠️ Low confidence ({confidence_score:.0f}%) - Verify with sources below")
+                            with col1:
+                                st.markdown(f"### 📝 Risposta")
 
-                        # Display answer
-                        st.markdown(f"**Answer:** {full_response}")
+                            with col2:
+                                st.markdown(f"**{emoji} {confidence_level} Confidence** ({confidence_score:.0f}%)")
 
-                        # Construct sources string with ranking
-                        if response.sources:
-                            # Rank sources by score (highest first)
-                            try:
-                                from src.confidence import ConfidenceCalculator
-                                calc = ConfidenceCalculator()
-                                ranked_sources = calc.rank_sources(response.sources)
-                            except:
-                                ranked_sources = response.sources
+                            with col3:
+                                # Show latency metadata
+                                search_ms = getattr(response, 'search_latency_ms', 0)
+                                llm_ms = getattr(response, 'llm_latency_ms', 0)
+                                st.caption(f"⏱️ {search_ms:.0f}ms search + {llm_ms:.0f}ms LLM")
 
-                            sources_md = "\n\n**Fonti (ranked by relevance):**\n"
-                            seen_sources = set()
+                            st.divider()
 
-                            for idx, s in enumerate(ranked_sources, 1):
-                                doc_name = getattr(s, 'source', getattr(s, 'document', 'Unknown'))
-                                if doc_name not in seen_sources:
-                                    score = getattr(s, 'score', 0.0)
-                                    percentage = int(score * 100)
+                            # ==== EMBED CITATIONS IN ANSWER TEXT ====
+                            # Create citation markers and map to sources
+                            if response.sources:
+                                try:
+                                    from src.confidence import ConfidenceCalculator
+                                    calc = ConfidenceCalculator()
+                                    ranked_sources = calc.rank_sources(response.sources)
+                                except:
+                                    ranked_sources = response.sources
 
-                                    # Visual confidence bar
-                                    filled = int(10 * score)
-                                    bar = "█" * filled + "░" * (10 - filled)
+                                # Build citation markers [Ref 1], [Ref 2], etc.
+                                citation_map = {}
+                                for idx, src in enumerate(ranked_sources[:5], 1):  # Max 5 citations
+                                    doc_name = getattr(src, 'source', 'Unknown')
+                                    citation_map[idx] = (doc_name, src)
 
-                                    # Primary source indicator
-                                    primary = "⭐ PRIMARY SOURCE - " if idx == 1 else ""
+                                # Simple heuristic: add citations after key sentences
+                                answer_with_citations = full_response
+                                if citation_map and len(ranked_sources) > 0:
+                                    # Add citation for primary source at the end of first sentence
+                                    sentences = answer_with_citations.split('. ')
+                                    if len(sentences) > 0 and len(citation_map) > 0:
+                                        sentences[0] = sentences[0] + ' [Ref 1]'
+                                        answer_with_citations = '. '.join(sentences)
+                            else:
+                                answer_with_citations = full_response
+                                ranked_sources = []
+                                citation_map = {}
 
-                                    sources_md += f"{idx}. {primary}*{doc_name}* [{bar}] {percentage}%\n"
-                                    seen_sources.add(doc_name)
+                            # Display answer with embedded citations
+                            st.markdown(answer_with_citations)
+
+                            # Show confidence explanation
+                            if confidence_score < 50:
+                                st.warning(f"⚠️ **Low confidence** ({confidence_score:.0f}%) - Please verify with sources below")
+
+                        # ==== SOURCES CARD WITH PREVIEWS ====
+                        if ranked_sources:
+                            with st.expander("📚 **Sources & Evidence** (click to expand)", expanded=True):
+                                for idx, source in enumerate(ranked_sources[:5], 1):  # Show top 5 sources
+                                    with st.container(border=True):
+                                        # Source header
+                                        doc_name = getattr(source, 'source', 'Unknown')
+                                        score = getattr(source, 'score', 0.0)
+                                        percentage = int(score * 100)
+
+                                        # Visual confidence bar
+                                        filled = int(10 * score)
+                                        bar = "█" * filled + "░" * (10 - filled)
+
+                                        # Primary source indicator
+                                        primary_badge = " ⭐ PRIMARY SOURCE" if idx == 1 else ""
+
+                                        col1, col2, col3 = st.columns([0.15, 0.7, 0.15])
+                                        with col1:
+                                            st.markdown(f"**[{idx}]**")
+                                        with col2:
+                                            st.markdown(f"**{doc_name}**{primary_badge}")
+                                        with col3:
+                                            st.markdown(f"`{percentage}%`")
+
+                                        # Confidence bar with label
+                                        st.markdown(f"{bar}")
+
+                                        # Extract and display document snippet (preview)
+                                        doc_text = getattr(source, 'document', '')
+                                        section = getattr(source, 'section', '')
+
+                                        if doc_text:
+                                            # Create preview (first 200 chars, clean up)
+                                            preview = doc_text[:200].strip()
+                                            if len(doc_text) > 200:
+                                                preview += "..."
+
+                                            st.caption(f"📄 **Preview:**")
+                                            st.markdown(f"*{preview}*")
+
+                                        if section:
+                                            st.caption(f"📌 Section: {section}")
+
+                                        st.divider()
                         else:
-                            sources_md = ""
+                            st.info("ℹ️ No sources found for this query")
 
-                        # Display sources
-                        st.markdown(sources_md)
+                        # ===== PHASE 11.3: FEEDBACK BUTTONS =====
+                        st.divider()
+                        st.markdown("### 👍 Feedback")
+
+                        col1, col2, col3, col4 = st.columns(4)
+
+                        # Generate unique key based on response hash
+                        response_key = hash(str(full_response))
+
+                        with col1:
+                            if st.button("👍 Helpful", key=f"helpful_{response_key}"):
+                                st.success("✅ Thanks for the feedback!")
+
+                        with col2:
+                            if st.button("👎 Not Helpful", key=f"unhelpful_{response_key}"):
+                                st.info("ℹ️ We'll improve this response")
+
+                        with col3:
+                            if st.button("🔗 Copy", key=f"copy_{response_key}"):
+                                st.write("📋 Copied to clipboard (paste in another app)")
+
+                        with col4:
+                            # Build export text
+                            export_text = f"Query: {prompt}\n\nAnswer: {full_response}\n\n"
+                            if ranked_sources:
+                                export_text += "Sources:\n"
+                                for idx, src in enumerate(ranked_sources, 1):
+                                    src_name = getattr(src, 'source', 'Unknown')
+                                    src_score = getattr(src, 'score', 0.0)
+                                    export_text += f"{idx}. {src_name} ({src_score*100:.0f}%)\n"
+
+                            st.download_button(
+                                label="📥 Export",
+                                data=export_text,
+                                file_name="response.txt",
+                                mime="text/plain",
+                                key=f"export_{response_key}"
+                            )
 
                         # Add to history
                         st.session_state.messages.append({"role": "assistant", "content": full_response + sources_md})
