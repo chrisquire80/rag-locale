@@ -687,7 +687,7 @@ if engine:
                                     from src.confidence import ConfidenceCalculator
                                     calc = ConfidenceCalculator()
                                     ranked_sources = calc.rank_sources(response.sources)
-                                except:
+                                except Exception:
                                     ranked_sources = response.sources
 
                                 # Build citation markers [Ref 1], [Ref 2], etc.
@@ -1030,7 +1030,7 @@ if engine:
                         metadata = doc_info.get("metadata", {})
                         tags = metadata.get("tags", []) if isinstance(metadata, dict) else []
                         tags_str = ", ".join(tags) if tags else "No tags"
-                    except:
+                    except Exception:
                         tags = []
                         tags_str = "No tags"
 
