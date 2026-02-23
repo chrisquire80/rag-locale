@@ -63,9 +63,6 @@ streamlit-antd-components==0.5.0
 python-dotenv==1.0.1
 python-multipart==0.0.8
 
-# Database
-sqlite3-python==1.0.0
-
 # Logging & Monitoring
 python-json-logger==2.0.8
 structlog==24.4.0
