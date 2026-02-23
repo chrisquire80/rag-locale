@@ -140,17 +140,11 @@ Document:
 
 Summary:"""
 
-            response = self.llm_service.client.models.generate_content(
-                model="gemini-2.0-flash",
-                contents=prompt,
-                generation_config={
-                    "max_output_tokens": max_length + 50,
-                    "temperature": 0.3,
-                },
-            )
+            # Use centralized LLM wrapper with retry logic and error handling
+            summary = self.llm_service.generate_response(prompt)
 
-            if response.text:
-                summary = response.text.strip()
+            if summary:
+                summary = summary.strip()
                 # Ensure it doesn't exceed max_length
                 words = summary.split()
                 if len(words) > max_length:
@@ -262,18 +256,12 @@ Document:
 
 Key Points:"""
 
-            response = self.llm_service.client.models.generate_content(
-                model="gemini-2.0-flash",
-                contents=prompt,
-                generation_config={
-                    "max_output_tokens": 300,
-                    "temperature": 0.3,
-                },
-            )
+            # Use centralized LLM wrapper with retry logic and error handling
+            response_text = self.llm_service.generate_response(prompt)
 
-            if response.text:
+            if response_text:
                 # Parse numbered list
-                lines = response.text.strip().split("\n")
+                lines = response_text.strip().split("\n")
                 points = []
                 for line in lines:
                     # Remove numbering (1., 2., etc.)
