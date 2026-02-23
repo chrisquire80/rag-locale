@@ -45,7 +45,7 @@ def _extract_entity_from_filename(filename: str) -> list[str]:
             entities.append(clean)
     return entities
 
-def build_entity_map(indexed_sources: set, anomalies: list[Dict] = None) -> dict[str, list[str]]:
+def build_entity_map(indexed_sources: set, anomalies: list[dict] = None) -> dict[str, list[str]]:
     """
     Build a map of {document_filename: [entity1, entity2, ...]}
     Also attaches anomaly markers if the document was referenced in past anomalies.
@@ -81,7 +81,7 @@ def build_entity_map(indexed_sources: set, anomalies: list[Dict] = None) -> dict
 
     return entity_map
 
-def get_graph_data(entity_map: dict[str, list[str]], risk_entities: list[str] = None, simulation_entities: list[str] = None) -> tuple[List, List]:
+def get_graph_data(entity_map: dict[str, list[str]], risk_entities: list[str] = None, simulation_entities: list[str] = None) -> tuple[list, list]:
     """
     Convert entity_map to nodes and edges (plain Python objects).
     Enhanced: support for risk_entities (orange) and simulation_entities (purple).
