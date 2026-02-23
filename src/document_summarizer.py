@@ -11,6 +11,8 @@ from typing import List, Dict, Optional, Tuple
 from datetime import datetime
 import time
 
+from src.entity_extractor import get_entity_extractor
+
 logger = logging.getLogger(__name__)
 
 
@@ -294,6 +296,9 @@ Key Points:"""
         """
         Extract key points using keyword analysis (fallback).
 
+        Delegated to centralized EntityExtractor to eliminate
+        duplicated keyword extraction logic.
+
         Args:
             content: Document text
             num_points: Number of points to extract
@@ -302,22 +307,15 @@ Key Points:"""
             List of key points based on frequent terms
         """
         try:
-            # Extract noun phrases (simple approach)
-            import re
-
-            # Find capitalized phrases (likely important concepts)
-            phrases = re.findall(r"[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*", content)
-
-            if not phrases:
-                # Fallback: use frequent long words
-                words = re.findall(r"\b\w{5,}\b", content.lower())
-                from collections import Counter
-                word_freq = Counter(words)
-                phrases = [w.capitalize() for w, _ in word_freq.most_common(num_points)]
-
-            # Deduplicate and limit
-            unique_phrases = list(dict.fromkeys(phrases))[:num_points]
-            return [f"{phrase}" for phrase in unique_phrases]
+            # Use centralized entity extractor
+            entity_extractor = get_entity_extractor()
+            keywords = entity_extractor.extract_keywords(
+                content,
+                num_keywords=num_points,
+                use_llm=False,  # Use frequency-based for speed
+                remove_stopwords=True
+            )
+            return keywords if keywords else []
 
         except Exception as e:
             logger.warning(f"Keyword extraction failed: {e}")

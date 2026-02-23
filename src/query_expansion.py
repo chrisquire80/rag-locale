@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from src.cache import QueryExpansionCache
+from src.entity_extractor import get_entity_extractor
 
 logger = logging.getLogger(__name__)
 
@@ -77,11 +78,13 @@ class QueryExpander:
             expanded = self._parse_expansion_response(response, query)
         except Exception as e:
             logger.error(f"Query expansion failed: {e}")
-            # Fallback
+            # Fallback: use centralized entity extractor
+            entity_extractor = get_entity_extractor()
+            keywords = entity_extractor.extract_keywords(query, num_keywords=5)
             expanded = ExpandedQuery(
                 original=query,
                 variants=[query],
-                keywords=query.split(),
+                keywords=keywords if keywords else query.split()[:5],
                 intent="search",
                 difficulty="unknown"
             )
@@ -130,6 +133,8 @@ Only return the JSON, no other text."""
 
     def _parse_expansion_response(self, response: str, original_query: str) -> ExpandedQuery:
         """Parse Gemini response"""
+        entity_extractor = get_entity_extractor()
+
         try:
             # Extract JSON
             match = re.search(r'\{.*\}', response, re.DOTALL)
@@ -138,19 +143,28 @@ Only return the JSON, no other text."""
 
             data = json.loads(match.group())
 
+            # Extract keywords from data or use centralized extractor
+            keywords = data.get('keywords')
+            if not keywords:
+                keywords = entity_extractor.extract_keywords(original_query, num_keywords=5)
+            if not keywords:
+                keywords = original_query.split()[:5]
+
             return ExpandedQuery(
                 original=original_query,
                 variants=data.get('variants', [original_query]),
-                keywords=data.get('keywords', original_query.split()),
+                keywords=keywords,
                 intent=data.get('intent', 'search'),
                 difficulty=data.get('difficulty', 'moderate')
             )
         except Exception as e:
             logger.warning(f"Failed to parse query expansion: {e}")
+            # Use centralized extractor for fallback
+            keywords = entity_extractor.extract_keywords(original_query, num_keywords=5)
             return ExpandedQuery(
                 original=original_query,
                 variants=[original_query],
-                keywords=original_query.split(),
+                keywords=keywords if keywords else original_query.split()[:5],
                 intent="search",
                 difficulty="unknown"
             )
@@ -186,26 +200,14 @@ Only return the JSON, no other text."""
         return [query]
 
     def generate_keywords(self, query: str, num_keywords: int = 5) -> List[str]:
-        """Extract important keywords from query"""
-        prompt = f"""Extract the most important {num_keywords} keywords from this query.
+        """
+        Extract important keywords from query.
 
-Query: "{query}"
-
-Return as JSON list of keywords, ordered by importance:
-["keyword1", "keyword2", "keyword3"]
-
-Only return the JSON."""
-
-        try:
-            response = self.llm.generate_response(prompt)
-            match = re.search(r'\[.*\]', response, re.DOTALL)
-            if match:
-                keywords = json.loads(match.group())
-                return keywords if isinstance(keywords, list) else query.split()[:num_keywords]
-        except Exception as e:
-            logger.warning(f"Keyword extraction failed: {e}")
-
-        return query.split()[:num_keywords]
+        Delegated to centralized EntityExtractor for consistency
+        and to eliminate duplicated extraction logic.
+        """
+        entity_extractor = get_entity_extractor()
+        return entity_extractor.extract_keywords(query, num_keywords, use_llm=True)
 
     def get_cache_stats(self) -> Dict:
         """Get cache statistics"""
