@@ -5,7 +5,6 @@ Consente di processare più query contemporaneamente senza blocking
 """
 
 import asyncio
-import logging
 import time
 from datetime import datetime
 from typing import Optional
@@ -15,8 +14,9 @@ from src.config import config
 from src.vector_store import get_vector_store
 from src.llm_service import get_llm_service
 from src.rag_engine import RetrievalResult, RAGResponse
+from src.logging_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class AsyncRAGEngine:

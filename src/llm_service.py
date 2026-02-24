@@ -4,7 +4,6 @@ Gestisce embedding e generazione testo via Cloud.
 Con timeout aumentati e retry logic per ReadTimeoutError e ConnectionResetError.
 """
 
-import logging
 import time
 import google.genai as genai
 from typing import Any, Optional
@@ -12,8 +11,9 @@ from google.genai.types import HarmCategory, HarmBlockThreshold
 from requests.exceptions import Timeout, ConnectionError, ReadTimeout
 
 from src.config import config
+from src.logging_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class GeminiService:
     """Gestisce connessione e interazioni con Google Gemini"""

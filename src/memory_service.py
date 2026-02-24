@@ -3,9 +3,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 import json
-import logging
+from src.logging_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Percorso assoluto per evitare problemi con CWD diversa tra UI e API
 DB_PATH = Path(__file__).parent.parent / "rag_memory.db"

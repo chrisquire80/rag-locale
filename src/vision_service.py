@@ -3,7 +3,6 @@ Vision Service - FASE 17 Multimodal RAG
 Provides image analysis and text extraction using Google Gemini Vision API
 """
 
-import logging
 import time
 import hashlib
 import numpy as np
@@ -19,8 +18,9 @@ except ImportError:
 import google.genai as genai
 from src.config import config
 from src.cache import VisionProcessingCache
+from src.logging_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass

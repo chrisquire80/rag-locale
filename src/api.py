@@ -1,5 +1,4 @@
 
-import logging
 import shutil
 import asyncio
 from contextlib import asynccontextmanager
@@ -13,10 +12,9 @@ from src.config import config, DOCUMENTS_DIR
 from src.rag_engine import RAGEngine
 from src.document_ingestion import DocumentIngestionPipeline
 from src.vector_store import get_vector_store
+from src.logging_config import get_logger
 
-# Configure Logging
-logging.basicConfig(level=getattr(logging, config.log_level, logging.INFO))
-logger = logging.getLogger("api")
+logger = get_logger(__name__)
 
 # Global Engine & Pipeline
 rag_engine = None

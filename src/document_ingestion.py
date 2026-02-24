@@ -4,7 +4,6 @@ Supporta: PDF, TXT, MD, DOCX
 Utilizza RegEx-based chunking per preservare struttura
 """
 
-import logging
 import re
 import time
 from pathlib import Path
@@ -29,8 +28,9 @@ from src.progress_callbacks import ProgressCallback, ProgressUpdate
 from src.pdf_validator import get_pdf_validator
 from src.tag_manager import TagManager
 from src.document_summarizer import DocumentSummarizer
+from src.logging_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Crash Recovery Files
 LOCK_FILE = LOGS_DIR / "ingestion_lock.txt"

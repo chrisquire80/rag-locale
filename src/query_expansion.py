@@ -3,7 +3,6 @@ Query Expansion Module - Improve search by generating query variants
 Uses Gemini to expand queries with synonyms, related terms, and reformulations
 """
 
-import logging
 import json
 import re
 from typing import Optional
@@ -12,8 +11,9 @@ from datetime import datetime
 
 from src.cache import QueryExpansionCache
 from src.entity_extractor import get_entity_extractor
+from src.logging_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class ExpandedQuery:

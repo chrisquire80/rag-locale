@@ -3,7 +3,6 @@ RAG Engine con Human-in-the-Loop (HITL)
 Impedisce allucinazioni validando chunk pertinenti prima di generare risposta
 """
 
-import logging
 import time
 from datetime import datetime
 from functools import lru_cache
@@ -13,6 +12,7 @@ from dataclasses import dataclass
 from src.config import config
 from src.vector_store import get_vector_store
 from src.llm_service import get_llm_service
+from src.logging_config import get_logger
 
 # FASE 2: Performance profiling
 from src.performance_profiler import get_profiler, profile_operation
@@ -29,7 +29,7 @@ from src.context_deduplicator import get_context_deduplicator
 # FASE 8.1: Query and document processing caching
 from src.cache_integration import get_cache_integration
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class RetrievalResult:

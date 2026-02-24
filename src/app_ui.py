@@ -2,7 +2,6 @@
 import streamlit as st
 import os
 from pathlib import Path
-import logging
 import time
 import shutil
 
@@ -15,6 +14,7 @@ from src.rag_engine import RAGEngine
 from src.document_ingestion import DocumentIngestionPipeline
 from src.metrics.ui import show_metrics_dashboard
 from src.progress_callbacks import StreamlitProgressCallback
+from src.logging_config import get_logger
 
 # FASE 7: Feature integrations
 from src.tag_manager import TagManager
@@ -22,6 +22,8 @@ from src.search_filters import SearchFilter, SearchFilterBuilder
 from src.upload_manager import UploadManager
 from src.vector_store import get_vector_store
 from src.metrics import get_metrics_collector
+
+logger = get_logger(__name__)
 
 # Configure page
 st.set_page_config(
@@ -31,9 +33,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Configure logging
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+# Logging configured via logging_config.py
 
 # Custom CSS
 st.markdown("""

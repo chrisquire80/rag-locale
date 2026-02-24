@@ -24,6 +24,14 @@ from pathlib import Path
 class JSONFormatter(logging.Formatter):
     """Custom formatter that outputs structured JSON logs"""
 
+    # Standard LogRecord attributes to exclude from extra fields
+    _STANDARD_FIELDS = {
+        'name', 'msg', 'args', 'created', 'filename', 'funcName', 'levelname', 'levelno',
+        'lineno', 'module', 'msecs', 'message', 'pathname', 'process', 'processName',
+        'relativeCreated', 'thread', 'threadName', 'exc_info', 'exc_text', 'stack_info',
+        'getMessage', 'asctime', 'taskName'  # Python 3.14+ internal field
+    }
+
     def format(self, record: logging.LogRecord) -> str:
         """Format log record as JSON"""
         log_obj = {
@@ -39,9 +47,10 @@ class JSONFormatter(logging.Formatter):
         if record.exc_info:
             log_obj["exception"] = self.formatException(record.exc_info)
 
-        # Add any extra fields from LogRecord
-        if hasattr(record, 'extra_fields'):
-            log_obj.update(record.extra_fields)
+        # Add any extra fields passed via extra={...} parameter
+        for key, value in record.__dict__.items():
+            if key not in self._STANDARD_FIELDS and not key.startswith('_'):
+                log_obj[key] = value
 
         # Return as compact JSON (no pretty-printing)
         return json.dumps(log_obj, default=str)
@@ -124,7 +133,9 @@ if os.getenv('PYTEST_CURRENT_TEST') is None:
     _init_logger = get_logger(__name__)
     _init_logger.info(
         "Logging configured",
-        level=_log_level,
-        log_file=_log_file,
-        format="json"
+        extra={
+            'log_level': _log_level,
+            'log_file': _log_file,
+            'log_format': 'json'
+        }
     )

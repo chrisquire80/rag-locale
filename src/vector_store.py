@@ -3,7 +3,6 @@ Custom Vector Store (Numpy + Pickle)
 Sostituto lightweight di ChromaDB per Python 3.14+
 """
 
-import logging
 import pickle
 import numpy as np
 from pathlib import Path
@@ -14,13 +13,14 @@ from datetime import datetime
 
 from src.config import config
 from src.llm_service import get_llm_service
+from src.logging_config import get_logger
 
 # FASE 2, 5, 6: Performance optimizations
 from src.performance_profiler import get_profiler, profile_operation
 from src.hnsw_indexing import FastVectorSearch
 from src.quantization import EmbeddingQuantizer
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class Document:
