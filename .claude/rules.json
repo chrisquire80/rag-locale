@@ -1,0 +1,49 @@
+{
+  "project": {
+    "name": "RAG LOCALE",
+    "description": "Production-Ready RAG System with Security Hardening",
+    "language": "python",
+    "framework": "rag",
+    "testing": "pytest",
+    "documentation": "markdown"
+  },
+  "coding_standards": {
+    "type_hints": "always",
+    "docstrings": "comprehensive",
+    "line_length": 100,
+    "imports": "sorted",
+    "naming": "snake_case"
+  },
+  "testing": {
+    "framework": "pytest",
+    "min_coverage": 80,
+    "integration_tests": true,
+    "e2e_tests": true
+  },
+  "security": {
+    "enabled": true,
+    "modules": ["src/security_hardening.py"],
+    "checks": [
+      "sql_injection",
+      "xss",
+      "csrf",
+      "cors",
+      "rate_limiting"
+    ]
+  },
+  "performance": {
+    "profiling": true,
+    "benchmarks": true,
+    "optimization_targets": [
+      "api_latency",
+      "memory_usage",
+      "query_performance"
+    ]
+  },
+  "automation": {
+    "pre_commit": true,
+    "tests_on_commit": true,
+    "documentation_generation": true,
+    "performance_monitoring": true
+  }
+}

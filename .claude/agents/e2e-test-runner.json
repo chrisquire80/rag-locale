@@ -1,0 +1,56 @@
+{
+  "id": "e2e-test-runner",
+  "name": "E2E Test Runner Agent",
+  "description": "Automated end-to-end integration testing",
+  "enabled": true,
+  "triggers": {
+    "on_commit": true,
+    "on_pull_request": true,
+    "scheduled": "daily_at_2am"
+  },
+  "test_suites": [
+    {
+      "name": "Core E2E Tests",
+      "path": "test_e2e_simplified.py",
+      "tests": 7,
+      "timeout": 60,
+      "critical": true
+    },
+    {
+      "name": "Security Tests",
+      "path": "test_security_hardening.py",
+      "tests": 44,
+      "timeout": 30,
+      "critical": true
+    },
+    {
+      "name": "PDF to Response Flow",
+      "path": "test_e2e_pdf_to_response.py",
+      "tests": 7,
+      "timeout": 120,
+      "critical": false
+    }
+  ],
+  "execution": {
+    "framework": "pytest",
+    "parallel": false,
+    "verbose": true,
+    "coverage": {
+      "enabled": true,
+      "min": 80
+    }
+  },
+  "reporting": {
+    "format": "junit",
+    "output_dir": ".test-results",
+    "artifacts": [
+      "coverage.xml",
+      "test_report.html"
+    ]
+  },
+  "actions": {
+    "on_failure": "notify_team",
+    "on_all_pass": "auto_merge_eligible",
+    "on_coverage_drop": "block_merge"
+  }
+}

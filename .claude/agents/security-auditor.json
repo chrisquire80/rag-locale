@@ -1,0 +1,49 @@
+{
+  "id": "security-auditor",
+  "name": "Security Auditor Agent",
+  "description": "Automated security scanning and hardening verification",
+  "enabled": true,
+  "triggers": {
+    "on_commit": true,
+    "on_push": true,
+    "scheduled": "daily"
+  },
+  "tools": [
+    "sql_injection_detector",
+    "xss_scanner",
+    "cors_validator",
+    "input_validator",
+    "session_auditor"
+  ],
+  "checks": [
+    {
+      "name": "SQL Injection Prevention",
+      "module": "src/security_hardening.py",
+      "function": "SQLInjectionPrevention.is_suspicious",
+      "severity": "critical"
+    },
+    {
+      "name": "XSS Protection",
+      "module": "src/security_hardening.py",
+      "function": "InputValidator.sanitize_string",
+      "severity": "critical"
+    },
+    {
+      "name": "CORS Policy",
+      "module": "src/security_hardening.py",
+      "function": "CORSPolicy.is_origin_allowed",
+      "severity": "high"
+    },
+    {
+      "name": "Input Validation",
+      "module": "src/security_hardening.py",
+      "function": "InputValidator.validate_query",
+      "severity": "high"
+    }
+  ],
+  "actions": {
+    "on_failure": "block_commit",
+    "on_warning": "notify",
+    "report_format": "json"
+  }
+}

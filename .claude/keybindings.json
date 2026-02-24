@@ -1,0 +1,39 @@
+{
+  "keybindings": [
+    {
+      "key": "ctrl+shift+s",
+      "command": "run_security_audit",
+      "description": "Run security hardening tests"
+    },
+    {
+      "key": "ctrl+shift+e",
+      "command": "run_e2e_tests",
+      "description": "Run end-to-end integration tests"
+    },
+    {
+      "key": "ctrl+shift+p",
+      "command": "run_performance_profiler",
+      "description": "Run performance profiling analysis"
+    },
+    {
+      "key": "ctrl+shift+t",
+      "command": "run_all_tests",
+      "description": "Run all test suites"
+    },
+    {
+      "key": "ctrl+shift+d",
+      "command": "generate_documentation",
+      "description": "Generate project documentation"
+    },
+    {
+      "key": "ctrl+shift+c",
+      "command": "check_security_compliance",
+      "description": "Quick security compliance check"
+    },
+    {
+      "key": "ctrl+shift+m",
+      "command": "merge_check",
+      "description": "Check if ready to merge"
+    }
+  ]
+}

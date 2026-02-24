@@ -1,0 +1,40 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "RAG LOCALE App",
+      "runtimeExecutable": "streamlit",
+      "runtimeArgs": ["run", "app.py"],
+      "port": 8501,
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "API Server",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["api.py"],
+      "port": 5000,
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Performance Profiler",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["performance_profiler_analysis.py"],
+      "port": null,
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Security Audit",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "pytest", "test_security_hardening.py", "-v"],
+      "port": null,
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "E2E Tests",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "pytest", "test_e2e_simplified.py", "-v", "-s"],
+      "port": null,
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

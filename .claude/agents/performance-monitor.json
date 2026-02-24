@@ -1,0 +1,58 @@
+{
+  "id": "performance-monitor",
+  "name": "Performance Monitor Agent",
+  "description": "Continuous performance profiling and optimization",
+  "enabled": true,
+  "triggers": {
+    "on_commit": true,
+    "on_build": true,
+    "scheduled": "every_6_hours"
+  },
+  "profiling": {
+    "enabled": true,
+    "tool": "cProfile",
+    "output": "performance_profile_results.json",
+    "min_execution_time": 0.1
+  },
+  "benchmarks": {
+    "enabled": true,
+    "targets": [
+      {
+        "name": "Document Ingestion",
+        "module": "src.document_ingestion",
+        "threshold": "30s",
+        "critical": true
+      },
+      {
+        "name": "Vector Search",
+        "module": "src.vector_store",
+        "threshold": "10s",
+        "critical": true
+      },
+      {
+        "name": "LLM Response",
+        "module": "src.rag_engine",
+        "threshold": "30s",
+        "critical": false
+      },
+      {
+        "name": "Memory Service",
+        "module": "src.memory_service",
+        "threshold": "1s",
+        "critical": false
+      }
+    ]
+  },
+  "alerting": {
+    "enabled": true,
+    "channels": ["console", "json_log"],
+    "thresholds": {
+      "degradation": "10%",
+      "regression": "5%"
+    }
+  },
+  "actions": {
+    "on_regression": "notify_developer",
+    "on_critical_failure": "block_merge"
+  }
+}
