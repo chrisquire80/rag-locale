@@ -15,7 +15,7 @@ Features:
 import logging
 import re
 import json
-from typing import List, Set, Dict, Optional, Tuple
+from typing import Optional
 from dataclasses import dataclass
 from collections import Counter
 
@@ -37,15 +37,13 @@ STOPWORDS = {
     'questo', 'quello', 'questo', 'quello', 'che', 'chi', 'quando', 'dove',
 }
 
-
 @dataclass
 class ExtractedEntity:
     """Represents an extracted entity"""
     text: str
     entity_type: str  # 'keyword', 'entity', 'number', 'date'
     confidence: float
-    position: Tuple[int, int]  # (start, end) in original text
-
+    position: tuple[int, int]  # (start, end) in original text
 
 class EntityExtractor:
     """
@@ -70,7 +68,7 @@ class EntityExtractor:
             except Exception:
                 self.llm = None
 
-        self.extraction_cache: Dict[str, List[str]] = {}
+        self.extraction_cache: dict[str, list[str]] = {}
         self.max_cache_size = 1000
 
     def extract_keywords(
@@ -79,7 +77,7 @@ class EntityExtractor:
         num_keywords: int = 5,
         use_llm: bool = True,
         remove_stopwords: bool = True
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract important keywords from text.
 
@@ -126,7 +124,7 @@ class EntityExtractor:
 
         return keywords
 
-    def _extract_keywords_llm(self, text: str, num_keywords: int) -> List[str]:
+    def _extract_keywords_llm(self, text: str, num_keywords: int) -> list[str]:
         """
         Extract keywords using LLM.
 
@@ -166,7 +164,7 @@ Return ONLY valid JSON array of keywords, no other text."""
         text: str,
         num_keywords: int,
         remove_stopwords: bool = True
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract keywords based on word frequency.
 
@@ -186,7 +184,7 @@ Return ONLY valid JSON array of keywords, no other text."""
 
         return top_keywords
 
-    def extract_entities(self, text: str, entity_types: List[str] = None) -> List[ExtractedEntity]:
+    def extract_entities(self, text: str, entity_types: list[str] = None) -> list[ExtractedEntity]:
         """
         Extract named entities from text.
 
@@ -219,7 +217,7 @@ Return ONLY valid JSON array of keywords, no other text."""
 
         return sorted(entities, key=lambda e: e.position[0])
 
-    def _extract_numbers(self, text: str) -> List[ExtractedEntity]:
+    def _extract_numbers(self, text: str) -> list[ExtractedEntity]:
         """Extract numbers and quantities"""
         entities = []
         # Match numbers (integers and decimals)
@@ -236,7 +234,7 @@ Return ONLY valid JSON array of keywords, no other text."""
 
         return entities
 
-    def _extract_dates(self, text: str) -> List[ExtractedEntity]:
+    def _extract_dates(self, text: str) -> list[ExtractedEntity]:
         """Extract dates and time expressions"""
         entities = []
 
@@ -260,7 +258,7 @@ Return ONLY valid JSON array of keywords, no other text."""
 
         return entities
 
-    def _extract_proper_nouns(self, text: str) -> List[ExtractedEntity]:
+    def _extract_proper_nouns(self, text: str) -> list[ExtractedEntity]:
         """Extract capitalized sequences (likely proper nouns)"""
         entities = []
 
@@ -315,7 +313,7 @@ Return ONLY valid JSON array of keywords, no other text."""
         text: str,
         remove_stopwords: bool = True,
         min_length: int = 1
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Split text into tokens.
 
@@ -336,7 +334,7 @@ Return ONLY valid JSON array of keywords, no other text."""
         text: str,
         remove_stopwords: bool = True,
         min_length: int = 1
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Internal tokenization method.
 
@@ -365,8 +363,8 @@ Return ONLY valid JSON array of keywords, no other text."""
 
     def combine_keywords(
         self,
-        keywords_list: List[List[str]]
-    ) -> List[str]:
+        keywords_list: list[list[str]]
+    ) -> list[str]:
         """
         Combine and deduplicate keywords from multiple extractions.
 
@@ -401,10 +399,8 @@ Return ONLY valid JSON array of keywords, no other text."""
         self.extraction_cache.clear()
         logger.info("Entity extraction cache cleared")
 
-
 # Global instance
 _entity_extractor = None
-
 
 def get_entity_extractor() -> EntityExtractor:
     """Get or create global entity extractor"""

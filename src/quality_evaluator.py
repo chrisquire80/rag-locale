@@ -12,20 +12,19 @@ Evaluates RAG response quality using multiple metrics:
 
 import logging
 import json
-from typing import List, Optional, Dict, Tuple
+from typing import Optional
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import statistics
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class QueryEvaluation:
     """Comprehensive evaluation result for a query response"""
     query: str
     answer: str
-    contexts: List[str]
+    contexts: list[str]
 
     # Core metrics (0-1 scale)
     faithfulness: float  # Claims grounded in context
@@ -42,7 +41,6 @@ class QueryEvaluation:
     num_sources: int
     response_length: int
     evaluation_time_ms: float = 0.0
-
 
 class QualityEvaluator:
     """
@@ -77,7 +75,7 @@ class QualityEvaluator:
         self,
         query: str,
         answer: str,
-        contexts: List[str],
+        contexts: list[str],
         reference_answer: Optional[str] = None
     ) -> QueryEvaluation:
         """
@@ -133,10 +131,10 @@ class QualityEvaluator:
 
     def evaluate_batch(
         self,
-        queries: List[str],
-        answers: List[str],
-        contexts_list: List[List[str]]
-    ) -> List[QueryEvaluation]:
+        queries: list[str],
+        answers: list[str],
+        contexts_list: list[list[str]]
+    ) -> list[QueryEvaluation]:
         """
         Evaluate multiple responses in parallel.
 
@@ -174,7 +172,7 @@ class QualityEvaluator:
     def _evaluate_faithfulness(
         self,
         answer: str,
-        contexts: List[str]
+        contexts: list[str]
     ) -> float:
         """
         Evaluate how faithfully the answer is grounded in contexts.
@@ -252,7 +250,7 @@ Return ONLY a number between 0 and 1."""
             logger.warning(f"Relevance evaluation error: {e}")
             return 0.5
 
-    def _calculate_precision(self, contexts: List[str]) -> float:
+    def _calculate_precision(self, contexts: list[str]) -> float:
         """
         Calculate precision: % of retrieved docs that are relevant.
 
@@ -278,7 +276,7 @@ Return ONLY a number between 0 and 1."""
 
     def _calculate_recall(
         self,
-        contexts: List[str],
+        contexts: list[str],
         reference_answer: str
     ) -> float:
         """
@@ -306,7 +304,7 @@ Return ONLY a number between 0 and 1."""
     def _evaluate_consistency(
         self,
         answer: str,
-        answer_variants: List[str]
+        answer_variants: list[str]
     ) -> float:
         """
         Evaluate consistency: how stable is the answer across variations?
@@ -348,10 +346,8 @@ Return ONLY a number between 0 and 1."""
             logger.warning(f"Consistency evaluation error: {e}")
             return 0.8  # Assume reasonably consistent
 
-
 # Global instance
 _quality_evaluator = None
-
 
 def get_quality_evaluator() -> QualityEvaluator:
     """Get or create global quality evaluator"""

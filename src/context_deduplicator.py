@@ -86,7 +86,7 @@ class ContextDeduplicator:
             if norm1 == 0 or norm2 == 0:
                 return 0.0
             return np.dot(vec1, vec2) / (norm1 * norm2)
-        except:
+        except Exception:
             return 0.0
 
     def deduplicate_chunks(self, chunks: List['RetrievalResult']) -> List['RetrievalResult']:

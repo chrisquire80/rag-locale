@@ -447,6 +447,8 @@ class DocumentIngestionPipeline:
         batch_ids = []
         BATCH_THRESHOLD = 500  # Write to VectorStore every 500 chunks to save RAM
         chunks_since_last_write = 0
+        total_chunks = 0  # FIX: inizializzare prima del loop futures
+
 
         # OPTIMIZATION 8.7: Parallelize PDF processing
         with ProcessPoolExecutor(max_workers=max_workers) as executor:

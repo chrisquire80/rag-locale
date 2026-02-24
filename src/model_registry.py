@@ -7,13 +7,12 @@ Supports model rollback and A/B testing between versions.
 
 import logging
 import json
-from typing import List, Dict, Optional
+from typing import Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class ModelVersion:
@@ -41,7 +40,6 @@ class ModelVersion:
     test_accuracy: float = 0.0
     improvement_percent: float = 0.0
 
-
 @dataclass
 class DeploymentRecord:
     """Record of a model deployment"""
@@ -52,7 +50,6 @@ class DeploymentRecord:
     environment: str  # "staging", "production"
     traffic_percent: float  # 0-100 for canary deployments
     metrics_snapshot: Dict
-
 
 class ModelRegistry:
     """
@@ -76,8 +73,8 @@ class ModelRegistry:
         self.registry_path = Path(registry_path)
         self.registry_path.parent.mkdir(parents=True, exist_ok=True)
 
-        self.versions: List[ModelVersion] = []
-        self.deployments: List[DeploymentRecord] = []
+        self.versions: list[ModelVersion] = []
+        self.deployments: list[DeploymentRecord] = []
 
         # Load existing registry
         self._load_registry()
@@ -339,10 +336,8 @@ class ModelRegistry:
         except Exception as e:
             logger.error(f"Failed to save registry: {e}")
 
-
 # Global instance
 _registry = None
-
 
 def get_model_registry() -> ModelRegistry:
     """Get or create global model registry"""

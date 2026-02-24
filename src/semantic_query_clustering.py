@@ -11,6 +11,7 @@ PHASE 10.1: Advanced Retrieval & Semantic Search
 import logging
 import time
 import numpy as np
+from collections import deque
 from typing import Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -59,8 +60,8 @@ class SemanticQueryClusterer:
         self.max_recent_queries = max_recent_queries
         self.similarity_threshold = similarity_threshold
 
-        # Track recent queries and their embeddings
-        self._recent_queries: List[Tuple[str, np.ndarray]] = []  # [(query, embedding), ...]
+        # Track recent queries and their embeddings (deque is O(1) for both append and maxlen eviction)
+        self._recent_queries: deque = deque(maxlen=max_recent_queries)  # [(query, embedding), ...]
         self._query_clusters: dict[str, QueryCluster] = {}  # {cluster_id: QueryCluster}
         self._query_to_cluster: dict[str, str] = {}  # {query: cluster_id}
 
@@ -204,10 +205,8 @@ class SemanticQueryClusterer:
         # Register query to cluster
         self._query_to_cluster[query] = cluster_id
 
-        # Add query to recent queries (keep only recent)
+        # Add query to recent queries (deque handles eviction automatically)
         self._recent_queries.append((query, embedding if embedding is not None else np.zeros(1536)))
-        if len(self._recent_queries) > self.max_recent_queries:
-            self._recent_queries.pop(0)
 
         # Update cluster's query list if cluster exists
         if cluster_id in self._query_clusters:
@@ -305,6 +304,19 @@ class SemanticQueryClusterer:
             logger.info(f"Cleared {len(expired_clusters)} expired clusters (>={max_age_hours}h old)")
 
         return len(expired_clusters)
+
+
+    def invalidate_clusters(self) -> None:
+        """
+        Svuota tutta la cache cluster.
+        Da chiamare quando RAGEngine.invalidate_cache() viene invocato
+        (es. dopo upload di nuovi documenti) per evitare risposte stale.
+        """
+        count = len(self._query_clusters)
+        self._query_clusters.clear()
+        self._query_to_cluster.clear()
+        self._recent_queries.clear()
+        logger.info(f"🗑️ Cluster cache invalidata ({count} cluster rimossi)")
 
 
 # Global instance

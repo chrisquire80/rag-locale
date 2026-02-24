@@ -7,30 +7,28 @@ Supports embedding adaptation and prompt optimization.
 
 import logging
 import json
-from typing import List, Dict, Optional, Tuple
+from typing import Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class TrainingData:
     """Training dataset for fine-tuning"""
     query: str
     answer: str
-    contexts: List[str]
+    contexts: list[str]
     quality_score: float  # Ground truth quality
     query_id: Optional[str] = None
-
 
 @dataclass
 class TrainingDataset:
     """Complete training/validation/test split"""
-    train: List[TrainingData]
-    validation: List[TrainingData]
-    test: List[TrainingData]
+    train: list[TrainingData]
+    validation: list[TrainingData]
+    test: list[TrainingData]
 
     @property
     def total_samples(self) -> int:
@@ -39,7 +37,6 @@ class TrainingDataset:
     @property
     def train_ratio(self) -> float:
         return len(self.train) / self.total_samples if self.total_samples > 0 else 0.0
-
 
 class FineTuningPipeline:
     """
@@ -65,11 +62,11 @@ class FineTuningPipeline:
             from src.llm_service import get_llm_service
             self.llm = get_llm_service()
 
-        self.training_history: List[Dict] = []
+        self.training_history: list[Dict] = []
 
     def prepare_training_data(
         self,
-        evaluation_records: List[Dict],
+        evaluation_records: list[Dict],
         train_ratio: float = 0.7,
         val_ratio: float = 0.15,
         test_ratio: float = 0.15,
@@ -311,10 +308,8 @@ class FineTuningPipeline:
             json.dump(self.training_history, f, indent=2)
         logger.info(f"Exported training history to {filepath}")
 
-
 # Global instance
 _pipeline = None
-
 
 def get_fine_tuning_pipeline() -> FineTuningPipeline:
     """Get or create global fine-tuning pipeline"""

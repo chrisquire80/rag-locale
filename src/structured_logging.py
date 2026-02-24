@@ -9,9 +9,8 @@ import logging
 import json
 import sys
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 from pathlib import Path
-
 
 class JSONFormatter(logging.Formatter):
     """
@@ -55,7 +54,6 @@ class JSONFormatter(logging.Formatter):
             log_data.update(record.extra_fields)
 
         return json.dumps(log_data, ensure_ascii=False)
-
 
 class StructuredLogger:
     """
@@ -123,7 +121,6 @@ class StructuredLogger:
         """Log critical message with optional context"""
         self._log(logging.CRITICAL, message, **extra_fields)
 
-
 def configure_json_logging(
     log_level: str = "INFO",
     log_file: Path = None,
@@ -166,7 +163,6 @@ def configure_json_logging(
 
     return root_logger
 
-
 def get_structured_logger(name: str) -> StructuredLogger:
     """
     Get a structured logger instance.
@@ -178,7 +174,6 @@ def get_structured_logger(name: str) -> StructuredLogger:
         StructuredLogger instance
     """
     return StructuredLogger(name)
-
 
 # Example usage and log output documentation:
 """

@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import Optional
 import json
 import logging
 
@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 # Percorso assoluto per evitare problemi con CWD diversa tra UI e API
 DB_PATH = Path(__file__).parent.parent / "rag_memory.db"
-
 
 class MemoryService:
     """
@@ -88,7 +87,7 @@ class MemoryService:
         except Exception as e:
             logger.error(f"Failed to init memory DB: {e}")
 
-    def save_interaction(self, user_query: str, ai_response: str, found_anomalies: bool = False, referenced_docs: List[str] = None):
+    def save_interaction(self, user_query: str, ai_response: str, found_anomalies: bool = False, referenced_docs: list[str] = None):
         """Save a Q&A interaction to memory"""
         if referenced_docs is None:
             referenced_docs = []
@@ -165,7 +164,7 @@ class MemoryService:
             logger.error(f"Memory search failed: {e}")
             return ""
 
-    def get_anomalies_history(self, limit: int = 20) -> List[Dict]:
+    def get_anomalies_history(self, limit: int = 20) -> list[Dict]:
         """Retrieve recent interactions where anomalies were found (structured)."""
         try:
             conn = self._get_connection()  # Use pooled connection
@@ -186,7 +185,7 @@ class MemoryService:
             logger.error(f"Failed to retrieve anomaly history: {e}")
             return []
 
-    def get_all_interactions_for_forecast(self, limit: int = 30) -> List[Dict]:
+    def get_all_interactions_for_forecast(self, limit: int = 30) -> list[Dict]:
         """
         Retrieve recent interactions for Predictive Forecasting.
         Returns structured rows with timestamp, query, anomaly flag, and referenced docs.
@@ -249,7 +248,7 @@ class MemoryService:
         except Exception as e:
             logger.error(f"Failed to add task: {e}")
 
-    def get_all_tasks(self) -> List[Dict]:
+    def get_all_tasks(self) -> list[Dict]:
         """List all tasks sorted by urgency."""
         try:
             conn = self._get_connection()  # Use pooled connection
@@ -325,10 +324,8 @@ class MemoryService:
             logger.error(f"Failed to get completion rate: {e}")
             return 0.0
 
-
 # Singleton
 _memory_service = None
-
 
 def get_memory_service():
     global _memory_service

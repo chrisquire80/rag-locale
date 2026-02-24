@@ -7,12 +7,11 @@ Supports A/B testing and configuration comparison.
 
 import logging
 import itertools
-from typing import List, Dict, Optional, Tuple, Any
+from typing import Any, Optional
 from dataclasses import dataclass, field
 import time
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class HyperparameterConfig:
@@ -26,7 +25,6 @@ class HyperparameterConfig:
     rerank_batch_size: int = 10  # Batch size for reranking
     cache_ttl_seconds: int = 3600  # Cache time-to-live
 
-
 @dataclass
 class OptimizationResult:
     """Result of parameter optimization"""
@@ -36,7 +34,6 @@ class OptimizationResult:
     latency_ms: float  # Response latency
     cost_dollars: float  # API cost estimate
     evaluation_time_ms: float = 0.0
-
 
 class GridSearchOptimizer:
     """
@@ -60,14 +57,14 @@ class GridSearchOptimizer:
             evaluation_function: Function that takes config and returns metrics
         """
         self.evaluate = evaluation_function
-        self.results: List[OptimizationResult] = []
+        self.results: list[OptimizationResult] = []
 
     def search(
         self,
-        param_grid: Dict[str, List[Any]],
-        sample_queries: List[str],
+        param_grid: dict[str, list[Any]],
+        sample_queries: list[str],
         metric: str = "quality_score"
-    ) -> List[OptimizationResult]:
+    ) -> list[OptimizationResult]:
         """
         Perform exhaustive grid search.
 
@@ -148,7 +145,7 @@ class GridSearchOptimizer:
         self,
         k: int = 5,
         metric: str = "quality_score"
-    ) -> List[HyperparameterConfig]:
+    ) -> list[HyperparameterConfig]:
         """Get top K configurations"""
         if not self.results:
             return [HyperparameterConfig()]
@@ -180,14 +177,13 @@ class GridSearchOptimizer:
         )
         return getattr(best, metric)
 
-
 class ConfigurationHistory:
     """Tracks all tested configurations and their performance"""
 
     def __init__(self):
         """Initialize history"""
-        self.history: List[OptimizationResult] = []
-        self.best_configs: Dict[str, HyperparameterConfig] = {}
+        self.history: list[OptimizationResult] = []
+        self.best_configs: dict[str, HyperparameterConfig] = {}
 
     def record(self, result: OptimizationResult, metric: str):
         """Record a configuration evaluation"""
@@ -207,7 +203,7 @@ class ConfigurationHistory:
         self,
         metric: str,
         limit: Optional[int] = None
-    ) -> List[OptimizationResult]:
+    ) -> list[OptimizationResult]:
         """Get history sorted by metric"""
         reverse = metric == "quality_score"
         sorted_history = sorted(
@@ -249,11 +245,9 @@ class ConfigurationHistory:
 
         logger.info(f"Exported {len(data)} configurations to {filepath}")
 
-
 # Global instance
 _optimizer = None
 _history = None
-
 
 def get_grid_search_optimizer(eval_func) -> GridSearchOptimizer:
     """Get or create grid search optimizer"""
@@ -261,7 +255,6 @@ def get_grid_search_optimizer(eval_func) -> GridSearchOptimizer:
     if _optimizer is None:
         _optimizer = GridSearchOptimizer(eval_func)
     return _optimizer
-
 
 def get_configuration_history() -> ConfigurationHistory:
     """Get or create configuration history"""

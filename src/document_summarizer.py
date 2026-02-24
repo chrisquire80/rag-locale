@@ -7,14 +7,13 @@ Provides efficient caching and batch processing capabilities.
 import logging
 import hashlib
 import json
-from typing import List, Dict, Optional, Tuple
+from typing import Optional
 from datetime import datetime
 import time
 
 from src.entity_extractor import get_entity_extractor
 
 logger = logging.getLogger(__name__)
-
 
 class DocumentSummarizer:
     """Generates semantic summaries and key points from document content using LLM."""
@@ -34,7 +33,7 @@ class DocumentSummarizer:
                         If None, uses basic keyword extraction fallback.
         """
         self.llm_service = llm_service
-        self.summary_cache: Dict[str, Dict] = {}
+        self.summary_cache: dict[str, Dict] = {}
         self._load_cache()
 
     def _load_cache(self):
@@ -204,7 +203,7 @@ Summary:"""
 
     def extract_key_points(
         self, filename: str, content: str, num_points: int = 5
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract key points/bullet points from document content.
 
@@ -236,7 +235,7 @@ Summary:"""
 
     def _extract_keypoints_llm(
         self, content: str, num_points: int
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract key points using LLM.
 
@@ -280,7 +279,7 @@ Key Points:"""
 
     def _extract_keypoints_keywords(
         self, content: str, num_points: int
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract key points using keyword analysis (fallback).
 
@@ -332,9 +331,9 @@ Key Points:"""
 
     def summarize_batch(
         self,
-        documents: List[Tuple[str, str]],
+        documents: list[tuple[str, str]],
         callback=None
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Summarize multiple documents efficiently.
 

@@ -6,13 +6,12 @@ Provides clustering, related documents suggestions, and interactive visualizatio
 
 import logging
 import numpy as np
-from typing import List, Dict, Tuple, Optional
+from typing import Optional
 import json
 import os
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
-
 
 class DocumentSimilarityMatrix:
     """
@@ -33,8 +32,8 @@ class DocumentSimilarityMatrix:
         """
         self.vector_store = vector_store
         self.similarity_matrix: Optional[np.ndarray] = None
-        self.doc_ids_ordered: List[str] = []
-        self.doc_labels: Dict[str, str] = {}
+        self.doc_ids_ordered: list[str] = []
+        self.doc_labels: dict[str, str] = {}
         self._matrix_valid = False
         self._load_cached_matrix()
 
@@ -142,7 +141,7 @@ class DocumentSimilarityMatrix:
 
     def get_related_documents(
         self, doc_index: int, top_k: int = 3
-    ) -> List[Tuple[str, float]]:
+    ) -> list[tuple[str, float]]:
         """
         Get most similar documents to a given document.
 
@@ -220,7 +219,7 @@ class DocumentSimilarityMatrix:
             logger.error(f"Error building heatmap data: {e}")
             return {}
 
-    def get_clustering(self, num_clusters: int = 3) -> Dict[int, List[str]]:
+    def get_clustering(self, num_clusters: int = 3) -> dict[int, list[str]]:
         """
         Simple clustering of documents based on similarity.
         Uses hierarchical clustering approach.
@@ -311,7 +310,7 @@ class DocumentSimilarityMatrix:
             logger.error(f"Error computing statistics: {e}")
             return {}
 
-    def get_most_similar_pairs(self, top_n: int = 10) -> List[Tuple[str, str, float]]:
+    def get_most_similar_pairs(self, top_n: int = 10) -> list[tuple[str, str, float]]:
         """
         Get the most similar document pairs in the collection.
 

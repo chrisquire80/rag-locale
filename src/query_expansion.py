@@ -6,7 +6,7 @@ Uses Gemini to expand queries with synonyms, related terms, and reformulations
 import logging
 import json
 import re
-from typing import List, Dict, Optional
+from typing import Optional
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -15,16 +15,14 @@ from src.entity_extractor import get_entity_extractor
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class ExpandedQuery:
     """Expanded query with variants"""
     original: str
-    variants: List[str]  # Alternative phrasings
-    keywords: List[str]  # Important keywords
+    variants: list[str]  # Alternative phrasings
+    keywords: list[str]  # Important keywords
     intent: str  # What the user is really looking for
     difficulty: str  # "simple", "moderate", "complex"
-
 
 class QueryExpander:
     """Expand and reformulate queries for better retrieval
@@ -169,7 +167,7 @@ Only return the JSON, no other text."""
                 difficulty="unknown"
             )
 
-    def decompose_query(self, query: str) -> List[str]:
+    def decompose_query(self, query: str) -> list[str]:
         """
         Decompose complex query into sub-questions
 
@@ -199,7 +197,7 @@ Only return the JSON, no other text."""
 
         return [query]
 
-    def generate_keywords(self, query: str, num_keywords: int = 5) -> List[str]:
+    def generate_keywords(self, query: str, num_keywords: int = 5) -> list[str]:
         """
         Extract important keywords from query.
 
@@ -226,7 +224,6 @@ Only return the JSON, no other text."""
         self.expansion_cache.clear()
         logger.info("Query expansion cache cleared")
 
-
 class HyDEExpander:
     """Hypothetical Document Embeddings
 
@@ -245,7 +242,7 @@ class HyDEExpander:
         self,
         query: str,
         num_docs: int = 3
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Generate hypothetical documents that answer the query
 
@@ -276,7 +273,7 @@ Generate {num_docs} different documents, each starting with "[Doc N]":"""
             logger.error(f"HyDE generation failed: {e}")
             return [query]
 
-    def _extract_hypothetical_docs(self, response: str, num_docs: int) -> List[str]:
+    def _extract_hypothetical_docs(self, response: str, num_docs: int) -> list[str]:
         """Extract hypothetical documents from response"""
         docs = []
         pattern = r'\[Doc \d+\](.*?)(?=\[Doc \d+\]|$)'
@@ -289,11 +286,9 @@ Generate {num_docs} different documents, each starting with "[Doc N]":"""
 
         return docs
 
-
 # Global instances
 _expander = None
 _hyde_expander = None
-
 
 def get_query_expander(llm_service) -> QueryExpander:
     """Get or create global query expander"""
@@ -302,14 +297,12 @@ def get_query_expander(llm_service) -> QueryExpander:
         _expander = QueryExpander(llm_service)
     return _expander
 
-
 def get_hyde_expander(llm_service) -> HyDEExpander:
     """Get or create global HyDE expander"""
     global _hyde_expander
     if _hyde_expander is None:
         _hyde_expander = HyDEExpander(llm_service)
     return _hyde_expander
-
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
