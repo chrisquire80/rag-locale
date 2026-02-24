@@ -7,7 +7,7 @@ import logging
 import time
 from datetime import datetime
 from functools import lru_cache
-from typing import Optional, List, Tuple
+from typing import Optional
 from dataclasses import dataclass
 
 from src.config import config
@@ -28,7 +28,6 @@ from src.context_deduplicator import get_context_deduplicator
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class RetrievalResult:
     """Risultato di una ricerca nel vector store"""
@@ -37,7 +36,6 @@ class RetrievalResult:
     source: str
     section: str
     doc_id: str
-
 
 @dataclass
 class RAGResponse:
@@ -48,7 +46,6 @@ class RAGResponse:
     hitl_required: bool
     model: str
     confidence_score: float = 0.0  # Confidence 0-100, calculated from source scores
-
 
 class RAGEngine:
     """Core logic RAG con validazione HITL"""
@@ -94,7 +91,7 @@ class RAGEngine:
 
     def invalidate_cache(self) -> None:
         """
-        Svuota la cache query risultati.
+        Svuota la cache query risultati e la cluster cache.
         Da chiamare dopo ogni ingestion di nuovi documenti per evitare
         che le query restituiscano risultati obsoleti (TTL 2h).
         """
@@ -102,6 +99,8 @@ class RAGEngine:
         self._query_cache.clear()
         logger.info(f"🗑️ Query cache invalidata ({count} entries rimosse)")
 
+        # FASE 10.1: Also invalidate cluster cache (contains responses based on old documents)
+        self._query_clusterer.invalidate_clusters()
 
     @profile_operation("rag_query")
     def query(
@@ -111,10 +110,10 @@ class RAGEngine:
         metadata_filter: Optional[dict] = None,
         # FASE 7: Advanced filter parameters
         similarity_threshold: float = 0.0,
-        document_types: Optional[List[str]] = None,
-        date_range: Optional[Tuple[datetime, datetime]] = None,
-        tags: Optional[List[str]] = None,
-        source_documents: Optional[List[str]] = None,
+        document_types: Optional[list[str]] = None,
+        date_range: Optional[tuple[datetime, datetime]] = None,
+        tags: Optional[list[str]] = None,
+        source_documents: Optional[list[str]] = None,
     ) -> RAGResponse:
         """
         Esegui query RAG con HITL opzionale e advanced filtering.
@@ -187,8 +186,19 @@ class RAGEngine:
 
         # FASE 10.1: Check semantic query clustering (if direct cache miss)
         cluster_id = None
+        query_embedding = None
         if retrieval_results is None:
-            cluster_id = self._query_clusterer.cluster_query(user_query)
+            # Compute embedding ONCE and reuse for both clustering and retrieval
+            # This avoids the double API call (saves ~150-400ms per query)
+            try:
+                embeddings = self.llm.get_embeddings([user_query])
+                if embeddings:
+                    import numpy as np
+                    query_embedding = np.array(embeddings[0])
+            except Exception as e:
+                logger.warning(f"Could not pre-compute query embedding: {e}")
+
+            cluster_id = self._query_clusterer.cluster_query(user_query, embedding=query_embedding)
             cluster_cached = self._query_clusterer.get_cluster_results(cluster_id)
             if cluster_cached is not None and metadata_filter is None:
                 # Only use cluster cache if no filters applied
@@ -200,11 +210,12 @@ class RAGEngine:
 
         search_start = time.perf_counter()
         if retrieval_results is None:
-            # Cache miss - perform actual retrieval
+            # Cache miss - perform actual retrieval (pass pre-computed embedding to avoid double API call)
             retrieval_results = self._retrieve(
                 user_query,
                 top_k=self.top_k,
-                where_filter=metadata_filter
+                where_filter=metadata_filter,
+                query_embedding=query_embedding
             )
             # FASE 7: Apply similarity threshold filter post-retrieval
             if retrieval_results and similarity_threshold > 0.0:
@@ -216,10 +227,6 @@ class RAGEngine:
             # Cache the results
             if retrieval_results:
                 self._set_cache_result(cache_key, retrieval_results)
-                # FASE 10.1: Also cache in cluster (if we have a cluster_id)
-                if cluster_id and metadata_filter is None:
-                    # Will be cached after full response is generated
-                    pass
         else:
             # Cache hit - already retrieved (results were populated from cache)
             pass
@@ -311,14 +318,16 @@ class RAGEngine:
         self,
         query: str,
         top_k: int = 5,
-        where_filter: Optional[dict] = None
+        where_filter: Optional[dict] = None,
+        query_embedding = None
     ) -> list[RetrievalResult]:
         """Ricerca nel vector store"""
         try:
             raw_results = self.vector_store.search(
                 query=query,
                 top_k=top_k,
-                where_filter=where_filter
+                where_filter=where_filter,
+                query_embedding=query_embedding
             )
 
             results = []
@@ -555,7 +564,6 @@ RISPOSTA:
                 model=config.gemini.model_name
             )
 
-
     def query_stream(
         self,
         user_query: str,
@@ -687,7 +695,6 @@ def interactive_rag_session():
 
         # Stampa risultato
         engine.print_response(response)
-
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

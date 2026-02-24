@@ -5,7 +5,7 @@ Ambiente: HP ProBook 440 G11 (16GB RAM, CPU-only)
 
 import logging
 from pathlib import Path
-from typing import Literal, List
+from typing import Literal
 from pydantic_settings import BaseSettings
 from pydantic import Field, SecretStr
 
@@ -49,8 +49,6 @@ class GeminiConfig(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
 
-
-
 class ChromaDBConfig(BaseSettings):
     """Configurazione ChromaDB Vector Store"""
 
@@ -91,7 +89,6 @@ class ChromaDBConfig(BaseSettings):
     class Config:
         env_prefix = "CHROMADB_"
         extra = "ignore"
-
 
 class RAGConfig(BaseSettings):
     """Configurazione RAG Engine"""
@@ -146,7 +143,6 @@ AMBIGUITY RESOLUTION:
     class Config:
         env_prefix = "RAG_"
         extra = "ignore"
-
 
 class PerformanceConfig(BaseSettings):
     """Centralizzazione di tutti i parametri di performance e tuning"""
@@ -247,7 +243,6 @@ class PerformanceConfig(BaseSettings):
         env_prefix = "PERF_"
         extra = "ignore"
 
-
 class AppConfig(BaseSettings):
     """Configurazione applicazione principale"""
 
@@ -260,7 +255,7 @@ class AppConfig(BaseSettings):
     memory_warning_threshold_pct: int = Field(default=85)
 
     # Documenti da ingestire
-    document_extensions: List[str] = Field(
+    document_extensions: list[str] = Field(
         default=[".pdf", ".txt", ".md", ".docx"],
         description="Estensioni file supportate"
     )
@@ -276,10 +271,8 @@ class AppConfig(BaseSettings):
         env_nested_delimiter = "__"
         extra = "ignore"
 
-
 # Istanza globale di configurazione
 config = AppConfig()
-
 
 # Utility: Stampa configurazione attiva
 def print_config() -> None:
@@ -310,8 +303,6 @@ def print_config() -> None:
     logger.info(f"   Logs: {LOGS_DIR}")
     logger.info("\n" + "="*60 + "\n")
 
-
 if __name__ == "__main__":
     print_config()
-
 

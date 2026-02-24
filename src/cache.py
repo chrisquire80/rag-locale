@@ -9,6 +9,8 @@ from typing import Optional, Any, Dict
 from collections import OrderedDict
 from dataclasses import dataclass
 
+from src.config import config
+
 logger = logging.getLogger(__name__)
 
 
@@ -207,10 +209,13 @@ _vision_processing_cache: Optional[VisionProcessingCache] = None
 
 
 def get_query_result_cache() -> CacheManager:
-    """Get singleton query result cache (2-hour TTL)"""
+    """Get singleton query result cache (from PerformanceConfig)"""
     global _query_result_cache
     if _query_result_cache is None:
-        _query_result_cache = CacheManager(max_size=1000, default_ttl=7200)
+        _query_result_cache = CacheManager(
+            max_size=config.performance.cache_max_size,
+            default_ttl=config.performance.cache_ttl_seconds
+        )
         logger.debug("Initialized query result cache")
     return _query_result_cache
 

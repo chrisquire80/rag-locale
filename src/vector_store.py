@@ -7,7 +7,7 @@ import logging
 import pickle
 import numpy as np
 from pathlib import Path
-from typing import Optional, List, Dict, Any
+from typing import Any, Optional
 from dataclasses import dataclass, asdict
 import time
 from datetime import datetime
@@ -26,8 +26,8 @@ logger = logging.getLogger(__name__)
 class Document:
     id: str
     text: str
-    metadata: Dict[str, Any]
-    embedding: List[float]
+    metadata: dict[str, Any]
+    embedding: list[float]
 
 class VectorStore:
     """Archivio vettoriale basato su file (Pickle + Numpy)"""
@@ -36,7 +36,7 @@ class VectorStore:
         """Inizializza store caricando da disco se presente"""
         self.persist_directory = config.chromadb.persist_directory
         self.store_file = self.persist_directory / "vector_store.pkl"
-        self.documents: Dict[str, Document] = {}
+        self.documents: dict[str, Document] = {}
         self.llm = get_llm_service()
 
         # FASE 5: HNSW Vector Indexing
@@ -170,7 +170,7 @@ class VectorStore:
         self._metadata_index_dirty = False
         logger.debug(f"Metadata index rebuildata: {len(self._metadata_index)} entries")
 
-    def _cache_query_embedding(self, query_cache_key: str, embedding: List[float]) -> None:
+    def _cache_query_embedding(self, query_cache_key: str, embedding: list[float]) -> None:
         """
         PHASE 2 OPTIMIZATION: Gestisce cache query embeddings con LRU eviction.
         Mantiene cache size <= _query_cache_max_size per evitare memory leak.
@@ -193,7 +193,7 @@ class VectorStore:
 
             logger.debug(f"Cache eviction: removed oldest query embedding (cache size: {len(self._query_embedding_cache)})")
 
-    def _get_cached_query_embedding(self, query_cache_key: str) -> Optional[List[float]]:
+    def _get_cached_query_embedding(self, query_cache_key: str) -> Optional[list[float]]:
         """
         PHASE 2 OPTIMIZATION: Recupera embedding query da cache con update del timestamp LRU.
         """
@@ -226,9 +226,9 @@ class VectorStore:
 
     def add_documents(
         self,
-        documents: List[str],
-        metadatas: Optional[List[Dict]] = None,
-        ids: Optional[List[str]] = None,
+        documents: list[str],
+        metadatas: Optional[list[Dict]] = None,
+        ids: Optional[list[str]] = None,
         rebuild_matrix: bool = True,
         use_batch_embedding: bool = True
     ) -> tuple:
@@ -347,8 +347,9 @@ class VectorStore:
         self,
         query: str,
         top_k: int = 5,
-        where_filter: Optional[Dict] = None
-    ) -> List[Dict]:
+        where_filter: Optional[Dict] = None,
+        query_embedding: Optional[np.ndarray] = None
+    ) -> list[Dict]:
         """
         Cerca documenti per similarità coseno (OTTIMIZZATO con matrice pre-calcolata).
         FIX HIGH-5: Usa NumPy vettorizzazione invece di loop Python.
@@ -361,6 +362,12 @@ class VectorStore:
         - If where_filter provided, filter candidates BEFORE computing scores
         - Avoids wasted computation on excluded documents
         - Can give 20-50% speedup for selective queries
+
+        Args:
+            query: Query text
+            top_k: Number of top results to return
+            where_filter: Metadata filter
+            query_embedding: Pre-computed query embedding (optional, avoids double API call)
         """
         if not self.documents or self._embedding_matrix is None:
             logger.warning("⚠️ Vector store vuoto")
@@ -370,18 +377,23 @@ class VectorStore:
             # 1. Genera embedding query (con cache per evitare bottleneck API)
             # BOTTLENECK FIX #1: Cache query embeddings
             # PHASE 2 OPTIMIZATION: LRU cache management
-            query_cache_key = f"query_emb:{query}"
-            query_embedding = self._get_cached_query_embedding(query_cache_key)
-
             if query_embedding is not None:
-                logger.debug(f"Cache HIT for query embedding: {query[:30]}...")
+                # Use pre-computed embedding (avoids double API call when used with FASE 10.1 clustering)
+                q_vec = np.array(query_embedding, dtype=np.float32) if not isinstance(query_embedding, np.ndarray) else query_embedding.astype(np.float32)
+                logger.debug(f"Using pre-computed query embedding for: {query[:30]}...")
             else:
-                # Get embedding (potentially batch with variants from query expansion)
-                query_embedding = self.llm.get_embedding(query)
-                self._cache_query_embedding(query_cache_key, query_embedding)
-                logger.debug(f"Cache MISS for query embedding: {query[:30]}... (cached, total: {len(self._query_embedding_cache)})")
+                query_cache_key = f"query_emb:{query}"
+                cached_emb = self._get_cached_query_embedding(query_cache_key)
 
-            q_vec = np.array(query_embedding, dtype=np.float32)
+                if cached_emb is not None:
+                    logger.debug(f"Cache HIT for query embedding: {query[:30]}...")
+                    q_vec = np.array(cached_emb, dtype=np.float32)
+                else:
+                    # Get embedding (potentially batch with variants from query expansion)
+                    raw_emb = self.llm.get_embedding(query)
+                    self._cache_query_embedding(query_cache_key, raw_emb)
+                    logger.debug(f"Cache MISS for query embedding: {query[:30]}... (cached, total: {len(self._query_embedding_cache)})")
+                    q_vec = np.array(raw_emb, dtype=np.float32)
             q_norm = np.linalg.norm(q_vec)
 
             if q_norm > 0:
@@ -483,7 +495,7 @@ class VectorStore:
             "backend": "numpy+pickle"
         }
 
-    def get_all_documents(self) -> List[Dict]:
+    def get_all_documents(self) -> list[Dict]:
         """Ritorna TUTTI i documenti in libreria (non solo top-k)"""
         # Raggruppa chunk per documento (source)
         doc_groups = {}
@@ -562,7 +574,7 @@ class VectorStore:
         self,
         source_filename: str,
         summary: str,
-        key_points: Optional[List[str]] = None
+        key_points: Optional[list[str]] = None
     ) -> bool:
         """
         Update summary and key points for a document.
@@ -598,7 +610,7 @@ class VectorStore:
             logger.error(f"Error updating document summary: {e}")
             return False
 
-    def get_document_summaries(self) -> Dict[str, Dict]:
+    def get_document_summaries(self) -> dict[str, Dict]:
         """
         Get summaries and key points for all documents.
 
@@ -641,7 +653,7 @@ class VectorStore:
             logger.error(f"Error getting embeddings: {e}")
             return None
 
-    def get_document_ids_ordered(self) -> List[str]:
+    def get_document_ids_ordered(self) -> list[str]:
         """
         Get ordered list of document IDs matching embedding matrix order.
         Used for similarity matrix heatmap labels.
