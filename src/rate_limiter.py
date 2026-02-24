@@ -23,23 +23,29 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class RateLimitConfig:
-    """Configuration for rate limiting"""
+    """Configuration for rate limiting.
+    
+    Tuned for single-user Streamlit + Gemini API workload:
+    - Burst-friendly bucket (500 capacity) handles rapid UI interactions
+    - Refill rate of 50/sec sustains continuous operation
+    - Per-user/endpoint limits generous for single-user scenario
+    """
     # Token bucket parameters
-    refill_rate: float = 10.0  # tokens per second
-    bucket_capacity: int = 100  # max tokens in bucket
+    refill_rate: float = 50.0   # tokens per second (was 10.0 — too aggressive)
+    bucket_capacity: int = 500  # max tokens in bucket (was 100 — burst-starved)
     refill_interval: float = 0.1  # seconds between refills
 
     # Per-user limits
-    per_user_limit: int = 1000  # requests per hour
+    per_user_limit: int = 5000   # requests per hour (was 1000)
     per_user_window: int = 3600  # seconds (1 hour)
 
     # Per-endpoint limits
-    per_endpoint_limit: int = 5000  # requests per hour
+    per_endpoint_limit: int = 10000  # requests per hour (was 5000)
     per_endpoint_window: int = 3600  # seconds
 
     # Global limits
-    global_limit: int = 10000  # requests per hour
-    global_window: int = 3600  # seconds
+    global_limit: int = 50000   # requests per hour (was 10000)
+    global_window: int = 3600   # seconds
 
     # Enforcement
     enforce_limits: bool = True
