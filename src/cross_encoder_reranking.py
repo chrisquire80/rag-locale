@@ -4,13 +4,14 @@ Uses semantic cross-encoder models to rerank retrieval results for better releva
 Implements semantic-based reranking without requiring additional embedding calls
 """
 
-import logging
 import numpy as np
 from typing import Optional
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class RankedResult:
@@ -424,7 +425,6 @@ def get_hybrid_reranker(llm_service) -> HybridReranker:
     return get_hybrid_reranker._instance
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     print("Cross-Encoder Reranking Examples:")
     print("\n1. Gemini-based semantic relevance scoring")

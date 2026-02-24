@@ -9,12 +9,13 @@ Quantizzazione:
 - Trade-off: Minore accuratezza (~99% precisione con proper scaling)
 """
 
-import logging
 import numpy as np
 from typing import Optional
 from dataclasses import dataclass
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class QuantizationStats:
@@ -264,5 +265,4 @@ def benchmark_quantization():
     logger.info(f"  Average quantized similarity: {np.mean(quant_similarities):.4f}")
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
     benchmark_quantization()

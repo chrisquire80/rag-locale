@@ -3,7 +3,6 @@ Hybrid Search Engine - BM25 + Vector Similarity
 Combines keyword-based (BM25) and semantic (vector) search for better retrieval
 """
 
-import logging
 import numpy as np
 from pathlib import Path
 from typing import Optional
@@ -11,7 +10,9 @@ from dataclasses import dataclass
 from collections import defaultdict
 import math
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class SearchResult:
@@ -308,7 +309,6 @@ def get_hybrid_search_engine(
     return _hybrid_engine
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     # Test BM25
     corpus = [

@@ -8,7 +8,6 @@ PHASE 10.1: Advanced Retrieval & Semantic Search
 - Threshold: 0.85 cosine similarity = semantic equivalence
 """
 
-import logging
 import time
 import numpy as np
 from collections import deque
@@ -16,8 +15,9 @@ from typing import Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class QueryCluster:
@@ -31,7 +31,6 @@ class QueryCluster:
     def __post_init__(self):
         if self.timestamp is None:
             self.timestamp = datetime.now()
-
 
 class SemanticQueryClusterer:
     """
@@ -305,7 +304,6 @@ class SemanticQueryClusterer:
 
         return len(expired_clusters)
 
-
     def invalidate_clusters(self) -> None:
         """
         Svuota tutta la cache cluster.
@@ -318,10 +316,8 @@ class SemanticQueryClusterer:
         self._recent_queries.clear()
         logger.info(f"🗑️ Cluster cache invalidata ({count} cluster rimossi)")
 
-
 # Global instance
 _query_clusterer = None
-
 
 def get_semantic_query_clusterer() -> SemanticQueryClusterer:
     """Get or create global semantic query clusterer"""

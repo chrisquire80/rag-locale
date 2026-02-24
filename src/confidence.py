@@ -3,11 +3,12 @@ Response Confidence Scoring System
 Calculates answer confidence based on source quality and relevance
 """
 
-import logging
 import statistics
 from typing import Optional
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class RetrievalResult:
     """Wrapper for retrieval results to access score attribute"""

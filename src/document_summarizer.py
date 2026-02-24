@@ -4,7 +4,6 @@ Generates automatic summaries and extracts key points from documents using LLM.
 Provides efficient caching and batch processing capabilities.
 """
 
-import logging
 import hashlib
 import json
 from typing import Optional
@@ -13,7 +12,9 @@ import time
 
 from src.entity_extractor import get_entity_extractor
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class DocumentSummarizer:
     """Generates semantic summaries and key points from document content using LLM."""

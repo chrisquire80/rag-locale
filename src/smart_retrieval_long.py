@@ -4,12 +4,13 @@ Intelligent retrieval optimization for 1M token context window
 Selects and orders documents for maximum relevance within token budget
 """
 
-import logging
 from typing import Optional
 from dataclasses import dataclass
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class RetrievalStrategy(Enum):
     """Strategies for document retrieval and ordering"""

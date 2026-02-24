@@ -3,14 +3,15 @@ Conversation Memory - FASE 20
 Manages conversation context and history
 """
 
-import logging
 import json
 from typing import Any, Optional
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
 from collections import deque
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class ConversationTurn:

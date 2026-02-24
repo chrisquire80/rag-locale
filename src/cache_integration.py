@@ -15,7 +15,6 @@ Expected cache hit rates:
 Overall impact: 2-3x latency reduction for typical workloads
 """
 
-import logging
 import hashlib
 from typing import Optional, Callable, Any
 from functools import wraps
@@ -27,10 +26,10 @@ from src.cache import (
     get_embedding_cache,
     CacheManager
 )
+from src.logging_config import get_logger
 from src.config import config
 
-logger = logging.getLogger(__name__)
-
+logger = get_logger(__name__)
 
 @dataclass
 class CacheStats:
@@ -55,7 +54,6 @@ class CacheStats:
         """Record a cache miss"""
         self.total_requests += 1
         self.cache_misses += 1
-
 
 class CacheIntegration:
     """Centralized cache integration for RAG pipeline"""
@@ -219,10 +217,8 @@ class CacheIntegration:
         self.document_processing_stats = CacheStats()
         self.search_result_stats = CacheStats()
 
-
 # Global singleton
 _cache_integration: Optional[CacheIntegration] = None
-
 
 def get_cache_integration() -> CacheIntegration:
     """Get or create global cache integration instance"""
@@ -230,7 +226,6 @@ def get_cache_integration() -> CacheIntegration:
     if _cache_integration is None:
         _cache_integration = CacheIntegration()
     return _cache_integration
-
 
 def cached_operation(cache_name: str = "query_result"):
     """

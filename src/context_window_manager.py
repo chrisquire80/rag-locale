@@ -3,12 +3,13 @@ Context Window Manager - FASE 18
 Manages 1M token context window allocation for Gemini 2.0 Flash
 """
 
-import logging
 from typing import Optional
 from dataclasses import dataclass
 import re
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class TokenAllocation:

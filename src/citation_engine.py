@@ -3,13 +3,14 @@ Citation Engine - FASE 20
 Generates proper citations and attribution for sources
 """
 
-import logging
 import re
 from typing import Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class Citation:

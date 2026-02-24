@@ -5,7 +5,6 @@ Provides JSON-formatted structured logging for production monitoring.
 Logs are machine-parsable and include timestamp, level, module, message, and context.
 """
 
-import logging
 import json
 import sys
 from datetime import datetime

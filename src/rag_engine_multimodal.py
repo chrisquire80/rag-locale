@@ -3,7 +3,6 @@ Multimodal RAG Engine - FASE 17
 Extends RAGEngineV2 with multimodal (text + image) retrieval and generation
 """
 
-import logging
 import time
 import numpy as np
 from typing import Optional
@@ -17,7 +16,9 @@ from src.vision_service import get_vision_service
 from src.llm_service import get_llm_service
 from src.vector_store import get_vector_store
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class MultimodalRAGResponse(RAGResponse):
@@ -416,7 +417,6 @@ def get_multimodal_rag_engine() -> MultimodalRAGEngine:
     return get_multimodal_rag_engine._instance
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     # Test
     engine = get_multimodal_rag_engine()

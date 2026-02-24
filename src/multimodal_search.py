@@ -3,7 +3,6 @@ Multimodal Search Engine - FASE 17
 Combines text and image retrieval for unified search results
 """
 
-import logging
 import numpy as np
 from typing import Optional
 from dataclasses import dataclass, field
@@ -14,7 +13,9 @@ from src.hybrid_search import HybridSearchEngine, SearchResult
 from src.vision_service import get_vision_service
 from src.pdf_image_extraction import ExtractedImage
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class ImageSearchResult:
@@ -307,7 +308,6 @@ def get_multimodal_search_engine(
     return get_multimodal_search_engine._instance
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     # Test
     docs = [

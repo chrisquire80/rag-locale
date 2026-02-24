@@ -3,13 +3,14 @@ Document Hierarchy Manager - FASE 18
 Organizes documents into hierarchical structures for efficient long-context retrieval
 """
 
-import logging
 import re
 from typing import Optional
 from dataclasses import dataclass, field
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class HierarchyLevel(Enum):
     """Document hierarchy levels"""

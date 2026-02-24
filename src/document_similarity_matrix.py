@@ -4,14 +4,15 @@ Computes and visualizes document relationships using embedding similarity.
 Provides clustering, related documents suggestions, and interactive visualizations.
 """
 
-import logging
 import numpy as np
 from typing import Optional
 import json
 import os
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class DocumentSimilarityMatrix:
     """

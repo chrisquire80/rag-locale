@@ -3,7 +3,6 @@ RAG Engine V2 - FASE 16-20 Enhanced Implementation
 Integrates hybrid search, re-ranking, multimodal support, and quality metrics
 """
 
-import logging
 import time
 from datetime import datetime
 from functools import lru_cache
@@ -17,7 +16,9 @@ from src.hybrid_search import HybridSearchEngine
 from src.reranker import GeminiReRanker
 from src.query_expansion import QueryExpander
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class RetrievalResult:

@@ -5,15 +5,15 @@ Systematic comparison of two configurations.
 Supports statistical significance testing and sample size calculation.
 """
 
-import logging
 import random
 import math
 from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class ABTestRequest:
@@ -24,7 +24,6 @@ class ABTestRequest:
     quality_score: float
     latency_ms: float
     timestamp: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class ABTestResult:
@@ -61,7 +60,6 @@ class ABTestResult:
     # Winner
     winner: Optional[str] = None  # 'A', 'B', or None (tie)
     confidence: float = 0.0  # Confidence in winner (0-1)
-
 
 class ABTestRunner:
     """
@@ -300,10 +298,8 @@ class ABTestRunner:
 
         return t_stat, p_value
 
-
 # Global instance
 _ab_test_runner = None
-
 
 def create_ab_test(config_a, config_b, split_ratio: float = 0.5) -> ABTestRunner:
     """Create a new A/B test"""

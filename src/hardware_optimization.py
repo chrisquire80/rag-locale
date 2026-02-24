@@ -10,15 +10,15 @@ HP ProBook 440 G11 Specs:
 - OS: Windows 11 Pro
 """
 
-import logging
 import os
 import psutil
 import platform
 from typing import Dict, Any
 from dataclasses import dataclass
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class SystemProfile:
@@ -32,7 +32,6 @@ class SystemProfile:
     platform_name: str
     cpu_freq_ghz: float
     is_hp_probook: bool = False
-
 
 class HardwareOptimizer:
     """Ottimizzazioni specifiche per HP ProBook"""
@@ -258,10 +257,8 @@ class HardwareOptimizer:
         report += "\n" + "="*80 + "\n"
         return report
 
-
 # Singleton optimizer
 _optimizer_instance = None
-
 
 def get_hardware_optimizer() -> HardwareOptimizer:
     """Factory per hardware optimizer"""
@@ -270,8 +267,6 @@ def get_hardware_optimizer() -> HardwareOptimizer:
         _optimizer_instance = HardwareOptimizer()
     return _optimizer_instance
 
-
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
     optimizer = get_hardware_optimizer()
     print(optimizer.print_optimization_report())

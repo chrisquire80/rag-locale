@@ -3,7 +3,6 @@ Performance Profiler - Misurazione dettagliata dei tempi di esecuzione
 FASE 2: Profiling per identificare bottleneck
 """
 
-import logging
 import time
 import statistics
 from typing import Callable, Any, Dict, List
@@ -12,8 +11,9 @@ from collections import defaultdict
 from functools import wraps
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class TimingMetric:
@@ -23,7 +23,6 @@ class TimingMetric:
     timestamp: datetime = field(default_factory=datetime.now)
     call_count: int = 1
     tags: Dict[str, Any] = field(default_factory=dict)
-
 
 class PerformanceProfiler:
     """Profiler per timing dettagliato di operazioni RAG"""
@@ -163,10 +162,8 @@ class PerformanceProfiler:
         self.timestamps.clear()
         self._active_timers.clear()
 
-
 # Singleton profiler
 _profiler_instance = None
-
 
 def get_profiler() -> PerformanceProfiler:
     """Factory per performance profiler"""
@@ -174,7 +171,6 @@ def get_profiler() -> PerformanceProfiler:
     if _profiler_instance is None:
         _profiler_instance = PerformanceProfiler()
     return _profiler_instance
-
 
 def profile_operation(operation_name: str):
     """Decorator per profiling automatico di funzioni"""
@@ -191,13 +187,11 @@ def profile_operation(operation_name: str):
         return wrapper
     return decorator
 
-
 # Decorator alternativo con nome dinamico
 def profile_method(func: Callable) -> Callable:
     """Decorator che estrae il nome dal metodo"""
     operation_name = f"{func.__qualname__}"
     return profile_operation(operation_name)(func)
-
 
 # Test suite per profiler
 def test_profiler():
@@ -227,7 +221,5 @@ def test_profiler():
     print(profiler.print_report())
     print(profiler.print_detailed_report())
 
-
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
     test_profiler()

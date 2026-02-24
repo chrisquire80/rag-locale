@@ -3,13 +3,14 @@ UX Enhancements - FASE 20
 Advanced user experience features: citations, suggestions, memory, export
 """
 
-import logging
 from typing import Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class CitationType(Enum):
     """Types of citations"""

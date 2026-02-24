@@ -3,7 +3,6 @@ UX-Enhanced RAG Engine - FASE 20
 Extends QualityAwareRAGEngine with user experience enhancements
 """
 
-import logging
 from typing import Any, Optional
 from dataclasses import dataclass, field
 
@@ -20,7 +19,7 @@ from src.citation_engine import CitationEngine, Citation
 from src.query_suggestions import QuerySuggestionEngine, QuerySuggestion
 from src.chat_memory import ConversationMemory, ConversationTurn
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class EnhancedRAGResponse(RAGResponseWithMetrics):

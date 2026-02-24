@@ -9,7 +9,6 @@ Integrates all 6 quality enhancement tasks (TASKS 1-6):
 6. Multi-Document Analysis
 """
 
-import logging
 import time
 from typing import Optional
 from datetime import datetime
@@ -22,7 +21,9 @@ from src.cross_encoder_reranking import get_hybrid_reranker
 from src.multi_document_analysis import get_multi_document_analyzer
 from src.config import config
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class EnhancedRAGEngine(RAGEngine):
     """
@@ -405,7 +406,6 @@ def get_enhanced_rag_engine() -> EnhancedRAGEngine:
     return get_enhanced_rag_engine._instance
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     print("Enhanced RAG Engine - All Quality Improvements Integrated")
     print("=" * 70)

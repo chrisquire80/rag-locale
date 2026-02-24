@@ -4,13 +4,14 @@ Batches multiple documents and queries to maximize 1M token context usage
 Reduces API calls by 90-95% through intelligent batching
 """
 
-import logging
 from typing import Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class BatchStrategy(Enum):
     """Strategy for batching documents"""

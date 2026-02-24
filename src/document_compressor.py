@@ -3,13 +3,14 @@ Document Compressor - FASE 18
 Multi-level compression engine for fitting documents in 1M token context
 """
 
-import logging
 import re
 from typing import Optional
 from dataclasses import dataclass
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class CompressionLevel(Enum):
     """Compression level enum"""

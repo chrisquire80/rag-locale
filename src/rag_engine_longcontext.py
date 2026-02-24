@@ -3,7 +3,6 @@ Long-Context RAG Engine - FASE 18
 Extends MultimodalRAGEngine with 1M token context capabilities
 """
 
-import logging
 import time
 from typing import Any, Optional
 from dataclasses import dataclass, field
@@ -18,7 +17,7 @@ except ImportError:
 from src.long_context_optimizer import LongContextOptimizer, ContextChunk
 from src.document_hierarchy import DocumentHierarchy, HierarchyNode
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class LongContextRAGResponse(MultimodalRAGResponse):

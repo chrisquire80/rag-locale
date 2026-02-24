@@ -4,14 +4,15 @@ from PIL import Image
 import io
 import os
 import json
-import logging
 from pathlib import Path
 from typing import List, Dict, Any
 
 from src.config import config
 from src.vision_service import get_vision_service
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Directory for saving cropped images
 CROP_OUTPUT_DIR = Path("static/crops")

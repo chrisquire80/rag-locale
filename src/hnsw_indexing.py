@@ -10,13 +10,14 @@ HNSW offre:
 Nota: Utilizza numpy puro senza dipendenze esterne (hnswlib non supportato)
 """
 
-import logging
 import numpy as np
 from typing import Optional
 from dataclasses import dataclass
 import heapq
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class HNSWConfig:
@@ -287,5 +288,4 @@ def benchmark_hnsw_vs_exact(num_items: int = 1000, num_queries: int = 100):
     logger.info(f"  Speedup: {speedup:.1f}x")
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
     benchmark_hnsw_vs_exact(num_items=1000, num_queries=100)

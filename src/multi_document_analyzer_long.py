@@ -4,12 +4,13 @@ Enhanced analysis across multiple documents using 1M token context
 Enables cross-document reasoning and synthesis within single API call
 """
 
-import logging
 from typing import Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class AnalysisResult:

@@ -3,14 +3,15 @@ Document Upload Manager
 Handles batch uploads, validation, duplicate detection, and folder organization.
 """
 
-import logging
 import io
 import re
 from typing import Optional
 from pathlib import Path
 import time
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class UploadManager:
     """Manages document uploads with validation and deduplication."""

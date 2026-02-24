@@ -4,7 +4,6 @@ Extracts and analyzes visual content (tables, charts, images) from PDFs
 Enables hybrid text + visual retrieval and reasoning
 """
 
-import logging
 import base64
 import io
 from typing import Optional
@@ -12,7 +11,9 @@ from dataclasses import dataclass
 from pathlib import Path
 import threading
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class VisualElement:
@@ -471,7 +472,6 @@ def get_visual_ingestion_engine(llm_service, vector_store) -> VisualDocumentInge
     return get_visual_ingestion_engine._instance
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     print("Visual Document Processor - Gemini 2.0 Flash Vision")
     print("=" * 60)

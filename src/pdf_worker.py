@@ -2,12 +2,12 @@
 import sys
 import gc
 import json
-import logging
 from pathlib import Path
 
 # Configure logging to stderr so it doesn't pollute stdout (if we used stdout for data)
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 try:
     import pypdf

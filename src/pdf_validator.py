@@ -4,12 +4,13 @@ Detects corrupted/malformed PDFs before processing
 Classifies errors for appropriate handling (retry vs blacklist)
 """
 
-import logging
 from pathlib import Path
 from typing import Optional
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class PDFErrorType(Enum):
     """Classification of PDF errors"""
@@ -227,8 +228,6 @@ def get_pdf_validator() -> PDFValidator:
 if __name__ == "__main__":
     # Test the validator
     import sys
-
-    logging.basicConfig(level=logging.INFO)
 
     if len(sys.argv) < 2:
         print("Usage: python pdf_validator.py <pdf_file>")

@@ -3,7 +3,6 @@ PDF Image Extraction - FASE 17 Multimodal RAG
 Extracts images from PDF documents and manages image metadata
 """
 
-import logging
 import tempfile
 from pathlib import Path
 from typing import Optional
@@ -27,7 +26,7 @@ try:
 except ImportError:
     raise ImportError("pdf2image not found. Install with: pip install pdf2image")
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class ExtractedImage:
@@ -416,7 +415,6 @@ def get_pdf_image_extractor(output_dir: Optional[Path] = None) -> PDFImageExtrac
     return get_pdf_image_extractor._instance
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     # Test extraction
     extractor = PDFImageExtractor()

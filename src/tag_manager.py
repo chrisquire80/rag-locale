@@ -4,12 +4,13 @@ Extracts, manages, and aggregates document tags using LLM-based analysis.
 Tags are stored in chunk metadata for filtering and organization.
 """
 
-import logging
 import re
 from typing import Optional
 from collections import defaultdict
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class TagManager:
     """Manages document tags using LLM-based extraction"""

@@ -3,13 +3,14 @@ Configurazione centralizzata per RAG Locale
 Ambiente: HP ProBook 440 G11 (16GB RAM, CPU-only)
 """
 
-import logging
 from pathlib import Path
 from typing import Literal
 from pydantic_settings import BaseSettings
 from pydantic import Field, SecretStr
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Percorsi assoluti per robustezza
 PROJECT_ROOT = Path(__file__).parent.parent

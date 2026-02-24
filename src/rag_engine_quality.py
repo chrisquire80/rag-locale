@@ -3,7 +3,6 @@ Quality-Aware RAG Engine - FASE 19
 Extends LongContextRAGEngine with quality metrics and feedback loops
 """
 
-import logging
 import time
 from typing import Optional
 from dataclasses import dataclass, field
@@ -20,7 +19,7 @@ except ImportError:
 from src.quality_metrics import QualityMetrics, QualityMetricsCollector
 from src.ragas_integration import RagasEvaluator
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class RAGResponseWithMetrics(LongContextRAGResponse):

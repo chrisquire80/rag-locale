@@ -6,19 +6,20 @@ Attualmente: Un worker per PDF (lento)
 Migliorato: Multi-thread per pagine PDF (10-20x più veloce)
 """
 
-import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 
 from pathlib import Path
 import threading
 
+from src.logging_config import get_logger
+
 try:
     from pypdf import PdfReader
 except ImportError:
     from PyPDF2 import PdfReader
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class ParallelPDFParser:
     """Parser PDF parallelo"""
@@ -224,5 +225,4 @@ def benchmark_pdf_parsing():
     logger.info("  Speedup: ~4x")
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
     benchmark_pdf_parsing()

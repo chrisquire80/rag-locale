@@ -10,14 +10,15 @@ Evaluates RAG response quality using multiple metrics:
 - F1: Harmonic mean of precision/recall
 """
 
-import logging
 import json
 from typing import Optional
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import statistics
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class QueryEvaluation:

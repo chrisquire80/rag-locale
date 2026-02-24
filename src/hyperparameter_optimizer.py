@@ -5,13 +5,14 @@ Grid search and Bayesian optimization for RAG parameters.
 Supports A/B testing and configuration comparison.
 """
 
-import logging
 import itertools
 from typing import Any, Optional
 from dataclasses import dataclass, field
 import time
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class HyperparameterConfig:

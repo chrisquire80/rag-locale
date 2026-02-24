@@ -3,15 +3,15 @@ Performance Optimizer for RAG LOCALE Quality Improvements
 Implements caching, batch processing, and performance tuning
 """
 
-import logging
 import time
 from typing import Dict, List, Optional, Any, Tuple
 from functools import lru_cache, wraps
 from datetime import datetime, timedelta
 import threading
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 class CacheManager:
     """Manages caching for expensive operations"""
@@ -78,7 +78,6 @@ class CacheManager:
             "entries": list(self.cache.keys())[:10]  # Show first 10 keys
         }
 
-
 class BatchProcessor:
     """Process items in batches for better performance"""
 
@@ -141,7 +140,6 @@ class BatchProcessor:
             self.timestamps = []
             logger.debug(f"Batch flushed: {len(result)} items")
             return result
-
 
 class PerformanceMonitor:
     """Monitor and report performance metrics"""
@@ -221,7 +219,6 @@ class PerformanceMonitor:
             self.metrics.clear()
             logger.info("Performance metrics cleared")
 
-
 class PerformanceDecorator:
     """Decorator for automatic performance monitoring"""
 
@@ -253,7 +250,6 @@ class PerformanceDecorator:
                     raise
             return wrapper
         return decorator
-
 
 class LazyLoader:
     """Lazy load expensive modules only when needed"""
@@ -287,13 +283,11 @@ class LazyLoader:
 
             return self.modules[module_name]
 
-
 # Global instances
 _cache_manager = None
 _batch_processor = None
 _performance_monitor = None
 _lazy_loader = None
-
 
 def get_cache_manager(max_size: int = 1000, ttl_seconds: int = 3600) -> CacheManager:
     """Get or create global cache manager"""
@@ -302,14 +296,12 @@ def get_cache_manager(max_size: int = 1000, ttl_seconds: int = 3600) -> CacheMan
         _cache_manager = CacheManager(max_size=max_size, ttl_seconds=ttl_seconds)
     return _cache_manager
 
-
 def get_batch_processor(batch_size: int = 10, timeout_seconds: float = 5.0) -> BatchProcessor:
     """Get or create global batch processor"""
     global _batch_processor
     if _batch_processor is None:
         _batch_processor = BatchProcessor(batch_size=batch_size, timeout_seconds=timeout_seconds)
     return _batch_processor
-
 
 def get_performance_monitor() -> PerformanceMonitor:
     """Get or create global performance monitor"""
@@ -318,14 +310,12 @@ def get_performance_monitor() -> PerformanceMonitor:
         _performance_monitor = PerformanceMonitor()
     return _performance_monitor
 
-
 def get_lazy_loader() -> LazyLoader:
     """Get or create global lazy loader"""
     global _lazy_loader
     if _lazy_loader is None:
         _lazy_loader = LazyLoader()
     return _lazy_loader
-
 
 def cached_operation(ttl_seconds: int = 3600):
     """
@@ -361,9 +351,7 @@ def cached_operation(ttl_seconds: int = 3600):
         return wrapper
     return decorator
 
-
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     # Test cache manager
     print("\n=== Cache Manager Test ===")

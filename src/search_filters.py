@@ -4,12 +4,13 @@ Provides multi-criteria filtering for RAG queries with support for
 document type, date range, tags, similarity threshold, and source documents.
 """
 
-import logging
 from dataclasses import dataclass, field
 from typing import Optional
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class SearchFilter:

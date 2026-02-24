@@ -4,7 +4,6 @@ Extracts and processes date information from filenames and document metadata
 Enables temporal filtering and date-aware RAG responses
 """
 
-import logging
 import re
 from typing import Optional
 from datetime import datetime, date
@@ -12,7 +11,9 @@ from dataclasses import dataclass
 from pathlib import Path
 import calendar
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class TemporalMetadata:
@@ -325,7 +326,6 @@ def get_temporal_extractor() -> TemporalMetadataExtractor:
     return _extractor
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     # Test examples
     extractor = TemporalMetadataExtractor()

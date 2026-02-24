@@ -4,13 +4,13 @@ Leverages Gemini 2.0 Flash's 1M token context for comprehensive document analysi
 Enables global summaries, cross-document insights, and pattern detection
 """
 
-import logging
 from typing import Optional
 from dataclasses import dataclass
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class DocumentCluster:
@@ -22,7 +22,6 @@ class DocumentCluster:
     summary: str
     confidence: float = 0.8
 
-
 @dataclass
 class CrossDocumentInsight:
     """Represents an insight across multiple documents"""
@@ -31,7 +30,6 @@ class CrossDocumentInsight:
     insight_text: str
     evidence: list[str]  # Supporting quotes
     confidence: float
-
 
 @dataclass
 class GlobalAnalysis:
@@ -45,7 +43,6 @@ class GlobalAnalysis:
     key_findings: list[str]
     recommendations: list[str]
     gaps_identified: list[str]
-
 
 class MultiDocumentAnalyzer:
     """Analyze and synthesize information across multiple documents"""
@@ -481,16 +478,13 @@ Solo JSON:"""
 
         return {"relationships": []}
 
-
 def get_multi_document_analyzer(llm_service) -> MultiDocumentAnalyzer:
     """Get or create global multi-document analyzer"""
     if not hasattr(get_multi_document_analyzer, '_instance'):
         get_multi_document_analyzer._instance = MultiDocumentAnalyzer(llm_service)
     return get_multi_document_analyzer._instance
 
-
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     print("Multi-Document Analysis Examples:")
     print("\n1. Global Summary Generation")

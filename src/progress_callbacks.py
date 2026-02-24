@@ -3,14 +3,14 @@ Progress callbacks for real-time ingestion UI updates
 Decouples backend progress from frontend rendering
 """
 
-import logging
 import time
 from typing import Optional, Callable
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class ProgressUpdate:
@@ -41,7 +41,6 @@ class ProgressUpdate:
             return f"{self.estimated_remaining_seconds/60:.1f}m"
         else:
             return f"{self.estimated_remaining_seconds/3600:.1f}h"
-
 
 class ProgressCallback(ABC):
     """Base callback interface for progress updates"""
@@ -77,7 +76,6 @@ class ProgressCallback(ABC):
         """Called when entire batch complete"""
         pass
 
-
 class LoggingProgressCallback(ProgressCallback):
     """Progress callback that logs to logger"""
 
@@ -104,7 +102,6 @@ class LoggingProgressCallback(ProgressCallback):
     def on_batch_complete(self, total_files: int, successful: int, failed: int, total_chunks: int,
                          elapsed_seconds: float):
         logger.info(f"Batch complete: {successful}/{total_files} files, {total_chunks} chunks in {elapsed_seconds:.1f}s")
-
 
 class PrintProgressCallback(ProgressCallback):
     """Progress callback that prints to stdout"""
@@ -134,7 +131,6 @@ class PrintProgressCallback(ProgressCallback):
         print(f"Complete: {successful}/{total_files} files ({failed} failed)")
         print(f"Total: {total_chunks} chunks in {elapsed_seconds:.1f}s ({rate:.1f} chunks/s)")
         print(f"{'='*60}\n")
-
 
 class StreamlitProgressCallback(ProgressCallback):
     """Progress callback for Streamlit UI"""
@@ -215,7 +211,6 @@ class StreamlitProgressCallback(ProgressCallback):
         except ImportError:
             return None
 
-
 class CompositeProgressCallback(ProgressCallback):
     """Composite callback that delegates to multiple callbacks"""
 
@@ -264,7 +259,6 @@ class CompositeProgressCallback(ProgressCallback):
                 cb.on_batch_complete(total_files, successful, failed, total_chunks, elapsed_seconds)
             except Exception as e:
                 logger.error(f"Error in progress callback: {e}")
-
 
 class NullProgressCallback(ProgressCallback):
     """No-op progress callback (for testing)"""

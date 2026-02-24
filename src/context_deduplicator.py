@@ -8,13 +8,13 @@ PHASE 10.3: Advanced Retrieval & Semantic Search
 - Expected improvement: 15-25% context reduction, 10-20% LLM latency reduction
 """
 
-import logging
 import numpy as np
 from typing import List, Optional, Dict
 from dataclasses import dataclass
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class ChunkInfo:
@@ -23,7 +23,6 @@ class ChunkInfo:
     source: str
     score: float
     doc_id: str
-
 
 class ContextDeduplicator:
     """
@@ -210,10 +209,8 @@ class ContextDeduplicator:
             "similarity_threshold": self.similarity_threshold,
         }
 
-
 # Global instance
 _context_deduplicator = None
-
 
 def get_context_deduplicator() -> ContextDeduplicator:
     """Get or create global context deduplicator"""

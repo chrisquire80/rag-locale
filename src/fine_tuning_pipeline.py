@@ -5,14 +5,15 @@ Framework for training and deploying fine-tuned models.
 Supports embedding adaptation and prompt optimization.
 """
 
-import logging
 import json
 from typing import Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class TrainingData:

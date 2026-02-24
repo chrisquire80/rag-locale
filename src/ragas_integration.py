@@ -4,11 +4,12 @@ Optional integration with RAGAS framework for advanced evaluation
 RAGAS: Retrieval-Augmented Generation Assessment
 """
 
-import logging
 from typing import Any, Optional
 from dataclasses import dataclass
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Try to import ragas if available
 try:

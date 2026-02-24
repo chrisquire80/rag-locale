@@ -3,7 +3,6 @@ Advanced Re-ranker using Gemini 2.0 Flash
 Evaluates and re-ranks search results based on relevance to query
 """
 
-import logging
 import json
 import re
 from typing import Optional
@@ -11,7 +10,9 @@ from dataclasses import dataclass
 from datetime import datetime
 import time
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class RankedResult:
@@ -352,7 +353,6 @@ def get_parent_retriever(documents: list[Dict]) -> ParentDocumentRetriever:
     return _parent_retriever
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     # Test example
     print("Parent Document Retriever Test:")

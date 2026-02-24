@@ -4,7 +4,6 @@ Uses ProcessPoolExecutor for concurrent PDF processing
 Provides 8-15x speedup for bulk uploads
 """
 
-import logging
 import time
 from pathlib import Path
 from typing import List, Optional, Callable
@@ -14,8 +13,9 @@ from dataclasses import dataclass
 from src.document_ingestion import DocumentProcessor, Chunk
 from src.vector_store import get_vector_store
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class IngestionStats:
@@ -28,7 +28,6 @@ class IngestionStats:
     elapsed_time: float
     chunks_per_second: float
     failed_file_names: List[str]
-
 
 class ParallelDocumentIngestion:
     """
@@ -230,7 +229,6 @@ PHASE 4 Parallel Ingestion Summary:
         logger.info(f"Found {len(file_paths)} documents to ingest from {directory}")
 
         return self.ingest_documents_parallel(file_paths, progress_callback)
-
 
 def create_parallel_ingestion(max_workers: Optional[int] = None) -> ParallelDocumentIngestion:
     """Factory function for parallel ingestion"""

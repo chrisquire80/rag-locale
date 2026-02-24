@@ -3,11 +3,12 @@ Multimodal Retrieval Engine - Hybrid Text + Visual Search
 Enables searching and reasoning over both text and visual content
 """
 
-import logging
 from typing import Optional
 from dataclasses import dataclass
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class MultimodalResult:
@@ -239,7 +240,6 @@ def get_multimodal_retriever(vector_store, llm_service) -> MultimodalRetriever:
     return get_multimodal_retriever._instance
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
 
     print("Multimodal Retrieval Engine")
     print("=" * 60)

@@ -4,15 +4,15 @@ Consolidates caching logic across rag_engine, async_rag_engine, and vector_store
 """
 
 import time
-import logging
 from typing import Optional, Any, Dict
 from collections import OrderedDict
 from dataclasses import dataclass
 
 from src.config import config
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
 
+logger = get_logger(__name__)
 
 @dataclass
 class CacheEntry:
@@ -24,7 +24,6 @@ class CacheEntry:
     def is_expired(self) -> bool:
         """Check if entry has expired"""
         return time.time() - self.timestamp > self.ttl
-
 
 class CacheManager:
     """
@@ -156,7 +155,6 @@ class CacheManager:
         """Return current cache size"""
         return len(self._cache)
 
-
 class QueryExpansionCache(CacheManager):
     """
     Specialized cache for query expansion variants (FASE 8: Feature 3).
@@ -173,7 +171,6 @@ class QueryExpansionCache(CacheManager):
         """
         super().__init__(max_size=max_size, default_ttl=3600)  # 1 hour TTL
         logger.debug("Initialized QueryExpansionCache (1-hour TTL)")
-
 
 class VisionProcessingCache(CacheManager):
     """
@@ -200,13 +197,11 @@ class VisionProcessingCache(CacheManager):
         """Cache result by image hash."""
         self.set(f"image_{image_hash}", result, ttl=self.default_ttl)
 
-
 # Global singletons for different cache purposes
 _query_result_cache: Optional[CacheManager] = None
 _embedding_cache: Optional[CacheManager] = None
 _query_expansion_cache: Optional[QueryExpansionCache] = None
 _vision_processing_cache: Optional[VisionProcessingCache] = None
-
 
 def get_query_result_cache() -> CacheManager:
     """Get singleton query result cache (from PerformanceConfig)"""
@@ -219,7 +214,6 @@ def get_query_result_cache() -> CacheManager:
         logger.debug("Initialized query result cache")
     return _query_result_cache
 
-
 def get_embedding_cache() -> CacheManager:
     """Get singleton embedding cache (24-hour TTL)"""
     global _embedding_cache
@@ -228,7 +222,6 @@ def get_embedding_cache() -> CacheManager:
         logger.debug("Initialized embedding cache")
     return _embedding_cache
 
-
 def get_query_expansion_cache() -> QueryExpansionCache:
     """Get singleton query expansion cache (1-hour TTL, FASE 8)"""
     global _query_expansion_cache
@@ -236,14 +229,12 @@ def get_query_expansion_cache() -> QueryExpansionCache:
         _query_expansion_cache = QueryExpansionCache(max_size=500)
     return _query_expansion_cache
 
-
 def get_vision_processing_cache() -> VisionProcessingCache:
     """Get singleton vision processing cache (24-hour TTL, FASE 8)"""
     global _vision_processing_cache
     if _vision_processing_cache is None:
         _vision_processing_cache = VisionProcessingCache(max_size=1000)
     return _vision_processing_cache
-
 
 def clear_all_caches() -> None:
     """Clear all global caches (useful for shutdown/cleanup)"""

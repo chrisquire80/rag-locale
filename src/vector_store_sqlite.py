@@ -4,7 +4,6 @@ PHASE 3 OPTIMIZATION: SQLite-based storage for better performance and incrementa
 Alternative to pickle-based storage with schema for metadata and embeddings
 """
 
-import logging
 import sqlite3
 import json
 import numpy as np
@@ -13,7 +12,9 @@ from typing import Any, Optional
 from dataclasses import dataclass, asdict
 import threading
 
-logger = logging.getLogger(__name__)
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 @dataclass
 class SQLiteDocument:
