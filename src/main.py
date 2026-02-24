@@ -24,7 +24,6 @@ from src.async_rag_engine import get_async_rag_engine
 
 # Initialize structured logging (replaces basicConfig)
 from src.logging_config import get_logger as _get_logger, configure_logging as _configure_logging
-import os
 
 _log_level = os.getenv('LOG_LEVEL', config.log_level if hasattr(config, 'log_level') else 'INFO')
 _log_file = str(LOGS_DIR / "rag_main.jsonl")
