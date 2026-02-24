@@ -14,6 +14,7 @@ from datetime import datetime
 from src.config import config
 from src.llm_service import get_llm_service
 from src.logging_config import get_logger
+from src.rate_limiter import rate_limit
 
 # FASE 2, 5, 6: Performance optimizations
 from src.performance_profiler import get_profiler, profile_operation
@@ -224,6 +225,7 @@ class VectorStore:
                     pass
             raise
 
+    @rate_limit(endpoint_name="vector_store_add", tokens_cost=8.0)
     def add_documents(
         self,
         documents: list[str],
@@ -342,6 +344,7 @@ class VectorStore:
 
         return count_added, failed_docs
 
+    @rate_limit(endpoint_name="vector_search", tokens_cost=2.0)
     @profile_operation("vector_search")
     def search(
         self,

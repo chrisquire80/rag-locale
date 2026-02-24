@@ -29,6 +29,7 @@ from src.pdf_validator import get_pdf_validator
 from src.tag_manager import TagManager
 from src.document_summarizer import DocumentSummarizer
 from src.logging_config import get_logger
+from src.rate_limiter import rate_limit
 
 logger = get_logger(__name__)
 
@@ -594,6 +595,7 @@ class DocumentIngestionPipeline:
             logger.error(f"Worker error processing {file_path.name}: {e}")
             raise
 
+    @rate_limit(endpoint_name="document_ingestion", tokens_cost=5.0)
     def ingest_single_file(self, file_path: Path, max_retries: int = 3, progress_callback: Optional[ProgressCallback] = None, file_number: int = 1, total_files: int = 1) -> int:
         """
         Ingestisci singolo file con retry logic per rate-limit errors.

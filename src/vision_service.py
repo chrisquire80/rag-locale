@@ -19,6 +19,7 @@ import google.genai as genai
 from src.config import config
 from src.cache import VisionProcessingCache
 from src.logging_config import get_logger
+from src.rate_limiter import rate_limit
 
 logger = get_logger(__name__)
 
@@ -62,6 +63,7 @@ class GeminiVisionService:
             logger.warning(f"Could not hash image {image_path}: {e}")
             return None
 
+    @rate_limit(endpoint_name="vision_analyze", tokens_cost=5.0)
     def analyze_image(self, image_path: str) -> str:
         """
         Analyze image and generate description
@@ -131,6 +133,7 @@ Be concise but comprehensive."""
             logger.error(f"Image analysis failed for {image_path}: {e}")
             raise
 
+    @rate_limit(endpoint_name="vision_extract", tokens_cost=3.0)
     def extract_image_text(self, image_path: str) -> str:
         """
         Extract text from image (OCR-like functionality)

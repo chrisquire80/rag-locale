@@ -12,6 +12,7 @@ from requests.exceptions import Timeout, ConnectionError, ReadTimeout
 
 from src.config import config
 from src.logging_config import get_logger
+from src.rate_limiter import rate_limit
 
 logger = get_logger(__name__)
 
@@ -39,6 +40,7 @@ class GeminiService:
             logger.error(f"✗ Errore connessione Gemini: {e}")
             return False
 
+    @rate_limit(endpoint_name="gemini_embedding", tokens_cost=1.0)
     def get_embedding(self, text: str) -> list[float]:
         """
         Ottieni embedding vettoriale per il testo con exponential backoff.
@@ -107,6 +109,7 @@ class GeminiService:
                     logger.error(f"✗ Failed to get embedding after {max_retries} retries: {e}")
                     raise RuntimeError(f"Embedding generation failed after {max_retries} retries: {e}")
 
+    @rate_limit(endpoint_name="gemini_embedding_batch", tokens_cost=10.0)
     def get_embeddings_batch(self, texts: list[str], batch_size: int = 50) -> list[list[float]]:
         """
         Ottieni embeddings per lista di testi in batch (OPTIMIZATION 8.5).
