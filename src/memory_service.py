@@ -151,7 +151,6 @@ class MemoryService:
                 LIMIT ?
             ''', (f'%{query}%', f'%{query}%', limit))
             rows = cursor.fetchall()
-            conn.close()
 
             context_parts = []
             for row in rows:
@@ -178,7 +177,7 @@ class MemoryService:
             ''', (limit,))
             rows = cursor.fetchall()
             return [
-                {"id": r[0], "timestamp": r[1], "user_query": r[2], "ai_response": r[3], "referenced_docs": r[4]}
+                {"id": r['id'], "timestamp": r['timestamp'], "user_query": r['user_query'], "ai_response": r['ai_response'], "referenced_docs": r['referenced_docs']}
                 for r in rows
             ]
         except Exception as e:
@@ -202,11 +201,11 @@ class MemoryService:
             rows = cursor.fetchall()
             return [
                 {
-                    "timestamp": r[0],
-                    "user_query": r[1],
-                    "ai_response": r[2][:300],
-                    "found_anomalies": bool(r[3]),
-                    "referenced_docs": r[4]
+                    "timestamp": r['timestamp'],
+                    "user_query": r['user_query'],
+                    "ai_response": r['ai_response'][:300],
+                    "found_anomalies": bool(r['found_anomalies']),
+                    "referenced_docs": r['referenced_docs']
                 }
                 for r in rows
             ]
@@ -221,7 +220,6 @@ class MemoryService:
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*), SUM(found_anomalies) FROM chat_history")
             total, anomalies = cursor.fetchone()
-            conn.close()
             return {
                 "total_interactions": total or 0,
                 "total_anomalies": int(anomalies or 0),
@@ -243,7 +241,6 @@ class MemoryService:
                 VALUES (?, ?, ?, ?)
             ''', (title, level, datetime.now(), source))
             conn.commit()
-            conn.close()
             logger.info(f"Task added: {title}")
         except Exception as e:
             logger.error(f"Failed to add task: {e}")
@@ -265,8 +262,8 @@ class MemoryService:
             rows = cursor.fetchall()
             return [
                 {
-                    "id": r[0], "title": r[1], "level": r[2], 
-                    "status": r[3], "created_at": r[4], "completed_at": r[5]
+                    "id": r['id'], "title": r['title'], "level": r['level'],
+                    "status": r['status'], "created_at": r['created_at'], "completed_at": r['completed_at']
                 }
                 for r in rows
             ]
@@ -285,7 +282,7 @@ class MemoryService:
             if not row:
                 return
 
-            new_status = "completed" if row[0] == "pending" else "pending"
+            new_status = "completed" if row['status'] == "pending" else "pending"
             comp_at = datetime.now() if new_status == "completed" else None
 
             cursor.execute('''
@@ -294,7 +291,6 @@ class MemoryService:
                 WHERE id = ?
             ''', (new_status, comp_at, task_id))
             conn.commit()
-            conn.close()
         except Exception as e:
             logger.error(f"Failed to toggle task: {e}")
 
@@ -305,7 +301,6 @@ class MemoryService:
             cursor = conn.cursor()
             cursor.execute("DELETE FROM action_tasks WHERE id = ?", (task_id,))
             conn.commit()
-            conn.close()
         except Exception as e:
             logger.error(f"Failed to delete task: {e}")
 
@@ -316,7 +311,6 @@ class MemoryService:
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*), SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) FROM action_tasks")
             total, completed = cursor.fetchone()
-            conn.close()
             if not total:
                 return 0.0
             return (completed or 0) / total
