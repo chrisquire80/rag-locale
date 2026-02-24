@@ -26,6 +26,9 @@ from src.semantic_query_clustering import get_semantic_query_clusterer
 # FASE 10.3: Context deduplication for optimized LLM input
 from src.context_deduplicator import get_context_deduplicator
 
+# FASE 8.1: Query and document processing caching
+from src.cache_integration import get_cache_integration
+
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -58,15 +61,16 @@ class RAGEngine:
         self.top_k = config.rag.similarity_top_k
         self.system_prompt = config.rag.system_prompt
 
-        # OPTIMIZATION 8.4: Query result caching with TTL
-        self._query_cache = {}  # {query_hash: (timestamp, results)}
-        self._cache_ttl = 7200  # 2 hours cache TTL (increased from 5 min for better UI responsiveness)
+        # FASE 8.1: Centralized cache integration (replaces local _query_cache)
+        self._cache = get_cache_integration()
 
         # FASE 10.1: Semantic query clustering for improved cache hit rates
         self._query_clusterer = get_semantic_query_clusterer()
 
         # FASE 10.3: Context deduplication for optimized LLM input
         self._context_deduplicator = get_context_deduplicator()
+
+        logger.info("RAGEngine initialized with centralized caching (Phase 8.1)")
 
     def _get_cache_key(self, query: str, metadata_filter: Optional[dict] = None) -> str:
         """Genera cache key da query e filter"""
