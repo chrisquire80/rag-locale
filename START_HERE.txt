@@ -1,0 +1,153 @@
+================================================================================
+                          START HERE
+                    RAG LOCALE Quick Start
+================================================================================
+
+Welcome! Your RAG LOCALE application now has automatic session persistence.
+
+Everything is ready to use. Just follow these simple steps:
+
+================================================================================
+STEP 1: START THE APPLICATION (30 seconds)
+================================================================================
+
+Double-click:
+  restart_app.bat
+
+Or run from command line:
+  .\restart_app.bat
+
+What happens:
+  • Console window opens with status messages
+  • Your browser opens automatically
+  • App loads at http://localhost:8503
+  • Ready to use in about 30 seconds
+
+================================================================================
+STEP 2: SELECT YOUR DOCUMENTS (1 minute)
+================================================================================
+
+On first startup:
+  1. Click "Scegli cartella" button
+  2. Select folder with your documents
+  3. Click "Apri" or equivalent button
+  4. Wait 5-15 seconds while app indexes
+
+What's happening:
+  • Documents are being indexed
+  • Topics are being extracted
+  • Cache is being created
+  • Everything is being saved for next time
+
+================================================================================
+STEP 3: START USING! (immediately)
+================================================================================
+
+Now you can:
+  1. Ask questions about your documents
+  2. Click "Argomenti" tab to see topics
+  3. Browse documents by theme
+  4. View conversation history
+  5. Use all RAG LOCALE features
+
+Everything works!
+
+================================================================================
+STEP 4: NEXT TIME (< 1 second)
+================================================================================
+
+Tomorrow, next week, whenever:
+  1. Double-click: restart_app.bat
+  2. Everything is ready
+  3. Your folder is remembered
+  4. Documents load from cache
+  5. Conversation history restored
+
+NO RECONFIGURATION NEEDED!
+Everything happens automatically.
+
+================================================================================
+FEATURES THAT WORK AUTOMATICALLY
+================================================================================
+
+✓ Folder Selection
+  Your documents folder is remembered forever
+  (until you change it)
+
+✓ Document Caching
+  All documents loaded in seconds (from cache)
+  Instead of scanning filesystem every time
+
+✓ Conversation History
+  All past questions and answers preserved
+  Full context available across sessions
+
+✓ Topic Grouping
+  Documents automatically organized by theme
+  Instantly available next time
+
+✓ Settings
+  Your preferences and UI state saved
+  Restored exactly as you left it
+
+================================================================================
+IF SOMETHING GOES WRONG
+================================================================================
+
+App won't start?
+  Solution: Run .\restart_app.bat
+  (It automatically handles port cleanup)
+
+Folder not remembered?
+  Solution: Delete data/session_persistence/user_settings.json
+           Then restart and select folder again
+
+Cache broken?
+  Solution: Delete data/session_persistence/documents_cache.json
+           Then restart and select folder again
+
+Want to start fresh?
+  Solution: Delete entire data/session_persistence/ folder
+           Then restart app
+
+Need verification?
+  Command: python verify_session_persistence.py
+  Expected: 7/7 tests passed
+
+================================================================================
+DOCUMENTATION
+================================================================================
+
+If you want to learn more:
+
+Quick Start:
+  → Read: STARTUP_GUIDE.txt
+
+Technical Details:
+  → Read: SESSION_PERSISTENCE_GUIDE.md
+
+Feature Overview:
+  → Read: README_SESSION_PERSISTENCE.txt
+
+Implementation Details:
+  → Read: FINAL_SUMMARY.txt
+
+File Inventory:
+  → Read: FILES_CHECKLIST.txt
+
+================================================================================
+THAT'S IT!
+================================================================================
+
+You're ready to use RAG LOCALE with full session persistence.
+
+Remember:
+  • First time: Select folder, wait ~10 seconds
+  • After that: Everything is instant
+
+To start:
+  Double-click: restart_app.bat
+
+Enjoy!
+
+================================================================================

@@ -1,0 +1,25 @@
+
+GOVERNANCE DEI DATI
+
+1. CLASSIFICAZIONE DATI
+Tutti i dati aziendali devono essere classificati in base al livello di riservatezza:
+- PUBLIC: Dati pubblicamente disponibili
+- INTERNAL: Dati aziendali non critici
+- CONFIDENTIAL: Dati sensibili (contratti, piani strategici)
+- RESTRICTED: Dati ad accesso limitato (dati personali, finanziari)
+
+2. RETENTION POLICY
+I dati devono essere conservati secondo il periodo di retention stabilito:
+- Dati transazionali: 7 anni
+- Dati personali: Secondo GDPR (massimo tempo di legittimo interesse)
+- Dati di sicurezza: Minimo 12 mesi
+- Dati di audit: 10 anni per finanza, 5 anni per operazionale
+
+3. DATA GOVERNANCE COMMITTEE
+È costituito da: CIO, Chief Privacy Officer, responsabili dipartimentali. Si riunisce mensile per valutare rischi, implementare policy, verificare compliance.
+
+4. GDPR COMPLIANCE
+Tutti i trattamenti di dati personali devono avere una base legale esplicita (consenso, obbligo legale, interesse legittimo). È obbligatoria la documentazione del registro dei trattamenti (Data Processing Register).
+
+5. CRITTOGRAFIA
+I dati RESTRICTED devono essere crittografati sia in transito (TLS 1.2+) che a riposo (AES-256). Le chiavi di crittografia devono essere gestite tramite Key Management System aziendale.

@@ -1,0 +1,84 @@
+{
+  "conversation_history": [],
+  "quality_scores": [],
+  "conversation_id": "session_910b0f7d",
+  "last_docs_dir": "./test_documents",
+  "custom_docs_path": "C:/Users/ChristianRobecchi/OneDrive - Etjca S.p.A/IT - Dep Etjca - General/Riunioni",
+  "simulation_vars": {
+    "cost_variation": 0,
+    "revenue_variation": 0,
+    "client_churn": 0,
+    "target_entity": ""
+  },
+  "saved_at": "2026-02-23T14:11:41.796116",
+  "topic_grouped": {
+    "test txt": {
+      "display_name": "Test txt",
+      "documents": [
+        {
+          "id": "doc_001",
+          "text": "Test document content",
+          "metadata": {
+            "filename": "test.txt",
+            "size": 1024
+          }
+        }
+      ],
+      "count": 1
+    },
+    "test2 txt": {
+      "display_name": "Test2 txt",
+      "documents": [
+        {
+          "id": "doc_002",
+          "text": "Another test document",
+          "metadata": {
+            "filename": "test2.txt",
+            "size": 2048
+          }
+        }
+      ],
+      "count": 1
+    },
+    "another": {
+      "display_name": "Another",
+      "documents": [
+        {
+          "id": "doc_002",
+          "text": "Another test document",
+          "metadata": {
+            "filename": "test2.txt",
+            "size": 2048
+          }
+        }
+      ],
+      "count": 1
+    }
+  },
+  "topic_stats": {
+    "total_topics": 3,
+    "total_documents": 3,
+    "topics": [
+      {
+        "name": "Test txt",
+        "count": 1,
+        "percentage": 33.3
+      },
+      {
+        "name": "Test2 txt",
+        "count": 1,
+        "percentage": 33.3
+      },
+      {
+        "name": "Another",
+        "count": 1,
+        "percentage": 33.3
+      }
+    ],
+    "distribution": {
+      "Test txt": 1,
+      "Test2 txt": 1,
+      "Another": 1
+    }
+  }
+}

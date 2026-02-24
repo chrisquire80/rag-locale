@@ -1,0 +1,17 @@
+
+PROCEDURE SICUREZZA INFORMATICA
+
+1. BACKUP GIORNALIERI
+Il backup dei dati deve essere eseguito giornalmente secondo il piano di disaster recovery (DRP). I backup devono essere archiviati in locazioni geograficamente separate dai sistemi primari, in conformità a GDPR e ISO 27001.
+
+2. PATCH MANAGEMENT
+Tutti i sistemi IT devono essere aggiornati almeno mensilmente con le patch di sicurezza rilasciate dai vendor. Gli aggiornamenti di sicurezza critici devono essere applicati entro 48 ore da disponibilità.
+
+3. PASSWORD POLICY
+Le password devono contenere almeno 12 caratteri, includere maiuscole, minuscole, numeri e caratteri speciali. La modifica password è obbligatoria ogni 90 giorni. Non sono consentite password precedentemente utilizzate negli ultimi 12 mesi.
+
+4. MULTI-FACTOR AUTHENTICATION (MFA)
+L'MFA è obbligatoria per l'accesso a sistemi critici (AD, email, VPN). Sono supportati: TOTP, hardware token, e email verification. Le app di autenticazione non devono essere disabilitate.
+
+5. INCIDENT RESPONSE
+Qualsiasi sospetta violazione di sicurezza deve essere segnalata immediatamente al Security Operations Center (SOC). Il tempo di risposta massimo è di 4 ore per vulnerabilità critiche.

@@ -1,0 +1,143 @@
+[
+  {
+    "operation": "Vector Store (add + search)",
+    "top_functions": [
+      {
+        "ncalls": "13/11",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 1.575,
+        "percall_cumtime": 0.143,
+        "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\rate_limiter.py:317(wrapper)"
+      },
+      {
+        "ncalls": "2",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 1.251,
+        "percall_cumtime": 0.625,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\models.py:4332(embed_content)"
+      },
+      {
+        "ncalls": "2",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 1.222,
+        "percall_cumtime": 0.611,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\_api_client.py:1386(request)"
+      },
+      {
+        "ncalls": "2",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 1.221,
+        "percall_cumtime": 0.611,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\_api_client.py:1214(_request)"
+      },
+      {
+        "ncalls": "2",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 1.221,
+        "percall_cumtime": 0.611,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\tenacity\\__init__.py:460(__call__)"
+      }
+    ],
+    "total_calls": 207054,
+    "total_time": 0.0
+  },
+  {
+    "operation": "LLM Service (embeddings)",
+    "top_functions": [
+      {
+        "ncalls": "9",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 3.211,
+        "percall_cumtime": 0.357,
+        "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\rate_limiter.py:317(wrapper)"
+      },
+      {
+        "ncalls": "9",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 3.211,
+        "percall_cumtime": 0.357,
+        "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\llm_service.py:43(get_embedding)"
+      },
+      {
+        "ncalls": "9",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 3.211,
+        "percall_cumtime": 0.357,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\models.py:4332(embed_content)"
+      },
+      {
+        "ncalls": "9",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 3.198,
+        "percall_cumtime": 0.355,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\_api_client.py:1386(request)"
+      },
+      {
+        "ncalls": "9",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 3.197,
+        "percall_cumtime": 0.355,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\_api_client.py:1214(_request)"
+      }
+    ],
+    "total_calls": 82656,
+    "total_time": 0.0
+  },
+  {
+    "operation": "Memory Service (add + retrieve)",
+    "top_functions": [
+      {
+        "ncalls": "20",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 0.069,
+        "percall_cumtime": 0.003,
+        "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\memory_service.py:90(save_interaction)"
+      },
+      {
+        "ncalls": "20",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 0.004,
+        "percall_cumtime": 0.0,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py:1510(info)"
+      },
+      {
+        "ncalls": "20",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 0.004,
+        "percall_cumtime": 0.0,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py:1641(_log)"
+      },
+      {
+        "ncalls": "20",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 0.002,
+        "percall_cumtime": 0.0,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py:1667(handle)"
+      },
+      {
+        "ncalls": "20",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 0.002,
+        "percall_cumtime": 0.0,
+        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py:1721(callHandlers)"
+      }
+    ],
+    "total_calls": 2552,
+    "total_time": 0.0
+  }
+]

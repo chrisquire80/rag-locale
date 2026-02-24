@@ -6,6 +6,7 @@ Logs are machine-parsable and include timestamp, level, module, message, and con
 """
 
 import json
+import logging
 import sys
 from datetime import datetime
 from typing import Any

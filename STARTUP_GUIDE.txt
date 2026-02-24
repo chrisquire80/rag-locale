@@ -1,0 +1,324 @@
+================================================================================
+    RAG LOCALE - QUICK START GUIDE
+    Session Persistence System - Complete Setup
+================================================================================
+
+STARTING THE APPLICATION
+========================
+
+Method 1: Double-Click Batch Script (Easiest)
+  • Double-click: restart_app.bat
+  • Handles everything automatically
+  • Kills old process, starts fresh
+  • Shows colored output with progress
+
+Method 2: Command Line
+  • Open Command Prompt or PowerShell
+  • Navigate to app folder
+  • Run: .\restart_app.bat
+  • Or: python -m streamlit run app_streamlit_real_docs.py --server.port 8503
+
+Expected Output:
+  [1/4] Verifying Python installation...
+  [OK] Python is available
+
+  [2/4] Checking for existing process on port 8503...
+  [INFO] No existing process found on port 8503
+
+  [3/4] Verifying application files...
+  [OK] Application file found: app_streamlit_real_docs.py
+
+  [4/4] Starting RAG LOCALE application on port 8503...
+
+  Access the application at: http://localhost:8503
+  Press Ctrl+C to stop the server
+
+BROWSER ACCESS
+==============
+
+1. Application opens automatically OR
+2. Manual: Open http://localhost:8503 in browser
+
+FIRST TIME SETUP
+================
+
+Step 1: Select Documents Folder
+  • Click "Scegli cartella" button
+  • Choose folder with your documents
+  • App loads all documents automatically
+  • Wait 5-15 seconds (depends on document count)
+
+Step 2: Automatic Features Activate
+  • Documents indexed and cached
+  • Topics automatically extracted
+  • Cache created for fast access
+  • Folder path remembered
+
+Step 3: Start Using
+  • Ask questions about documents
+  • View topics in "Argomenti" tab
+  • Check conversation history
+  • All data is saved automatically
+
+SUBSEQUENT SESSIONS
+===================
+
+Session 2, 3, 4, etc... are instant:
+
+1. Start app: .\restart_app.bat
+2. Automatic restoration:
+   ✓ Folder automatically selected
+   ✓ Documents loaded from cache (< 1 second)
+   ✓ Conversation history restored
+   ✓ Topics and analysis available
+3. Start using immediately
+
+NO RECONFIGURATION NEEDED AFTER FIRST TIME
+
+WHAT GETS REMEMBERED
+====================
+
+1. Document Folder
+   Storage: data/session_persistence/user_settings.json
+   Duration: Until you change it
+
+2. Loaded Documents
+   Storage: data/session_persistence/documents_cache.json
+   Duration: Until folder changes
+
+3. Conversation History
+   Storage: data/session_persistence/current_session.json
+   Duration: Until you clear it
+
+4. Document Topics
+   Storage: data/topics_cache/topics_cache.json
+   Duration: Until you clear it
+
+5. Application Settings
+   Storage: data/session_persistence/user_settings.json
+   Duration: Persistent
+
+KEY FEATURES
+============
+
+Topic Analysis (Argomenti Tab)
+  • Filter by topic in sidebar
+  • View documents grouped by theme
+  • See topic distribution charts
+  • Search within topics
+  • Hierarchical tree view
+  • Card-based grid view
+
+Conversation Management
+  • Full history persisted
+  • Context preserved across sessions
+  • Quality metrics recorded
+  • Simulation variables saved
+
+Performance
+  • First load: 5-15 seconds
+  • Subsequent loads: < 1 second
+  • Cache automatically managed
+  • Intelligent fallback strategies
+
+TROUBLESHOOTING
+===============
+
+App won't start - Port 8503 in use:
+  Solution 1: Restart batch script (automatic)
+  Solution 2: netstat -ano | find "8503"
+              taskkill /pid <PID> /f
+
+Documents not remembered:
+  Solution: Folder path changed or deleted
+            Delete: data/session_persistence/user_settings.json
+            Restart and select folder again
+
+Cache seems broken:
+  Solution: Delete data/session_persistence/documents_cache.json
+            Restart and select folder again
+            Wait for re-indexing
+
+Slow on first load:
+  Expected: 5-15 seconds is normal
+  Reason: Indexing documents, extracting topics
+  Next time: Will be instant from cache
+
+VERIFICATION
+============
+
+Run verification script:
+  python verify_session_persistence.py
+
+Expected output:
+  7/7 tests passed
+  [SUCCESS] All verifications passed! The system is ready.
+
+DIRECTORY STRUCTURE
+===================
+
+RAG LOCALE/
+├── restart_app.bat                    ← Use to start app
+├── app_streamlit_real_docs.py         ← Main app
+├── session_persistence.py              ← Persistence system
+├── document_topic_analyzer.py           ← Topic extraction
+├── topic_ui_renderer.py                 ← Topic UI
+├── verify_session_persistence.py        ← Verification
+├── SESSION_PERSISTENCE_GUIDE.md         ← Full documentation
+├── STARTUP_GUIDE.txt                    ← This file
+└── data/
+    ├── session_persistence/            ← Persisted data
+    │   ├── current_session.json         ← Conversation & state
+    │   ├── documents_cache.json         ← Cached documents
+    │   └── user_settings.json           ← Folder & preferences
+    └── topics_cache/                    ← Topic cache
+        └── topics_cache.json
+
+WORKFLOW EXAMPLE
+================
+
+Session 1 (First Time):
+  1. Run: .\restart_app.bat
+  2. Browser opens to http://localhost:8503
+  3. Click "Scegli cartella"
+  4. Select ./documents or your folder
+  5. Wait 5-15 seconds for indexing
+  6. Topics tab shows extracted themes
+  7. Ask questions about documents
+  8. All data automatically saved
+
+Session 2 (Next Day):
+  1. Run: .\restart_app.bat
+  2. Browser opens to http://localhost:8503
+  3. Documents auto-loaded from cache
+  4. Topics instantly available
+  5. Conversation history restored
+  6. Ask questions immediately
+  NO RECONFIGURATION NEEDED
+
+Session 3 (Different Folder):
+  1. Run: .\restart_app.bat
+  2. Click "Scegli cartella"
+  3. Select new folder
+  4. Wait for indexing
+  5. New folder now remembered
+  6. Previous cache still available
+
+ADVANCED: CLEAR CACHE
+=====================
+
+Option A: Keep folder, reload documents
+  1. Delete: data/session_persistence/documents_cache.json
+  2. Restart app
+  3. Select folder again to re-cache
+
+Option B: Complete reset
+  1. Delete: entire data/session_persistence/ folder
+  2. Restart app
+  3. App treats as first time
+
+Option C: Python script
+  python -c "
+  from session_persistence import SessionPersistence
+  SessionPersistence.clear_session_cache()
+  print('Cache cleared')
+  "
+
+DATA STORAGE & PRIVACY
+======================
+
+Storage Location: Local machine only
+  Path: ./data/session_persistence/
+
+What's Stored:
+  • Your selected folder path
+  • Document content (cached)
+  • Your conversation history
+  • Extracted topics
+  • Analysis results
+
+Security:
+  • No cloud upload (except to configured LLM)
+  • Full local control
+  • File permissions inherited from data folder
+  • Can be encrypted like any local files
+
+MONITORING
+==========
+
+Check cache status:
+  python -c "
+  from session_persistence import SessionPersistence
+  import json
+  info = SessionPersistence.get_cache_info()
+  print(json.dumps(info, indent=2))
+  "
+
+View logs:
+  • Check terminal/console output while app runs
+  • Shows all save/load operations
+  • Debug information available
+
+Performance metrics:
+  • Document count
+  • Cache size
+  • Last save time
+  • Conversation turns
+
+SUPPORT & DOCUMENTATION
+=======================
+
+Quick Start: This file (STARTUP_GUIDE.txt)
+
+Full Documentation: SESSION_PERSISTENCE_GUIDE.md
+  • Architecture details
+  • API reference
+  • Advanced features
+  • Troubleshooting guide
+
+Code Documentation:
+  • session_persistence.py      - Core module
+  • document_topic_analyzer.py   - Topic extraction
+  • topic_ui_renderer.py         - UI components
+  • app_streamlit_real_docs.py   - Main application
+
+QUICK REFERENCE
+===============
+
+Start app:
+  .\restart_app.bat
+
+Check status:
+  python verify_session_persistence.py
+
+Clear cache:
+  python -c "from session_persistence import SessionPersistence; SessionPersistence.clear_session_cache()"
+
+View cache info:
+  python -c "from session_persistence import SessionPersistence; import json; print(json.dumps(SessionPersistence.get_cache_info(), indent=2))"
+
+Browser URL:
+  http://localhost:8503
+
+Stop app:
+  Ctrl + C (in terminal)
+  Or close browser (background process continues)
+  Or use: taskkill /f /pid <PID>
+
+================================================================================
+
+READY TO START?
+
+1. Run: .\restart_app.bat
+2. Open: http://localhost:8503
+3. Select your documents folder
+4. That's it! Everything else is automatic.
+
+For detailed information, see SESSION_PERSISTENCE_GUIDE.md
+For developer documentation, see individual .py files
+
+================================================================================
+Version: 1.0
+Date: 2026-02-20
+Status: Production Ready
+================================================================================

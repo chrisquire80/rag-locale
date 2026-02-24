@@ -1,0 +1,24 @@
+{
+  "documents": [
+    {
+      "id": "doc_001",
+      "text": "Test document content",
+      "metadata": {
+        "filename": "test.txt",
+        "size": 1024
+      }
+    },
+    {
+      "id": "doc_002",
+      "text": "Another test document",
+      "metadata": {
+        "filename": "test2.txt",
+        "size": 2048
+      }
+    }
+  ],
+  "docs_dir": "./test_documents",
+  "count": 2,
+  "saved_at": "2026-02-20T18:02:32.687950",
+  "timestamp": 1771606952.68796
+}

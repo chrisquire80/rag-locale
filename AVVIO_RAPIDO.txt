@@ -1,0 +1,158 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                      RAG LOCALE - GUIDA DI AVVIO RAPIDO                   ║
+║                                                                            ║
+║                              🚀 START HERE 🚀                             ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+OPZIONE 1: AVVIO VELOCE (Consigliato - 30 secondi)
+═══════════════════════════════════════════════════════════════════════════
+
+1. Doppio-click su:
+   📁 start_ui.bat
+
+Fatto! Il sistema avvierà Streamlit e aprirà il browser.
+
+
+OPZIONE 2: VERIFICA PRIMA (se il sistema è offline)
+═══════════════════════════════════════════════════════════════════════════
+
+1. Doppio-click su:
+   📁 check_system.bat
+
+2. Se OK, allora:
+   📁 start_ui.bat
+
+
+OPZIONE 3: AVVIO MANUALE (Terminal)
+═══════════════════════════════════════════════════════════════════════════
+
+1. Apri PowerShell o Command Prompt
+2. Naviga alla cartella RAG LOCALE:
+   cd "C:\Users\ChristianRobecchi\Downloads\RAG LOCALE"
+
+3. Esegui:
+   python -m streamlit run src/app_ui.py
+
+
+COSA SUCCEDE DOPO L'AVVIO?
+═══════════════════════════════════════════════════════════════════════════
+
+✅ Terminal mostrerà: "You can now view your Streamlit app in your browser"
+✅ Il browser si aprirà automaticamente
+✅ Potrai caricare PDF e fare domande
+
+Se il browser non si apre:
+  → Vai manualmente a: http://localhost:8501
+
+
+RISOLUZIONE PROBLEMI
+═══════════════════════════════════════════════════════════════════════════
+
+❌ PROBLEMA: "ModuleNotFoundError: No module named 'streamlit'"
+✅ SOLUZIONE:
+   python -m pip install streamlit google-genai
+
+❌ PROBLEMA: "ERR_CONNECTION_REFUSED" nel browser
+✅ SOLUZIONE:
+   - Aspetta 10 secondi dal primo avvio
+   - Ricarica la pagina (F5)
+   - Se persiste: esegui check_system.bat
+
+❌ PROBLEMA: Timeout durante caricamento PDF
+✅ SOLUZIONE:
+   - Sistema ha retry automatici (aspetta 5 minuti)
+   - File grandi: carica uno alla volta
+   - Se freezato: chiudi e riavvia
+
+❌ PROBLEMA: "GEMINI_API_KEY not found"
+✅ SOLUZIONE:
+   - Crea file .env nella cartella RAG LOCALE
+   - Aggiungi: GEMINI_API_KEY=your_key_here
+   - Riavvia
+
+
+INFORMAZIONI IMPORTANTI
+═══════════════════════════════════════════════════════════════════════════
+
+📊 Vector Store:
+   • Contiene 286 documenti già caricati
+   • Size: 7.67 MB
+   • Non perdere il file: data/vector_db/vector_store.pkl
+
+⚙️ Timeout Configurazione:
+   • API timeout: 300 secondi (5 minuti)
+   • Retry automatici: 5 tentativi
+   • Delay tra retry: 1s, 2s, 4s, 8s, 16s
+
+🔄 Processi Attivi:
+   • Streamlit: http://localhost:8501
+   • Backend API: http://localhost:5000 (facoltativo)
+
+
+PRIMI PASSI DOPO L'AVVIO
+═══════════════════════════════════════════════════════════════════════════
+
+1. Aspetta caricamento pagina (5-10 secondi)
+2. Nella sidebar, seleziona "Domanda & Risposta"
+3. Digita una domanda: "Riassumi i documenti"
+4. Clicca "Invia Query"
+5. Leggi la risposta!
+
+
+OPERAZIONI COMUNI
+═══════════════════════════════════════════════════════════════════════════
+
+📤 Caricare PDF:
+   • Vai a "Importa Documenti"
+   • Clicca "Choose files" o drag-drop
+   • Attendi completamento
+
+❓ Fare domande:
+   • Vai a "Domanda & Risposta"
+   • Scrivi domanda
+   • Clicca "Invia Query"
+
+📊 Vedere metriche:
+   • Vai a "Metriche"
+   • Vedi performance, errori, cache hit rate
+
+
+QUANDO CHIUDERE
+═══════════════════════════════════════════════════════════════════════════
+
+Nel terminal Streamlit:
+  • Premi Ctrl+C per fermare il server
+  • Oppure chiudi la finestra
+
+
+SUPPORTO & DOCUMENTAZIONE
+═══════════════════════════════════════════════════════════════════════════
+
+Per informazioni dettagliate:
+  • README_START_HERE.md - Introduzione
+  • COMPLETE_PROJECT_SUMMARY.md - Guida completa
+  • FINAL_DEPLOYMENT_CHECKLIST.md - Troubleshooting
+
+
+VERDETTO FINALE
+═══════════════════════════════════════════════════════════════════════════
+
+Tutto è pronto! 🎉
+
+Il sistema contiene:
+  ✅ 286 documenti già ingestionati
+  ✅ Hybrid search (BM25 + Vector)
+  ✅ Multimodal support (immagini da PDF)
+  ✅ Long-context support (900K token)
+  ✅ Quality metrics e auto-improvement
+  ✅ Citation e query suggestions
+
+Semplicemente:
+  Doppio-click su start_ui.bat e inizia! 🚀
+
+
+═══════════════════════════════════════════════════════════════════════════
+                              Enjoy! 🎉
+═══════════════════════════════════════════════════════════════════════════
