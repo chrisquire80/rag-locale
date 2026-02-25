@@ -7,12 +7,13 @@ Preserves structure, metadata, and analysis results.
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
+from io import StringIO
 from pathlib import Path
 from typing import Optional, TYPE_CHECKING
-import json
-from datetime import datetime
 
 from src.logging_config import get_logger
 
@@ -104,63 +105,60 @@ class ExportEngine:
         Returns:
             Markdown-formatted string
         """
-        lines = []
+        buf = StringIO()
+        now_iso = datetime.now().isoformat()
 
         # YAML frontmatter with metadata
         if options.include_metadata:
-            lines.append("---")
+            buf.write("---\n")
             if analysis.metadata:
                 m = analysis.metadata
-                lines.append(f"title: {m.title}")
-                lines.append(f"doc_id: {doc_id}")
-                lines.append(f"language: {m.language}")
-                lines.append(f"type: {m.doc_type}")
-                lines.append(f"reading_level: {m.reading_level}")
-                lines.append(f"word_count: {m.word_count}")
-                lines.append(f"exported_at: {datetime.now().isoformat()}")
-            lines.append("---")
-            lines.append("")
+                buf.write(f"title: {m.title}\n")
+                buf.write(f"doc_id: {doc_id}\n")
+                buf.write(f"language: {m.language}\n")
+                buf.write(f"type: {m.doc_type}\n")
+                buf.write(f"reading_level: {m.reading_level}\n")
+                buf.write(f"word_count: {m.word_count}\n")
+                buf.write(f"exported_at: {now_iso}\n")
+            buf.write("---\n\n")
 
         # Document structure with sections
         if options.include_structure and analysis.sections:
-            lines.append("# Document Structure\n")
+            buf.write("# Document Structure\n\n")
             for section in analysis.sections:
-                # Recreate heading hierarchy using level
-                heading_prefix = "#" * min(section.level.value, 6)  # H6 max
-                lines.append(f"{heading_prefix} {section.title}\n")
+                heading_prefix = "#" * min(section.level, 6)
+                buf.write(f"{heading_prefix} {section.title}\n\n")
 
         # Metadata section
         if options.include_metadata and analysis.metadata:
             m = analysis.metadata
-            lines.append("\n## Metadata\n")
-            lines.append(f"- **Language**: {m.language}")
-            lines.append(f"- **Type**: {m.doc_type}")
-            lines.append(f"- **Reading Level**: {m.reading_level}")
-            lines.append(f"- **Word Count**: {m.word_count:,}")
-            lines.append(f"- **Sections**: {len(analysis.sections)}")
+            buf.write("\n## Metadata\n\n")
+            buf.write(f"- **Language**: {m.language}\n")
+            buf.write(f"- **Type**: {m.doc_type}\n")
+            buf.write(f"- **Reading Level**: {m.reading_level}\n")
+            buf.write(f"- **Word Count**: {m.word_count:,}\n")
+            buf.write(f"- **Sections**: {len(analysis.sections)}\n")
 
             if m.keywords:
-                lines.append(f"- **Keywords**: {', '.join(m.keywords[:10])}")
+                buf.write(f"- **Keywords**: {', '.join(m.keywords[:10])}\n")
             if m.author:
-                lines.append(f"- **Author**: {m.author}\n")
+                buf.write(f"- **Author**: {m.author}\n\n")
 
         # Knowledge graph summary
         if options.include_knowledge_graph and analysis.edges:
-            lines.append("\n## Knowledge Graph\n")
-            lines.append(f"**Relationships**: {len(analysis.edges)} extracted\n")
+            buf.write("\n## Knowledge Graph\n\n")
+            buf.write(f"**Relationships**: {len(analysis.edges)} extracted\n\n")
 
             # Top relationships by weight
-            top_edges = sorted(analysis.edges, key=lambda e: e.weight, reverse=True)[
-                :20
-            ]
+            top_edges = sorted(analysis.edges, key=lambda e: e.weight, reverse=True)[:20]
             for edge in top_edges:
                 source = edge.source_entity_id.split("_e_")[-1].replace("_", " ")
                 target = edge.target_entity_id.split("_e_")[-1].replace("_", " ")
-                lines.append(
-                    f"- **{source}** → **{target}** (co-occurrences: {edge.weight})"
+                buf.write(
+                    f"- **{source}** -> **{target}** (co-occurrences: {edge.weight})\n"
                 )
 
-        return "\n".join(lines)
+        return buf.getvalue()
 
     def _export_json(
         self,
@@ -206,7 +204,7 @@ class ExportEngine:
                 {
                     "section_id": s.section_id,
                     "title": s.title,
-                    "level": s.level.value,
+                    "level": s.level,
                     "parent_id": s.parent_id,
                     "chunk_count": len(s.chunk_indices),
                 }
@@ -311,46 +309,32 @@ class ExportEngine:
         Returns:
             Markdown-formatted comparison
         """
-        lines = [
-            "# Document Comparison Report",
-            "",
-            f"**Comparing**: {', '.join(doc_ids)}",
-            f"**Generated**: {datetime.now().isoformat()}",
-            f"**Overall Similarity**: {comparison.get('overall_similarity', 0):.0%}",
-            "",
-        ]
+        buf = StringIO()
+        buf.write("# Document Comparison Report\n\n")
+        buf.write(f"**Comparing**: {', '.join(doc_ids)}\n")
+        buf.write(f"**Generated**: {datetime.now().isoformat()}\n")
+        buf.write(f"**Overall Similarity**: {comparison.get('overall_similarity', 0):.0%}\n\n")
 
         # Shared concepts
         shared = comparison.get("shared_concepts", [])
         if shared:
-            lines.extend(
-                [
-                    "## Shared Concepts",
-                    "",
-                    "Topics and entities present in both documents:",
-                    "",
-                ]
-            )
+            buf.write("## Shared Concepts\n\n")
+            buf.write("Topics and entities present in both documents:\n\n")
             for concept in shared[:20]:
-                lines.append(f"- {concept}")
-            lines.append("")
+                buf.write(f"- {concept}\n")
+            buf.write("\n")
 
         # Overlap metrics
         metrics = comparison.get("overlap_metrics", {})
         if metrics:
-            lines.extend(
-                [
-                    "## Overlap Metrics",
-                    "",
-                ]
-            )
+            buf.write("## Overlap Metrics\n\n")
             for metric_name, metric_data in metrics.items():
                 value = metric_data.get("value", 0)
                 description = metric_data.get("description", "")
-                lines.append(f"- **{metric_name}**: {value:.0%} ({description})")
-            lines.append("")
+                buf.write(f"- **{metric_name}**: {value:.0%} ({description})\n")
+            buf.write("\n")
 
-        return "\n".join(lines)
+        return buf.getvalue()
 
     def export_conversation(
         self,
@@ -381,26 +365,22 @@ class ExportEngine:
 
     def _export_conversation_markdown(self, messages: list[dict]) -> str:
         """Export conversation as readable markdown"""
-        lines = [
-            "# Conversation Export",
-            f"Generated: {datetime.now().isoformat()}",
-            f"Messages: {len(messages)}",
-            "",
-        ]
+        buf = StringIO()
+        buf.write("# Conversation Export\n")
+        buf.write(f"Generated: {datetime.now().isoformat()}\n")
+        buf.write(f"Messages: {len(messages)}\n\n")
 
         for i, msg in enumerate(messages, 1):
             role = msg.get("role", "unknown").upper()
             content = msg.get("content", "")
             nav_type = msg.get("navigation_type", "")
 
-            lines.append(f"## [{i}] {role}")
+            buf.write(f"## [{i}] {role}\n")
             if nav_type:
-                lines.append(f"*Type: {nav_type}*")
-            lines.append("")
-            lines.append(content)
-            lines.append("")
+                buf.write(f"*Type: {nav_type}*\n")
+            buf.write(f"\n{content}\n\n")
 
-        return "\n".join(lines)
+        return buf.getvalue()
 
 
 # Global singleton

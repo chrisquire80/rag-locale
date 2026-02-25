@@ -188,7 +188,14 @@ class MetadataStore:
 
     @contextmanager
     def _get_connection(self):
-        """Context manager yielding a sqlite3 connection with WAL mode."""
+        """Context manager yielding a sqlite3 connection with WAL mode.
+
+        PRAGMAs are set once per connection. WAL + synchronous=NORMAL
+        provides a significant write-throughput improvement over the
+        default DELETE journal + synchronous=FULL, while remaining
+        safe against data loss on process crash (only an OS crash
+        could lose the last transaction).
+        """
         conn = sqlite3.connect(
             str(self.db_path),
             check_same_thread=False,
@@ -197,6 +204,8 @@ class MetadataStore:
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA journal_mode=WAL")
         conn.execute("PRAGMA foreign_keys=ON")
+        conn.execute("PRAGMA synchronous=NORMAL")
+        conn.execute("PRAGMA cache_size=-8000")  # 8 MB page cache
         try:
             yield conn
             conn.commit()
@@ -258,21 +267,27 @@ class MetadataStore:
         Returns None if the document has not been analyzed yet.
         Returns a validated DocumentMetadataRow Pydantic instance.
         """
-        with self._get_connection() as conn:
-            row = conn.execute(
-                "SELECT * FROM document_metadata WHERE doc_id = ?", (doc_id,)
-            ).fetchone()
-        if row is None:
-            return None
-        return DocumentMetadataRow(**dict(row))
+        with self._lock:  # Thread-safe read
+            with self._get_connection() as conn:
+                row = conn.execute(
+                    """SELECT doc_id, title, language, reading_level, doc_type,
+                              word_count, chunk_count, keywords_json,
+                              author, source_filename
+                       FROM document_metadata WHERE doc_id = ?""",
+                    (doc_id,),
+                ).fetchone()
+            if row is None:
+                return None
+            return DocumentMetadataRow(**dict(row))
 
     def list_analyzed_documents(self) -> list[str]:
         """Return all doc_ids that have a metadata row."""
-        with self._get_connection() as conn:
-            rows = conn.execute(
-                "SELECT doc_id FROM document_metadata ORDER BY updated_at DESC"
-            ).fetchall()
-        return [r["doc_id"] for r in rows]
+        with self._lock:  # Thread-safe read
+            with self._get_connection() as conn:
+                rows = conn.execute(
+                    "SELECT doc_id FROM document_metadata ORDER BY updated_at DESC"
+                ).fetchall()
+            return [r["doc_id"] for r in rows]
 
     def delete_document(self, doc_id: str) -> None:
         """
@@ -302,7 +317,14 @@ class MetadataStore:
         """
         if not sections:
             return
-        doc_id = sections[0].doc_id if hasattr(sections[0], 'doc_id') else sections[0].section_id.split('_s')[0]
+
+        # Extract doc_id from section - doc_id must be explicitly set
+        # Fallback to first section's doc_id for safety
+        if not hasattr(sections[0], 'doc_id') or not sections[0].doc_id:
+            logger.error("Section must have explicit doc_id attribute")
+            raise ValueError("Sections must have explicit doc_id attribute")
+
+        doc_id = sections[0].doc_id
 
         with self._lock:
             with self._get_connection() as conn:
@@ -332,15 +354,16 @@ class MetadataStore:
 
     def get_sections(self, doc_id: str) -> list[DocumentSectionRow]:
         """Return all sections for a document ordered by level."""
-        with self._get_connection() as conn:
-            rows = conn.execute(
-                """
-                SELECT * FROM document_sections
-                WHERE doc_id = ? ORDER BY level ASC, section_id ASC
-                """,
-                (doc_id,),
-            ).fetchall()
-        return [DocumentSectionRow(**dict(r)) for r in rows]
+        with self._lock:  # Thread-safe read
+            with self._get_connection() as conn:
+                rows = conn.execute(
+                    """SELECT section_id, doc_id, title, level,
+                              parent_id, chunk_indices_json
+                       FROM document_sections
+                       WHERE doc_id = ? ORDER BY level ASC, section_id ASC""",
+                    (doc_id,),
+                ).fetchall()
+            return [DocumentSectionRow(**dict(r)) for r in rows]
 
     # ------------------------------------------------------------------
     # knowledge_edges CRUD
@@ -377,12 +400,13 @@ class MetadataStore:
 
     def get_edges(self, doc_id: str) -> list[KnowledgeEdgeRow]:
         """Return knowledge edges for a document, sorted by weight descending."""
-        with self._get_connection() as conn:
-            rows = conn.execute(
-                """
-                SELECT * FROM knowledge_edges
-                WHERE doc_id = ? ORDER BY weight DESC
-                """,
-                (doc_id,),
-            ).fetchall()
-        return [KnowledgeEdgeRow(**dict(r)) for r in rows]
+        with self._lock:  # Thread-safe read
+            with self._get_connection() as conn:
+                rows = conn.execute(
+                    """SELECT id, doc_id, source_entity_id, target_entity_id,
+                              relationship, weight
+                       FROM knowledge_edges
+                       WHERE doc_id = ? ORDER BY weight DESC""",
+                    (doc_id,),
+                ).fetchall()
+            return [KnowledgeEdgeRow(**dict(r)) for r in rows]

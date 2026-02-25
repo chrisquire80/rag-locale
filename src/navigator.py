@@ -18,10 +18,11 @@ Architecture:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Optional, TYPE_CHECKING
-from datetime import datetime
 import re
+from dataclasses import dataclass, field
+from datetime import datetime
+from io import StringIO
+from typing import Optional, TYPE_CHECKING
 
 from src.logging_config import get_logger
 
@@ -85,7 +86,7 @@ class ChatContext:
 
     def get_context_window(self, n: int = MAX_CONTEXT_MESSAGES) -> list[ChatMessage]:
         """Return last N messages for LLM prompt injection"""
-        return self.messages[-n:] if len(self.messages) > 0 else []
+        return self.messages[-n:] if self.messages else []
 
     def switch_document(self, doc_id: str) -> None:
         """Switch active document and initialize section tracking if needed"""
@@ -99,12 +100,14 @@ class ChatContext:
             return ""
 
         window = self.get_context_window(MAX_CONTEXT_MESSAGES)
-        formatted = []
-        for msg in window:
+        buf = StringIO()
+        for i, msg in enumerate(window):
+            if i > 0:
+                buf.write("\n")
             prefix = "User:" if msg.role == "user" else "Assistant:"
-            formatted.append(f"{prefix} {msg.content}")
+            buf.write(f"{prefix} {msg.content}")
 
-        return "\n".join(formatted)
+        return buf.getvalue()
 
     def mark_section_visited(self, doc_id: str, section_id: str) -> None:
         """Track visited sections for analytics"""
@@ -171,66 +174,78 @@ class NavigationResponse:
         return self.error is None
 
 
+def _compile_combined(patterns: list[str]) -> re.Pattern:
+    """Combine multiple pattern strings into a single compiled regex with alternation."""
+    combined = "|".join(f"(?:{p})" for p in patterns)
+    return re.compile(combined, re.IGNORECASE)
+
+
 class IntentClassifier:
-    """Pure functions for detecting user navigation intent"""
+    """Pure functions for detecting user navigation intent.
 
-    # Italian and English patterns for intent detection
-    SUMMARY_PATTERNS_IT = [
-        r"riassumi",
-        r"summarizza",
-        r"dammi un (rapido |breve )?riepilogo",
-        r"cosa contiene",
-        r"cosa tratta",
-    ]
-    SUMMARY_PATTERNS_EN = [
-        r"summarize",
-        r"summary",
-        r"give me an? (quick |brief )?overview",
-        r"what does",
-        r"what treats",
-    ]
+    All regex patterns are pre-compiled at class definition time into
+    single combined patterns per intent category, avoiding per-call
+    recompilation overhead.
+    """
 
-    SECTION_JUMP_PATTERNS_IT = [
-        r"vai (a|alla|al) (?:sezione |paragrafo |capitolo )?([^\.]+)",
+    # Pre-compiled combined patterns (one regex per intent category)
+    _SUMMARY_RE = _compile_combined([
+        r"riassumi", r"summarizza",
+        r"dammi un (?:rapido |breve )?riepilogo",
+        r"cosa contiene", r"cosa tratta",
+        r"summarize", r"summary",
+        r"give me an? (?:quick |brief )?overview",
+        r"what does", r"what treats",
+    ])
+
+    _SECTION_JUMP_RE = _compile_combined([
+        r"vai (?:a|alla|al) (?:sezione |paragrafo |capitolo )?([^\.]+)",
         r"mostrami (?:la |la sezione )?([^\.]+)",
-        r"vai a ([^\.]+)",
-        r"salta a ([^\.]+)",
-    ]
-    SECTION_JUMP_PATTERNS_EN = [
+        r"vai a ([^\.]+)", r"salta a ([^\.]+)",
         r"go to (?:section |chapter |)?([^\.]+)",
         r"jump to ([^\.]+)",
         r"show me (?:the )?([^\.]+)",
         r"take me to ([^\.]+)",
-    ]
+    ])
 
-    COMPARISON_PATTERNS_IT = [
-        r"confronta",
-        r"compara",
-        r"differenza tra",
-        r"quale è (la |il )?differenza",
-        r"contrasta",
-    ]
-    COMPARISON_PATTERNS_EN = [
-        r"compare",
-        r"contrast",
-        r"difference between",
-        r"what'?s the difference",
-        r"how do .* differ",
-    ]
+    _COMPARISON_RE = _compile_combined([
+        r"confronta", r"compara", r"differenza tra",
+        r"quale è (?:la |il )?differenza", r"contrasta",
+        r"compare", r"contrast", r"difference between",
+        r"what'?s the difference", r"how do .* differ",
+    ])
 
-    RELATED_DOCS_PATTERNS_IT = [
-        r"documenti simili",
-        r"documenti correlati",
-        r"cosa è collegato",
-        r"trovami .* simile",
+    _RELATED_DOCS_RE = _compile_combined([
+        r"documenti simili", r"documenti correlati",
+        r"cosa è collegato", r"trovami .* simile",
         r"altri documenti su",
-    ]
-    RELATED_DOCS_PATTERNS_EN = [
-        r"similar documents",
-        r"related documents",
-        r"what'?s related",
-        r"find .* similar",
+        r"similar documents", r"related documents",
+        r"what'?s related", r"find .* similar",
         r"other documents about",
+    ])
+
+    _SELF_REF_RE = _compile_combined([
+        r"questo documento", r"questo file",
+        r"il documento", r"il file", r"questo",
+        r"this document", r"this file",
+        r"the document", r"the file",
+    ])
+
+    _SECTION_REF_IT_RE = re.compile(
+        r"(?:sezione|paragrafo|capitolo)\s+([\"']?)([^\"'\.]+)\1",
+        re.IGNORECASE,
+    )
+    _SECTION_REF_EN_RE = re.compile(
+        r"(?:section|chapter|paragraph)\s+([\"']?)([^\"'\.]+)\1",
+        re.IGNORECASE,
+    )
+
+    # Ordered intent dispatch: (compiled_pattern, intent_name)
+    _INTENT_ORDER = [
+        (_SUMMARY_RE, "summary"),
+        (_SECTION_JUMP_RE, "section_jump"),
+        (_COMPARISON_RE, "comparison"),
+        (_RELATED_DOCS_RE, "related_docs"),
     ]
 
     @staticmethod
@@ -243,27 +258,10 @@ class IntentClassifier:
         """
         text_lower = text.lower()
 
-        # Check summary intent
-        for pattern in IntentClassifier.SUMMARY_PATTERNS_IT + IntentClassifier.SUMMARY_PATTERNS_EN:
-            if re.search(pattern, text_lower, re.IGNORECASE):
-                return "summary"
+        for pattern, intent in IntentClassifier._INTENT_ORDER:
+            if pattern.search(text_lower):
+                return intent
 
-        # Check section jump intent
-        for pattern in IntentClassifier.SECTION_JUMP_PATTERNS_IT + IntentClassifier.SECTION_JUMP_PATTERNS_EN:
-            if re.search(pattern, text_lower, re.IGNORECASE):
-                return "section_jump"
-
-        # Check comparison intent
-        for pattern in IntentClassifier.COMPARISON_PATTERNS_IT + IntentClassifier.COMPARISON_PATTERNS_EN:
-            if re.search(pattern, text_lower, re.IGNORECASE):
-                return "comparison"
-
-        # Check related docs intent
-        for pattern in IntentClassifier.RELATED_DOCS_PATTERNS_IT + IntentClassifier.RELATED_DOCS_PATTERNS_EN:
-            if re.search(pattern, text_lower, re.IGNORECASE):
-                return "related_docs"
-
-        # Default: direct query
         return "direct_query"
 
     @staticmethod
@@ -276,23 +274,10 @@ class IntentClassifier:
         Resolve self-references ('questo documento', 'il file') to actual doc_id.
         Returns active_doc_id if reference is self-referential, or matched doc_id.
         """
-        # Self-reference patterns
-        self_refs = [
-            r"questo documento",
-            r"questo file",
-            r"il documento",
-            r"il file",
-            r"questo",
-            r"this document",
-            r"this file",
-            r"the document",
-            r"the file",
-        ]
-
         text_lower = text.lower()
-        for pattern in self_refs:
-            if re.search(pattern, text_lower, re.IGNORECASE):
-                return active_doc_id
+
+        if IntentClassifier._SELF_REF_RE.search(text_lower):
+            return active_doc_id
 
         # Try substring matching against known_doc_ids
         for doc_id in known_doc_ids:
@@ -307,13 +292,11 @@ class IntentClassifier:
         Extract section title from text like 'vai alla sezione Introduzione'.
         Returns section title or None.
         """
-        # Italian patterns
-        match = re.search(r"(?:sezione|paragrafo|capitolo|capitolo)\s+([\"']?)([^\"'\.]+)\1", text, re.IGNORECASE)
+        match = IntentClassifier._SECTION_REF_IT_RE.search(text)
         if match:
             return match.group(2).strip()
 
-        # English patterns
-        match = re.search(r"(?:section|chapter|paragraph)\s+([\"']?)([^\"'\.]+)\1", text, re.IGNORECASE)
+        match = IntentClassifier._SECTION_REF_EN_RE.search(text)
         if match:
             return match.group(2).strip()
 
@@ -392,7 +375,7 @@ class DocumentNavigator:
 
             # Extract source information
             source_chunks = [f"{r.source}#{r.section}" for r in response.sources]
-            related_docs = list(set([r.doc_id for r in response.sources if r.doc_id != ctx.active_doc_id]))
+            related_docs = list({r.doc_id for r in response.sources if r.doc_id != ctx.active_doc_id})
 
             # Add to context
             ctx.add_message("user", text, nav_type="direct_query")
@@ -461,7 +444,7 @@ Riassumi il documento in 3-4 frasi.
 """
 
             # Call LLM for summary
-            response = self.rag_engine.llm.generate(summary_prompt)
+            response = self.rag_engine.llm.completion(summary_prompt)
 
             # Mark sections as visited
             for section in analysis.sections:
@@ -559,11 +542,15 @@ Riassumi il documento in 3-4 frasi.
     def _handle_comparison(self, text: str, ctx: ChatContext) -> NavigationResponse:
         """Compare concepts or documents"""
         try:
-            # Extract comparison terms
-            match = re.search(r"(?:confronta|compara|differenza tra|contrasta)\s+([^\s]+)\s+(?:e|con)\s+([^\s\.]+)", text)
+            # Extract comparison terms - supports both Italian and English patterns
+            match = re.search(
+                r"(?:confronta|compara|differenza tra|contrasta|compare|contrast|difference between)\s+([^\s]+)\s+(?:e|con|and)\s+([^\s\.]+)",
+                text,
+                re.IGNORECASE
+            )
             if not match:
                 return NavigationResponse(
-                    answer="Per favore, specifica cosa confrontare: 'confronta A e B'.",
+                    answer="Per favore, specifica cosa confrontare: 'confronta A e B' oppure 'compare A and B'.",
                     navigation_type="comparison",
                     error="Could not parse comparison",
                 )
@@ -585,7 +572,7 @@ Confronta questi due concetti in modo conciso:
 Quali sono le differenze principali? (max 5 punti)
 """
 
-            answer = self.rag_engine.llm.generate(comparison_prompt)
+            answer = self.rag_engine.llm.completion(comparison_prompt)
 
             ctx.add_message("user", text, nav_type="comparison")
             ctx.add_message("assistant", answer, nav_type="comparison")
