@@ -23,6 +23,13 @@ from src.upload_manager import UploadManager
 from src.vector_store import get_vector_store
 from src.metrics import get_metrics_collector
 
+# Phase 3B: Document Navigator for conversational document navigation
+from src.navigator import (
+    ChatContext,
+    NavigationResponse,
+    get_document_navigator,
+)
+
 logger = get_logger(__name__)
 
 # Configure page
@@ -90,6 +97,12 @@ if "enable_query_expansion" not in st.session_state:
     st.session_state.enable_query_expansion = True
 if "enable_reranking" not in st.session_state:
     st.session_state.enable_reranking = True
+
+# Phase 3B: Initialize navigator session state (separate from existing chat tabs)
+if "nav_context" not in st.session_state:
+    st.session_state.nav_context = ChatContext()
+if "nav_messages" not in st.session_state:
+    st.session_state.nav_messages = []
 
 # Sidebar
 with st.sidebar:
@@ -432,14 +445,16 @@ st.caption("Interroga i tuoi documenti con AI avanzata: Self-Correction, Query E
 engine = load_engine()
 
 if engine:
-    # FASE 7: Create five tabs including Upload and Advanced filters
-    # Create tabs: Upload, Chat, Advanced Chat, Document Library, Global Analysis
-    tab_upload, tab_chat, tab_advanced, tab_library, tab_analysis = st.tabs([
+    # FASE 7: Create tabs including Upload, Chat, Advanced, Library, Analysis, Doc Analysis, Navigator
+    # Create tabs: Upload, Chat, Advanced Chat, Document Library, Global Analysis, Document Analysis, Navigator
+    tab_upload, tab_chat, tab_advanced, tab_library, tab_analysis, tab_doc_analysis, tab_navigator = st.tabs([
         "📤 Upload Documenti",
         "💬 Chat",
         "⭐ Chat Avanzato",
         "📚 Documenti in Libreria",
-        "🌍 Analisi Globale"
+        "🌍 Analisi Globale",
+        "🔬 Analisi Documento",  # Phase 3A: Document Analysis Engine
+        "🗺️ Navigatore"  # Phase 3B: Conversational Document Navigator
     ])
 
     # === TAB 0: UPLOAD DOCUMENTS (FASE 7: Feature 3) ===
@@ -1329,6 +1344,222 @@ if engine:
 
             **Context Window:** Gemini 2.0 Flash 1M token (supporta ~70+ documenti)
             """)
+
+    # === TAB 5: DOCUMENT ANALYSIS (PHASE 3A: Documentale) ===
+    with tab_doc_analysis:
+        st.subheader("🔬 Analisi Documento")
+        st.caption("Struttura, metadati e grafo di conoscenza estratti automaticamente durante l'ingestion")
+
+        try:
+            from src.analysis import get_document_analyzer
+            analyzer = get_document_analyzer()
+
+            analyzed_ids = analyzer.get_all_analyzed_doc_ids()
+            if not analyzed_ids:
+                st.info("Nessun documento analizzato. Carica documenti per avviare l'analisi automatica.")
+            else:
+                selected_doc_id = st.selectbox(
+                    "Seleziona documento",
+                    analyzed_ids,
+                    help="Solo documenti ingestiti con Phase 3A attivo"
+                )
+
+                if selected_doc_id:
+                    analysis = analyzer.get_analysis(selected_doc_id)
+
+                    if not analysis.analysis_available:
+                        st.warning(f"Analisi non disponibile per '{selected_doc_id}'.")
+                    else:
+                        # --- Metadata Card ---
+                        if analysis.metadata:
+                            m = analysis.metadata
+                            st.markdown("### Metadati Documento")
+                            col1, col2, col3, col4 = st.columns(4)
+                            with col1:
+                                st.metric("Tipo", m.doc_type)
+                            with col2:
+                                st.metric("Lingua", m.language)
+                            with col3:
+                                st.metric("Livello", m.reading_level)
+                            with col4:
+                                st.metric("Parole", m.word_count)
+
+                            st.markdown(f"**Titolo:** {m.title}")
+                            if m.author:
+                                st.caption(f"Autore: {m.author}")
+                            if m.keywords:
+                                st.markdown(f"**Keyword:** {', '.join(m.keywords[:10])}")
+
+                        st.divider()
+
+                        # --- Structure Tree ---
+                        if analysis.sections:
+                            st.markdown("### Struttura Documento")
+                            # Build indent-based tree display
+                            for sec in analysis.sections:
+                                indent = "  " * (sec.level - 1)
+                                chunks_info = f"({len(sec.chunk_indices)} chunk)" if sec.chunk_indices else ""
+                                st.markdown(
+                                    f"{indent}**{'#' * sec.level} {sec.title}** <small>{chunks_info}</small>",
+                                    unsafe_allow_html=True
+                                )
+
+                        st.divider()
+
+                        # --- Knowledge Graph Summary ---
+                        if analysis.edges:
+                            st.markdown("### Grafo di Conoscenza")
+                            st.metric("Relazioni estratte", len(analysis.edges))
+
+                            try:
+                                import pandas as pd
+                                edges_data = [
+                                    {
+                                        "Entita A":    e.source_entity_id.split('_e_')[-1].replace('_', ' '),
+                                        "Entita B":    e.target_entity_id.split('_e_')[-1].replace('_', ' '),
+                                        "Tipo":        e.relationship,
+                                        "Co-occorrenze": e.weight,
+                                    }
+                                    for e in analysis.edges[:20]
+                                ]
+                                st.dataframe(
+                                    pd.DataFrame(edges_data),
+                                    use_container_width=True,
+                                    hide_index=True
+                                )
+                            except ImportError:
+                                st.warning("Pandas non disponibile per l'estrazione dati")
+                        else:
+                            st.info("Nessuna relazione estratta (documento con poche entita ricorrenti).")
+
+        except Exception as e:
+            st.error(f"Errore nel caricamento dell'analisi: {e}")
+            logger.error(f"Analysis tab error: {e}", exc_info=True)
+
+    # === TAB 6: DOCUMENT NAVIGATOR (PHASE 3B: Conversational Navigator) ===
+    with tab_navigator:
+        st.subheader("🗺️ Navigatore Documenti")
+        st.caption("Naviga i tuoi documenti in conversazione naturale: sommari, sezioni, confronti, documenti correlati")
+
+        try:
+            from src.analysis import get_document_analyzer
+
+            # Initialize navigator and context
+            navigator = get_document_navigator(engine)
+            ctx = st.session_state.nav_context
+
+            # --- Document Selection Sidebar ---
+            st.markdown("### 📄 Seleziona Documento")
+
+            # Get list of available documents
+            vector_store = get_vector_store()
+            try:
+                available_docs = vector_store.list_indexed_files()
+            except:
+                available_docs = []
+
+            if available_docs:
+                selected_doc = st.selectbox(
+                    "Documento attivo",
+                    available_docs,
+                    key="nav_doc_selector",
+                    help="Seleziona il documento per la navigazione"
+                )
+
+                if selected_doc and ctx.active_doc_id != selected_doc:
+                    ctx.switch_document(selected_doc)
+                    st.success(f"✅ Documento cambiato: {selected_doc}")
+
+            else:
+                st.info("Nessun documento trovato. Carica documenti per iniziare.")
+                st.stop()
+
+            st.divider()
+
+            # --- Chat History Display ---
+            st.markdown("### 💬 Conversazione")
+
+            chat_container = st.container(border=True)
+            with chat_container:
+                if ctx.messages:
+                    for msg in ctx.messages[-10:]:  # Show last 10 messages
+                        with st.chat_message(msg.role):
+                            st.write(msg.content)
+                            if msg.navigation_type:
+                                st.caption(f"🔗 {msg.navigation_type}")
+                else:
+                    st.info("Nessun messaggio ancora. Inizia a fare domande!")
+
+            st.divider()
+
+            # --- Input and Query Section ---
+            st.markdown("### 🎤 Nuova Domanda")
+
+            col1, col2 = st.columns([0.85, 0.15])
+            with col1:
+                user_input = st.text_input(
+                    "Digita la tua domanda",
+                    placeholder="es: 'Riassumi questo documento' o 'Vai alla sezione Introduzione'",
+                    key="nav_input",
+                    label_visibility="collapsed"
+                )
+            with col2:
+                submit_button = st.button("📤 Invia", use_container_width=True, key="nav_submit")
+
+            # --- Process Query ---
+            if submit_button and user_input:
+                with st.spinner("Elaborazione..."):
+                    try:
+                        # Route through navigator
+                        response = navigator.query(user_input, ctx)
+
+                        # Display response
+                        st.divider()
+                        st.markdown("### 📋 Risposta")
+
+                        with st.chat_message("assistant"):
+                            st.write(response.answer)
+
+                            # Display navigation metadata
+                            col1, col2, col3 = st.columns(3)
+                            with col1:
+                                st.metric("Tipo", response.navigation_type)
+                            with col2:
+                                st.metric("Confidenza", f"{response.confidence_score:.0%}")
+                            with col3:
+                                st.metric("Fonti", len(response.source_chunks))
+
+                        # Display referenced sections if any
+                        if response.referenced_sections:
+                            st.markdown("#### 📑 Sezioni Referenziate")
+                            for sec_id in response.referenced_sections[:5]:
+                                st.caption(f"• {sec_id}")
+
+                        # Display related documents if any
+                        if response.related_documents:
+                            st.markdown("#### 🔗 Documenti Correlati")
+                            for doc_id in response.related_documents[:5]:
+                                st.caption(f"• {doc_id}")
+
+                        # Display suggested follow-up questions
+                        if response.suggested_questions:
+                            st.markdown("#### 💡 Domande Suggerite")
+                            for i, question in enumerate(response.suggested_questions, 1):
+                                if st.button(f"🔹 {question}", key=f"suggested_{i}"):
+                                    st.session_state.nav_input = question
+                                    st.rerun()
+
+                        # Display error if any
+                        if response.error:
+                            st.warning(f"⚠️ Errore: {response.error}")
+
+                    except Exception as e:
+                        st.error(f"Errore durante l'elaborazione: {e}")
+                        logger.error(f"Navigator query error: {e}", exc_info=True)
+
+        except Exception as e:
+            st.error(f"Errore nel caricamento del navigatore: {e}")
+            logger.error(f"Navigator tab error: {e}", exc_info=True)
 
 else:
     st.warning("Il motore RAG non è pronto. Controlla la sidebar per errori o riprova.")
