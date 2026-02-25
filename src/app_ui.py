@@ -30,6 +30,10 @@ from src.navigator import (
     get_document_navigator,
 )
 
+# Phase 3C: Document Comparison & Export
+from src.comparison_plugin import get_comparison_plugin
+from src.export_engine import get_export_engine, ExportFormat, ExportOptions
+
 logger = get_logger(__name__)
 
 # Configure page
@@ -1556,6 +1560,69 @@ if engine:
                     except Exception as e:
                         st.error(f"Errore durante l'elaborazione: {e}")
                         logger.error(f"Navigator query error: {e}", exc_info=True)
+
+            # === PHASE 5C: EXPORT & COMPARISON ===
+            st.divider()
+            st.markdown("### 📊 Esporta e Confronta")
+
+            col1, col2, col3 = st.columns(3)
+
+            # Export current document
+            with col1:
+                export_format = st.selectbox("Formato esportazione", ["Markdown", "JSON"])
+                if st.button("📥 Esporta Documento", key="export_doc"):
+                    if ctx.active_doc_id:
+                        try:
+                            from src.analysis import get_document_analyzer
+                            analyzer = get_document_analyzer()
+                            analysis = analyzer.get_analysis(ctx.active_doc_id)
+
+                            if analysis and analysis.analysis_available:
+                                export_engine = get_export_engine()
+                                fmt = ExportFormat.MARKDOWN if export_format == "Markdown" else ExportFormat.JSON
+                                options = ExportOptions(format_=fmt)
+                                content = export_engine.export_document(ctx.active_doc_id, analysis, options)
+
+                                if content:
+                                    st.success(f"Esportato in {export_format}")
+                                    st.download_button(
+                                        f"Scarica {export_format}",
+                                        content,
+                                        f"{ctx.active_doc_id}.{'md' if export_format == 'Markdown' else 'json'}",
+                                        key="download_export"
+                                    )
+                            else:
+                                st.info("Nessuna analisi disponibile per questo documento")
+                        except Exception as e:
+                            st.error(f"Errore esportazione: {e}")
+                    else:
+                        st.info("Seleziona un documento prima")
+
+            # Export conversation
+            with col2:
+                if st.button("💬 Esporta Conversazione", key="export_conv"):
+                    try:
+                        export_engine = get_export_engine()
+                        messages = [
+                            {"role": m.role, "content": m.content}
+                            for m in ctx.messages
+                        ]
+                        content = export_engine.export_conversation(messages, ExportFormat.MARKDOWN)
+                        if content:
+                            st.success("Conversazione esportata")
+                            st.download_button(
+                                "Scarica Conversazione",
+                                content,
+                                "conversazione.md",
+                                key="download_conv"
+                            )
+                    except Exception as e:
+                        st.error(f"Errore: {e}")
+
+            # Document comparison (Phase 5C)
+            with col3:
+                if st.button("🔄 Confronta Documenti", key="compare_docs"):
+                    st.info("Comparazione documenti: seleziona 2+ documenti per il confronto")
 
         except Exception as e:
             st.error(f"Errore nel caricamento del navigatore: {e}")

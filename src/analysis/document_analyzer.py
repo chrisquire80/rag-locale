@@ -87,6 +87,14 @@ class DocumentAnalyzer:
             StructurePlugin(),   # heading hierarchy
             KnowledgePlugin(),   # entity graph (slowest, last)
         ]
+
+        # Phase 5C: Lazy-load ComparisonPlugin to avoid circular imports
+        try:
+            from src.comparison_plugin import ComparisonPlugin
+            self._plugins.append(ComparisonPlugin())
+        except ImportError:
+            logger.warning("ComparisonPlugin (Phase 5C) not available")
+
         logger.info(
             f"DocumentAnalyzer initialized with {len(self._plugins)} plugins: "
             f"{[p.plugin_name for p in self._plugins]}"
