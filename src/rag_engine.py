@@ -48,7 +48,10 @@ class RAGResponse:
     approved: bool
     hitl_required: bool
     model: str
-    confidence_score: float = 0.0  # Confidence 0-100, calculated from source scores
+    confidence_score: float = 0.0  # Confidence 0-1.0, calculated from source scores
+    confidence_level: str = "Medium"  # High, Medium, Low (Phase 2 feature)
+    confidence_emoji: str = "🟡"  # 🟢, 🟡, 🔴 (Phase 2 feature)
+    confidence_explanation: str = ""  # Human-readable confidence explanation (Phase 2 feature)
 
 class RAGEngine:
     """Core logic RAG con validazione HITL"""
@@ -243,7 +246,11 @@ class RAGEngine:
                 sources=[],
                 approved=True,
                 hitl_required=False,
-                model=config.gemini.model_name
+                model=config.gemini.model_name,
+                confidence_score=0.0,
+                confidence_level="Low",
+                confidence_emoji="🔴",
+                confidence_explanation="No sources found for this query."
             )
 
         # Step 2: HITL Validation
@@ -261,7 +268,11 @@ class RAGEngine:
                 sources=retrieval_results,
                 approved=False,
                 hitl_required=True,
-                model=config.gemini.model_name
+                model=config.gemini.model_name,
+                confidence_score=0.0,
+                confidence_level="Low",
+                confidence_emoji="🔴",
+                confidence_explanation="Response generation declined by human review."
             )
 
         # Step 3: Generation
@@ -290,15 +301,56 @@ class RAGEngine:
         )
         metrics_collector.record_query(query_metrics)
 
-        # Calculate response confidence score
+        # Calculate response confidence score (Phase 2: Advanced confidence metrics)
+        confidence_score = 0.5
+        confidence_level = "Medium"
+        confidence_emoji = "🟡"
+        confidence_explanation = ""
+
         try:
-            from src.confidence import ConfidenceCalculator
+            from src.confidence_phase6 import ConfidenceCalculator
             confidence_calc = ConfidenceCalculator()
-            confidence_score = confidence_calc.calculate_response_confidence(retrieval_results)
-            logger.info(f"📊 Response confidence: {confidence_score:.0f}%")
+
+            # Convert RetrievalResult objects to dicts for confidence calculation
+            sources_for_confidence = []
+            for result in retrieval_results:
+                sources_for_confidence.append({
+                    "score": result.score if hasattr(result, 'score') else 0.0,
+                    "source": result.source if hasattr(result, 'source') else "unknown"
+                })
+
+            # Get full confidence metrics
+            confidence_metrics = confidence_calc.get_confidence_metrics(sources_for_confidence)
+            confidence_score = confidence_metrics.confidence_score
+            confidence_level = confidence_metrics.confidence_level
+            confidence_emoji = confidence_metrics.confidence_emoji
+            confidence_explanation = confidence_metrics.explanation
+
+            logger.info(f"📊 Response confidence: {confidence_emoji} {confidence_level} ({confidence_score:.0%})")
+            logger.info(f"💬 {confidence_explanation}")
         except Exception as e:
-            logger.warning(f"Could not calculate confidence: {e}")
-            confidence_score = 0.0
+            logger.warning(f"Could not calculate advanced confidence: {e}")
+            # Fallback to basic confidence calculation
+            try:
+                from src.confidence import ConfidenceCalculator as BasicConfidenceCalculator
+                basic_calc = BasicConfidenceCalculator()
+                # Convert to 0-1 scale from 0-100
+                basic_score = basic_calc.calculate_response_confidence(retrieval_results) / 100.0
+                confidence_score = basic_score
+                if basic_score >= 0.75:
+                    confidence_level = "High"
+                    confidence_emoji = "🟢"
+                    confidence_explanation = f"High confidence with {len(retrieval_results)} sources"
+                elif basic_score >= 0.50:
+                    confidence_level = "Medium"
+                    confidence_emoji = "🟡"
+                    confidence_explanation = f"Medium confidence with {len(retrieval_results)} sources"
+                else:
+                    confidence_level = "Low"
+                    confidence_emoji = "🔴"
+                    confidence_explanation = f"Low confidence - only {len(retrieval_results)} source(s)"
+            except Exception as fallback_e:
+                logger.warning(f"Fallback confidence also failed: {fallback_e}")
 
         # Create response object
         response = RAGResponse(
@@ -307,7 +359,10 @@ class RAGEngine:
             approved=approved,
             hitl_required=hitl_required,
             model=config.gemini.model_name,
-            confidence_score=confidence_score
+            confidence_score=confidence_score,
+            confidence_level=confidence_level,
+            confidence_emoji=confidence_emoji,
+            confidence_explanation=confidence_explanation
         )
 
         # FASE 10.1: Cache response in cluster (if not a cache hit and no filters)
