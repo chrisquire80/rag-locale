@@ -33,13 +33,28 @@ class MemoryService:
         self.close()
 
     def close(self):
-        """Close the persistent connection"""
+        """
+        Close the persistent connection
+        Ensures all data is persisted to disk via WAL checkpoint
+        """
         if self.conn:
             try:
+                # Force WAL checkpoint to ensure all data is persisted
+                # PRAGMA optimize - performs VACUUM and other optimizations
+                # PRAGMA wal_checkpoint(RESTART) - checkpoint without blocking new writes
+                self.conn.execute('PRAGMA optimize')
+                self.conn.execute('PRAGMA wal_checkpoint(RESTART)')
+
+                # Commit any pending transactions
+                self.conn.commit()
+
+                logger.info("Memory service checkpoint complete - all data persisted")
+
+                # Now safe to close
                 self.conn.close()
                 logger.info("Memory service connection closed")
             except Exception as e:
-                logger.error(f"Error closing connection: {e}")
+                logger.warning(f"Error during memory service close: {e}")
             finally:
                 self.conn = None
 

@@ -45,6 +45,35 @@ class QueryExpander:
         self.expansion_cache = QueryExpansionCache(max_size=500)
         logger.info("Initialized Query Expander with caching enabled")
 
+    def _sanitize_query(self, query: str) -> str:
+        """
+        Sanitize query while preserving intent
+        Allows emoji, unicode, and special characters that are valid in queries
+        Normalizes encoding to ensure compatibility across systems
+
+        Args:
+            query: Original query string (may contain special chars, emoji, unicode)
+
+        Returns:
+            Sanitized query safe for processing
+        """
+        import unicodedata
+
+        # Normalize unicode (NFC form combines characters)
+        query = unicodedata.normalize('NFC', query)
+
+        # For SQL-like queries, preserve the terms (don't strip as injection)
+        # The actual query will be embedded and not executed as SQL
+        # Just ensure it's valid UTF-8
+        try:
+            query.encode('utf-8')
+        except UnicodeEncodeError as e:
+            logger.warning(f"Query contains invalid UTF-8 characters: {query}")
+            # Replace invalid characters with replacement character
+            query = query.encode('utf-8', errors='replace').decode('utf-8')
+
+        return query
+
     def expand_query(
         self,
         query: str,
@@ -55,34 +84,37 @@ class QueryExpander:
         Expand query into variants and analyze intent
 
         Args:
-            query: Original query string
+            query: Original query string (may contain emoji, unicode, special chars)
             num_variants: Number of variants to generate
             use_cache: Use cached results if available
 
         Returns:
             ExpandedQuery with variants and analysis
         """
+        # Sanitize query to handle special characters, emoji, unicode
+        sanitized_query = self._sanitize_query(query)
+
         # Check cache
-        cache_key = query.lower().strip()
+        cache_key = sanitized_query.lower().strip()
         if use_cache:
             cached = self.expansion_cache.get(cache_key)
             if cached is not None:
                 return cached
 
-        prompt = self._create_expansion_prompt(query, num_variants)
+        prompt = self._create_expansion_prompt(sanitized_query, num_variants)
 
         try:
             response = self.llm.generate_response(prompt)
-            expanded = self._parse_expansion_response(response, query)
+            expanded = self._parse_expansion_response(response, sanitized_query)
         except Exception as e:
             logger.error(f"Query expansion failed: {e}")
             # Fallback: use centralized entity extractor
             entity_extractor = get_entity_extractor()
-            keywords = entity_extractor.extract_keywords(query, num_keywords=5)
+            keywords = entity_extractor.extract_keywords(sanitized_query, num_keywords=5)
             expanded = ExpandedQuery(
-                original=query,
-                variants=[query],
-                keywords=keywords if keywords else query.split()[:5],
+                original=query,  # Keep original (with special chars) in result
+                variants=[sanitized_query],
+                keywords=keywords if keywords else sanitized_query.split()[:5],
                 intent="search",
                 difficulty="unknown"
             )
