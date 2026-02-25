@@ -16,6 +16,7 @@ except ImportError:
 
 from src.long_context_optimizer import LongContextOptimizer, ContextChunk
 from src.document_hierarchy import DocumentHierarchy, HierarchyNode
+from src.logging_config import get_logger
 
 logger = get_logger(__name__)
 

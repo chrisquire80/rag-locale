@@ -8,7 +8,7 @@ import sqlite3
 import json
 import numpy as np
 from pathlib import Path
-from typing import Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 import threading
 

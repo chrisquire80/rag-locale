@@ -4,7 +4,7 @@ Multi-level compression engine for fitting documents in 1M token context
 """
 
 import re
-from typing import Optional
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
 

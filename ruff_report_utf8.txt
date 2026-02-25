@@ -1,0 +1,4055 @@
+﻿F401 [*] `typing.Dict` imported but unused
+  --> src\ab_test_framework.py:10:26
+   |
+ 8 | import random
+ 9 | import math
+10 | from typing import List, Dict, Optional, Tuple
+   |                          ^^^^
+11 | from dataclasses import dataclass, field
+12 | from datetime import datetime
+   |
+help: Remove unused import: `typing.Dict`
+
+F401 [*] `math.sqrt` imported but unused
+   --> src\ab_test_framework.py:242:26
+    |
+240 |         # n = 2 * (z_alpha/2 + z_beta)^2 / effect_size^2
+241 |
+242 |         from math import sqrt, erfc
+    |                          ^^^^
+243 |
+244 |         # z-values for common alpha and power
+    |
+help: Remove unused import
+
+F401 [*] `math.erfc` imported but unused
+   --> src\ab_test_framework.py:242:32
+    |
+240 |         # n = 2 * (z_alpha/2 + z_beta)^2 / effect_size^2
+241 |
+242 |         from math import sqrt, erfc
+    |                                ^^^^
+243 |
+244 |         # z-values for common alpha and power
+    |
+help: Remove unused import
+
+F841 Local variable `df` is assigned to but never used
+   --> src\ab_test_framework.py:290:9
+    |
+289 |         # Degrees of freedom (Welch's approximation)
+290 |         df = (
+    |         ^^
+291 |             ((std_a ** 2 / n_a + std_b ** 2 / n_b) ** 2) /
+292 |             ((std_a ** 2 / n_a) ** 2 / (n_a - 1) + (std_b ** 2 / n_b) ** 2 / (n_b - 1))
+    |
+help: Remove assignment to unused variable `df`
+
+F401 [*] `src.config.config` imported but unused
+  --> src\api.py:11:24
+   |
+ 9 | import uvicorn
+10 |
+11 | from src.config import config, DOCUMENTS_DIR
+   |                        ^^^^^^
+12 | from src.rag_engine import RAGEngine
+13 | from src.document_ingestion import DocumentIngestionPipeline
+   |
+help: Remove unused import: `src.config.config`
+
+F401 [*] `sys` imported but unused
+  --> src\app_streamlit.py:11:8
+   |
+ 9 | """
+10 |
+11 | import sys
+   |        ^^^
+12 | from pathlib import Path
+   |
+help: Remove unused import: `sys`
+
+F401 [*] `pathlib.Path` imported but unused
+  --> src\app_streamlit.py:12:21
+   |
+11 | import sys
+12 | from pathlib import Path
+   |                     ^^^^
+13 |
+14 | # Initialize structured logging FIRST (before any other imports)
+   |
+help: Remove unused import: `pathlib.Path`
+
+E402 Module level import not at top of file
+  --> src\app_streamlit.py:24:1
+   |
+23 | # Now import other modules
+24 | import streamlit as st
+   | ^^^^^^^^^^^^^^^^^^^^^^
+25 | from src.config import config, print_config
+26 | from src.rag_engine import RAGEngine
+   |
+
+E402 Module level import not at top of file
+  --> src\app_streamlit.py:25:1
+   |
+23 | # Now import other modules
+24 | import streamlit as st
+25 | from src.config import config, print_config
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+26 | from src.rag_engine import RAGEngine
+27 | from src.memory_service import get_memory_service
+   |
+
+F401 [*] `src.config.print_config` imported but unused
+  --> src\app_streamlit.py:25:32
+   |
+23 | # Now import other modules
+24 | import streamlit as st
+25 | from src.config import config, print_config
+   |                                ^^^^^^^^^^^^
+26 | from src.rag_engine import RAGEngine
+27 | from src.memory_service import get_memory_service
+   |
+help: Remove unused import: `src.config.print_config`
+
+E402 Module level import not at top of file
+  --> src\app_streamlit.py:26:1
+   |
+24 | import streamlit as st
+25 | from src.config import config, print_config
+26 | from src.rag_engine import RAGEngine
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+27 | from src.memory_service import get_memory_service
+   |
+
+E402 Module level import not at top of file
+  --> src\app_streamlit.py:27:1
+   |
+25 | from src.config import config, print_config
+26 | from src.rag_engine import RAGEngine
+27 | from src.memory_service import get_memory_service
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+28 |
+29 | logger.info("All modules imported successfully")
+   |
+
+F401 [*] `src.search_filters.SearchFilter` imported but unused
+  --> src\app_ui.py:21:32
+   |
+19 | # FASE 7: Feature integrations
+20 | from src.tag_manager import TagManager
+21 | from src.search_filters import SearchFilter, SearchFilterBuilder
+   |                                ^^^^^^^^^^^^
+22 | from src.upload_manager import UploadManager
+23 | from src.vector_store import get_vector_store
+   |
+help: Remove unused import
+
+F401 [*] `src.search_filters.SearchFilterBuilder` imported but unused
+  --> src\app_ui.py:21:46
+   |
+19 | # FASE 7: Feature integrations
+20 | from src.tag_manager import TagManager
+21 | from src.search_filters import SearchFilter, SearchFilterBuilder
+   |                                              ^^^^^^^^^^^^^^^^^^^
+22 | from src.upload_manager import UploadManager
+23 | from src.vector_store import get_vector_store
+   |
+help: Remove unused import
+
+F541 [*] f-string without any placeholders
+   --> src\app_ui.py:670:45
+    |
+669 |                             with col1:
+670 |                                 st.markdown(f"### ­ƒôØ Risposta")
+    |                                             ^^^^^^^^^^^^^^^^^^
+671 |
+672 |                             with col2:
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\app_ui.py:757:56
+    |
+755 |                                                 preview += "..."
+756 |
+757 |                                             st.caption(f"­ƒôä **Preview:**")
+    |                                                        ^^^^^^^^^^^^^^^^^^
+758 |                                             st.markdown(f"*{preview}*")
+    |
+help: Remove extraneous `f` prefix
+
+F821 Undefined name `sources_md`
+   --> src\app_ui.py:807:107
+    |
+806 |                         # Add to history
+807 |                         st.session_state.messages.append({"role": "assistant", "content": full_response + sources_md})
+    |                                                                                                           ^^^^^^^^^^
+808 |
+809 |                     except TimeoutError as e:
+    |
+
+F401 [*] `datetime.datetime` imported but unused
+  --> src\async_rag_engine.py:9:22
+   |
+ 7 | import asyncio
+ 8 | import time
+ 9 | from datetime import datetime
+   |                      ^^^^^^^^
+10 | from typing import Optional
+11 | from dataclasses import dataclass
+   |
+help: Remove unused import: `datetime.datetime`
+
+F401 [*] `dataclasses.dataclass` imported but unused
+  --> src\async_rag_engine.py:11:25
+   |
+ 9 | from datetime import datetime
+10 | from typing import Optional
+11 | from dataclasses import dataclass
+   |                         ^^^^^^^^^
+12 |
+13 | from src.config import config
+   |
+help: Remove unused import: `dataclasses.dataclass`
+
+F841 Local variable `cache_hit` is assigned to but never used
+  --> src\async_rag_engine.py:84:9
+   |
+82 |         cache_key = self._get_cache_key(user_query, metadata_filter)
+83 |         retrieval_results = self._get_cached_result(cache_key)
+84 |         cache_hit = retrieval_results is not None
+   |         ^^^^^^^^^
+85 |
+86 |         search_start = time.perf_counter()
+   |
+help: Remove assignment to unused variable `cache_hit`
+
+F821 Undefined name `logging`
+   --> src\async_rag_engine.py:296:5
+    |
+295 | if __name__ == "__main__":
+296 |     logging.basicConfig(level=logging.INFO)
+    |     ^^^^^^^
+297 |     asyncio.run(demo_parallel_queries())
+    |
+
+F821 Undefined name `logging`
+   --> src\async_rag_engine.py:296:31
+    |
+295 | if __name__ == "__main__":
+296 |     logging.basicConfig(level=logging.INFO)
+    |                               ^^^^^^^
+297 |     asyncio.run(demo_parallel_queries())
+    |
+
+F401 [*] `src.cache.CacheManager` imported but unused
+  --> src\cache_integration.py:27:5
+   |
+25 |     get_query_result_cache,
+26 |     get_embedding_cache,
+27 |     CacheManager
+   |     ^^^^^^^^^^^^
+28 | )
+29 | from src.logging_config import get_logger
+   |
+help: Remove unused import: `src.cache.CacheManager`
+
+F401 [*] `src.config.config` imported but unused
+  --> src\cache_integration.py:30:24
+   |
+28 | )
+29 | from src.logging_config import get_logger
+30 | from src.config import config
+   |                        ^^^^^^
+31 |
+32 | logger = get_logger(__name__)
+   |
+help: Remove unused import: `src.config.config`
+
+F821 Undefined name `Dict`
+  --> src\chat_memory.py:27:26
+   |
+25 |     metadata: dict[str, Any] = field(default_factory=dict)
+26 |
+27 |     def to_dict(self) -> Dict:
+   |                          ^^^^
+28 |         """Convert to dictionary"""
+29 |         return asdict(self)
+   |
+
+F821 Undefined name `Dict`
+  --> src\chat_memory.py:54:28
+   |
+52 |         quality_score: Optional[float] = None,
+53 |         sources: Optional[list[str]] = None,
+54 |         metadata: Optional[Dict] = None
+   |                            ^^^^
+55 |     ) -> ConversationTurn:
+56 |         """
+   |
+
+F821 Undefined name `Dict`
+  --> src\citation_engine.py:29:26
+   |
+27 |     relevance_score: float = 1.0
+28 |
+29 |     def to_dict(self) -> Dict:
+   |                          ^^^^
+30 |         """Convert to dictionary"""
+31 |         return {
+   |
+
+F821 Undefined name `Dict`
+  --> src\citation_engine.py:64:23
+   |
+62 |     def generate_citations(
+63 |         self,
+64 |         sources: list[Dict],
+   |                       ^^^^
+65 |         answer: str = ""
+66 |     ) -> dict[str, Citation]:
+   |
+
+F821 Undefined name `Dict`
+   --> src\citation_engine.py:149:17
+    |
+147 |     def extract_citation_context(
+148 |         self,
+149 |         source: Dict,
+    |                 ^^^^
+150 |         context_window: int = 50
+151 |     ) -> str:
+    |
+
+F841 Local variable `citation_idx` is assigned to but never used
+   --> src\citation_engine.py:200:9
+    |
+198 |         sentences = re.split(r'(?<=[.!?])\s+', answer)
+199 |
+200 |         citation_idx = 0
+    |         ^^^^^^^^^^^^
+201 |         current_pos = 0
+    |
+help: Remove assignment to unused variable `citation_idx`
+
+F821 Undefined name `Dict`
+   --> src\citation_engine.py:396:42
+    |
+394 |         return formatted
+395 |
+396 |     def get_citation_statistics(self) -> Dict:
+    |                                          ^^^^
+397 |         """Get citation statistics"""
+398 |         return {
+    |
+
+F401 [*] `typing.Optional` imported but unused
+ --> src\confidence.py:7:20
+  |
+6 | import statistics
+7 | from typing import Optional
+  |                    ^^^^^^^^
+8 |
+9 | from src.logging_config import get_logger
+  |
+help: Remove unused import: `typing.Optional`
+
+F821 Undefined name `List`
+  --> src\confidence.py:30:54
+   |
+28 |         self.MEDIUM_THRESHOLD = 0.50  # 50%
+29 |
+30 |     def calculate_response_confidence(self, sources: List) -> float:
+   |                                                      ^^^^
+31 |         """
+32 |         Calculate confidence score (0-100) based on source quality.
+   |
+
+F841 Local variable `variance` is assigned to but never used
+  --> src\confidence.py:76:17
+   |
+74 |         if len(scores) > 1:
+75 |             try:
+76 |                 variance = statistics.variance(scores)
+   |                 ^^^^^^^^
+77 |                 std_dev = statistics.stdev(scores)
+78 |                 # High variance reduces confidence
+   |
+help: Remove assignment to unused variable `variance`
+
+F821 Undefined name `List`
+   --> src\confidence.py:122:37
+    |
+120 |         return emoji_map.get(level, "ÔÜ¬")
+121 |
+122 |     def rank_sources(self, sources: List) -> List:
+    |                                     ^^^^
+123 |         """
+124 |         Rank sources by relevance (score descending).
+    |
+
+F821 Undefined name `List`
+   --> src\confidence.py:122:46
+    |
+120 |         return emoji_map.get(level, "ÔÜ¬")
+121 |
+122 |     def rank_sources(self, sources: List) -> List:
+    |                                              ^^^^
+123 |         """
+124 |         Rank sources by relevance (score descending).
+    |
+
+F821 Undefined name `List`
+   --> src\confidence.py:138:56
+    |
+136 |         return sorted(sources, key=get_score, reverse=True)
+137 |
+138 |     def generate_confidence_explanation(self, sources: List, confidence: float) -> str:
+    |                                                        ^^^^
+139 |         """
+140 |         Generate human-readable explanation of confidence score.
+    |
+
+F541 [*] f-string without any placeholders
+   --> src\config.py:284:17
+    |
+282 |     logger.info("CONFIGURAZIONE RAG LOCALE - HP ProBook 440 G11")
+283 |     logger.info("="*60)
+284 |     logger.info(f"\nGemini (Hybrid RAG):")
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+285 |     # logger.info(f"   API Key: {config.gemini.api_key.get_secret_value()[:5]}...")
+286 |     logger.info(f"   Model: {config.gemini.model_name}")
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\config.py:290:17
+    |
+288 |     logger.info(f"   Embedding: {config.gemini.embedding_model}")
+289 |
+290 |     logger.info(f"\nChromeDB:")
+    |                 ^^^^^^^^^^^^^^
+291 |     logger.info(f"   Mode: {config.chromadb.mode}")
+292 |     logger.info(f"   Path: {config.chromadb.persist_directory}")
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\config.py:296:17
+    |
+294 |     logger.info(f"   Chunk Size: {config.chromadb.chunk_size} tokens")
+295 |
+296 |     logger.info(f"\nRAG Engine:")
+    |                 ^^^^^^^^^^^^^^^^
+297 |     logger.info(f"   Top-K: {config.rag.similarity_top_k}")
+298 |     logger.info(f"   HITL: {'ENABLED' if config.rag.enable_hitl else 'DISABLED'}")
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\config.py:301:17
+    |
+299 |     logger.info(f"   HITL Threshold: {config.rag.hitl_score_threshold}")
+300 |
+301 |     logger.info(f"\nPaths:")
+    |                 ^^^^^^^^^^^
+302 |     logger.info(f"   Documents: {DOCUMENTS_DIR}")
+303 |     logger.info(f"   Vector DB: {VECTOR_DB_DIR}")
+    |
+help: Remove extraneous `f` prefix
+
+F821 Undefined name `Dict`
+  --> src\context_batcher.py:27:21
+   |
+25 |     """A batch of documents with shared context"""
+26 |     batch_id: str
+27 |     documents: list[Dict]                    # Documents in this batch
+   |                     ^^^^
+28 |     queries: list[str]                       # Queries to answer in this batch
+29 |     total_tokens: int                        # Total tokens used
+   |
+
+F821 Undefined name `Dict`
+  --> src\context_batcher.py:32:15
+   |
+30 |     available_tokens: int                    # Remaining tokens
+31 |     estimated_completion_time: float         # Seconds to process
+32 |     metadata: Dict = field(default_factory=dict)
+   |               ^^^^
+33 |     created_at: datetime = field(default_factory=datetime.now)
+   |
+
+F821 Undefined name `Dict`
+  --> src\context_batcher.py:52:21
+   |
+50 | class BatchRequest:
+51 |     """Request to create a batch"""
+52 |     documents: list[Dict]
+   |                     ^^^^
+53 |     queries: list[str]
+54 |     strategy: BatchStrategy = BatchStrategy.BY_RELEVANCE
+   |
+
+F821 Undefined name `Dict`
+  --> src\context_batcher.py:80:37
+   |
+79 |     def create_batch(self,
+80 |                     documents: list[Dict],
+   |                                     ^^^^
+81 |                     queries: list[str],
+82 |                     strategy: BatchStrategy = BatchStrategy.BY_RELEVANCE) -> ContextBatch:
+   |
+
+F821 Undefined name `Dict`
+   --> src\context_batcher.py:127:39
+    |
+126 |     def pack_documents(self,
+127 |                       documents: list[Dict],
+    |                                       ^^^^
+128 |                       max_batches: Optional[int] = None) -> list[ContextBatch]:
+129 |         """
+    |
+
+F821 Undefined name `Dict`
+   --> src\context_batcher.py:253:54
+    |
+252 |     def estimate_api_calls_reduction(self,
+253 |                                      documents: list[Dict],
+    |                                                      ^^^^
+254 |                                      queries: list[str]) -> dict[str, float]:
+255 |         """
+    |
+
+F821 Undefined name `RetrievalResult`
+  --> src\context_deduplicator.py:91:48
+   |
+89 |             return 0.0
+90 |
+91 |     def deduplicate_chunks(self, chunks: List['RetrievalResult']) -> List['RetrievalResult']:
+   |                                                ^^^^^^^^^^^^^^^
+92 |         """
+93 |         Remove duplicate/near-duplicate chunks.
+   |
+
+F821 Undefined name `RetrievalResult`
+  --> src\context_deduplicator.py:91:76
+   |
+89 |             return 0.0
+90 |
+91 |     def deduplicate_chunks(self, chunks: List['RetrievalResult']) -> List['RetrievalResult']:
+   |                                                                            ^^^^^^^^^^^^^^^
+92 |         """
+93 |         Remove duplicate/near-duplicate chunks.
+   |
+
+F821 Undefined name `RetrievalResult`
+   --> src\context_deduplicator.py:141:58
+    |
+139 |             return chunks
+140 |
+141 |     def optimize_information_density(self, chunks: List['RetrievalResult']) -> str:
+    |                                                          ^^^^^^^^^^^^^^^
+142 |         """
+143 |         Assemble context optimized for information density.
+    |
+
+F401 [*] `re` imported but unused
+  --> src\context_window_manager.py:8:8
+   |
+ 6 | from typing import Optional
+ 7 | from dataclasses import dataclass
+ 8 | import re
+   |        ^^
+ 9 |
+10 | from src.logging_config import get_logger
+   |
+help: Remove unused import: `re`
+
+F821 Undefined name `Dict`
+  --> src\context_window_manager.py:73:25
+   |
+71 |     def allocate_context(
+72 |         self,
+73 |         documents: list[Dict],
+   |                         ^^^^
+74 |         query: str,
+75 |         relevance_scores: Optional[dict[str, float]] = None
+   |
+
+F821 Undefined name `Dict`
+  --> src\context_window_manager.py:76:10
+   |
+74 |         query: str,
+75 |         relevance_scores: Optional[dict[str, float]] = None
+76 |     ) -> Dict:
+   |          ^^^^
+77 |         """
+78 |         Intelligently allocate context tokens across documents
+   |
+
+F821 Undefined name `Dict`
+   --> src\context_window_manager.py:152:41
+    |
+150 |         }
+151 |
+152 |     def _get_summary_level_1(self, doc: Dict) -> str:
+    |                                         ^^^^
+153 |         """Get detailed summary (~20% of original)"""
+154 |         content = doc.get('content', '')
+    |
+
+F821 Undefined name `Dict`
+   --> src\context_window_manager.py:164:41
+    |
+162 |         return summary
+163 |
+164 |     def _get_summary_level_2(self, doc: Dict) -> str:
+    |                                         ^^^^
+165 |         """Get executive summary (~5% of original)"""
+166 |         content = doc.get('content', '')
+    |
+
+F821 Undefined name `Dict`
+   --> src\context_window_manager.py:172:34
+    |
+170 |         return ' '.join(words[:cutoff])
+171 |
+172 |     def _get_metadata(self, doc: Dict) -> str:
+    |                                  ^^^^
+173 |         """Get metadata only (~1% of original)"""
+174 |         return f"""
+    |
+
+F821 Undefined name `Dict`
+   --> src\context_window_manager.py:181:52
+    |
+179 | """
+180 |
+181 |     def optimize_allocation(self, allocation_plan: Dict) -> Dict:
+    |                                                    ^^^^
+182 |         """
+183 |         Further optimize allocation by removing redundancy
+    |
+
+F821 Undefined name `Dict`
+   --> src\context_window_manager.py:181:61
+    |
+179 | """
+180 |
+181 |     def optimize_allocation(self, allocation_plan: Dict) -> Dict:
+    |                                                             ^^^^
+182 |         """
+183 |         Further optimize allocation by removing redundancy
+    |
+
+F841 Local variable `allocations` is assigned to but never used
+   --> src\context_window_manager.py:193:9
+    |
+191 |         logger.info("Optimizing token allocation")
+192 |
+193 |         allocations = allocation_plan['allocations']
+    |         ^^^^^^^^^^^
+194 |
+195 |         # Could add deduplication, information consolidation, etc.
+    |
+help: Remove assignment to unused variable `allocations`
+
+F821 Undefined name `Dict`
+   --> src\context_window_manager.py:200:34
+    |
+198 |         return allocation_plan
+199 |
+200 |     def get_utilization(self) -> Dict:
+    |                                  ^^^^
+201 |         """
+202 |         Get current context window utilization
+    |
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\cross_encoder_reranking.py:8:20
+   |
+ 7 | import numpy as np
+ 8 | from typing import Optional
+   |                    ^^^^^^^^
+ 9 | from dataclasses import dataclass
+10 | from abc import ABC, abstractmethod
+   |
+help: Remove unused import: `typing.Optional`
+
+F821 Undefined name `Dict`
+  --> src\cross_encoder_reranking.py:36:26
+   |
+34 |         self,
+35 |         query: str,
+36 |         candidates: list[Dict]
+   |                          ^^^^
+37 |     ) -> list[RankedResult]:
+38 |         """
+   |
+
+F821 Undefined name `Dict`
+  --> src\cross_encoder_reranking.py:87:26
+   |
+85 |         self,
+86 |         query: str,
+87 |         candidates: list[Dict],
+   |                          ^^^^
+88 |         top_k: int = 5,
+89 |         alpha: float = 0.3,  # Weight for original score (1-alpha for rerank score)
+   |
+
+F821 Undefined name `Dict`
+   --> src\cross_encoder_reranking.py:146:57
+    |
+144 |         return reranked[:top_k]
+145 |
+146 |     def _score_batch(self, query: str, candidates: list[Dict]) -> list[float]:
+    |                                                         ^^^^
+147 |         """
+148 |         Score a batch of candidates using Gemini
+    |
+
+F821 Undefined name `Dict`
+   --> src\cross_encoder_reranking.py:237:26
+    |
+235 |         self,
+236 |         query: str,
+237 |         candidates: list[Dict],
+    |                          ^^^^
+238 |         top_k: int = 5,
+239 |         alpha: float = 0.4,
+    |
+
+F821 Undefined name `Dict`
+   --> src\cross_encoder_reranking.py:360:26
+    |
+358 |         self,
+359 |         query: str,
+360 |         candidates: list[Dict],
+    |                          ^^^^
+361 |         top_k: int = 5
+362 |     ) -> list[RankedResult]:
+    |
+
+F541 [*] f-string without any placeholders
+  --> src\debug_missing_files.py:13:11
+   |
+12 | def check_missing_files():
+13 |     print(f"\n­ƒöì Analisi Discrepanze Documenti vs Vector Store")
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14 |     print(f"==================================================")
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\debug_missing_files.py:14:11
+   |
+12 | def check_missing_files():
+13 |     print(f"\n­ƒöì Analisi Discrepanze Documenti vs Vector Store")
+14 |     print(f"==================================================")
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+15 |     
+16 |     # 1. Get Physical Files
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\debug_missing_files.py:37:11
+   |
+35 |     print(f"­ƒº® Totale Chunk nel DB: {len(vs.documents)}")
+36 |     
+37 |     print(f"\n­ƒôè Dettagli:")
+   |           ^^^^^^^^^^^^^^^^^
+38 |     print(f"--------------------------------------------------")
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\debug_missing_files.py:38:11
+   |
+37 |     print(f"\n­ƒôè Dettagli:")
+38 |     print(f"--------------------------------------------------")
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+39 |     
+40 |     # 3. Find Missing
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\debug_missing_files.py:54:11
+   |
+53 |     # 4. Check for low chunk counts (potential read errors)
+54 |     print(f"\nÔÜá´©Å Controllo file con pochi chunk (<3):")
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+55 |     low_chunk_files = [f for f, count in vs_files_counter.items() if count < 3]
+56 |     if low_chunk_files:
+   |
+help: Remove extraneous `f` prefix
+
+F821 Undefined name `Dict`
+  --> src\document_compressor.py:29:15
+   |
+27 |     compression_level: CompressionLevel
+28 |     compressed_text: str
+29 |     metadata: Dict
+   |               ^^^^
+30 |     original_token_count: int
+31 |     compressed_token_count: int
+   |
+
+F821 Undefined name `Dict`
+  --> src\document_compressor.py:88:37
+   |
+86 |                  text: str,
+87 |                  level: CompressionLevel,
+88 |                  metadata: Optional[Dict] = None) -> CompressedDocument:
+   |                                     ^^^^
+89 |         """
+90 |         Compress document to specified level
+   |
+
+F821 Undefined name `Dict`
+   --> src\document_compressor.py:180:59
+    |
+178 |         return selected_text
+179 |
+180 |     def _extract_metadata_only(self, text: str, metadata: Dict) -> str:
+    |                                                           ^^^^
+181 |         """
+182 |         Extract metadata-only representation
+    |
+
+F821 Undefined name `Dict`
+   --> src\document_compressor.py:272:39
+    |
+271 |     def compress_batch(self,
+272 |                       documents: list[Dict],
+    |                                       ^^^^
+273 |                       allocation: dict[str, CompressionLevel]) -> list[CompressedDocument]:
+274 |         """
+    |
+
+F821 Undefined name `Dict`
+   --> src\document_compressor.py:306:38
+    |
+305 |     def auto_compress(self,
+306 |                      documents: list[Dict],
+    |                                      ^^^^
+307 |                      target_tokens: int,
+308 |                      relevance_scores: Optional[dict[str, float]] = None) -> list[CompressedDocument]:
+    |
+
+F821 Undefined name `Dict`
+  --> src\document_hierarchy.py:31:15
+   |
+29 |     parent_id: Optional[str] = None
+30 |     children: list['HierarchyNode'] = field(default_factory=list)
+31 |     metadata: Dict = field(default_factory=dict)
+   |               ^^^^
+32 |     relevance_score: float = 0.0
+33 |     token_count: int = 0
+   |
+
+F821 Undefined name `Dict`
+  --> src\document_hierarchy.py:43:40
+   |
+41 |         self.roots: dict[str, HierarchyNode] = {}  # doc_id -> root node
+42 |         self.node_map: dict[str, HierarchyNode] = {}  # node_id -> node
+43 |         self.doc_structures: dict[str, Dict] = {}  # doc_id -> structure metadata
+   |                                        ^^^^
+44 |
+45 |     def organize_by_structure(self, documents: list[Dict]) -> dict[str, HierarchyNode]:
+   |
+
+F821 Undefined name `Dict`
+  --> src\document_hierarchy.py:45:53
+   |
+43 |         self.doc_structures: dict[str, Dict] = {}  # doc_id -> structure metadata
+44 |
+45 |     def organize_by_structure(self, documents: list[Dict]) -> dict[str, HierarchyNode]:
+   |                                                     ^^^^
+46 |         """
+47 |         Parse documents and organize by hierarchical structure
+   |
+
+F821 Undefined name `Dict`
+   --> src\document_hierarchy.py:181:19
+    |
+179 |         text: str,
+180 |         doc_id: str,
+181 |         metadata: Dict
+    |                   ^^^^
+182 |     ) -> HierarchyNode:
+183 |         """Parse document into hierarchy"""
+    |
+
+F821 Undefined name `Dict`
+   --> src\document_hierarchy.py:325:33
+    |
+323 |             self._index_hierarchy(child)
+324 |
+325 |     def get_statistics(self) -> Dict:
+    |                                 ^^^^
+326 |         """Get hierarchy statistics"""
+327 |         total_nodes = len(self.node_map)
+    |
+
+F401 [*] `src.progress_callbacks.ProgressUpdate` imported but unused
+  --> src\document_ingestion.py:27:54
+   |
+25 | from src.config import config, DOCUMENTS_DIR, LOGS_DIR
+26 | from src.vector_store import get_vector_store
+27 | from src.progress_callbacks import ProgressCallback, ProgressUpdate
+   |                                                      ^^^^^^^^^^^^^^
+28 | from src.pdf_validator import get_pdf_validator
+29 | from src.tag_manager import TagManager
+   |
+help: Remove unused import: `src.progress_callbacks.ProgressUpdate`
+
+F821 Undefined name `logging`
+   --> src\document_ingestion.py:918:5
+    |
+916 | if __name__ == "__main__":
+917 |     # Test
+918 |     logging.basicConfig(level=logging.INFO)
+    |     ^^^^^^^
+919 |
+920 |     pipeline = DocumentIngestionPipeline()
+    |
+
+F821 Undefined name `logging`
+   --> src\document_ingestion.py:918:31
+    |
+916 | if __name__ == "__main__":
+917 |     # Test
+918 |     logging.basicConfig(level=logging.INFO)
+    |                               ^^^^^^^
+919 |
+920 |     pipeline = DocumentIngestionPipeline()
+    |
+
+F821 Undefined name `Dict`
+   --> src\document_similarity_matrix.py:186:37
+    |
+184 |             return []
+185 |
+186 |     def build_heatmap_data(self) -> Dict:
+    |                                     ^^^^
+187 |         """
+188 |         Build data structure for Plotly heatmap visualization.
+    |
+
+F821 Undefined name `Dict`
+   --> src\document_similarity_matrix.py:277:33
+    |
+275 |         logger.info("Similarity matrix cache invalidated")
+276 |
+277 |     def get_statistics(self) -> Dict:
+    |                                 ^^^^
+278 |         """
+279 |         Get statistics about the similarity matrix.
+    |
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\document_summarizer.py:9:20
+   |
+ 7 | import hashlib
+ 8 | import json
+ 9 | from typing import Optional
+   |                    ^^^^^^^^
+10 | from datetime import datetime
+11 | import time
+   |
+help: Remove unused import: `typing.Optional`
+
+F821 Undefined name `Dict`
+  --> src\document_summarizer.py:37:39
+   |
+35 |         """
+36 |         self.llm_service = llm_service
+37 |         self.summary_cache: dict[str, Dict] = {}
+   |                                       ^^^^
+38 |         self._load_cache()
+   |
+
+F821 Undefined name `Dict`
+   --> src\document_summarizer.py:312:50
+    |
+310 |             return []
+311 |
+312 |     def get_summary_stats(self, summary: str) -> Dict:
+    |                                                  ^^^^
+313 |         """
+314 |         Get statistics about a summary.
+    |
+
+F821 Undefined name `Dict`
+   --> src\document_summarizer.py:367:34
+    |
+365 |         logger.info("Cleared summary cache")
+366 |
+367 |     def get_cache_stats(self) -> Dict:
+    |                                  ^^^^
+368 |         """
+369 |         Get statistics about the summary cache.
+    |
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\entity_extractor.py:17:20
+   |
+15 | import re
+16 | import json
+17 | from typing import Optional
+   |                    ^^^^^^^^
+18 | from dataclasses import dataclass
+19 | from collections import Counter
+   |
+help: Remove unused import: `typing.Optional`
+
+F821 Undefined name `Dict`
+   --> src\entity_extractor.py:390:34
+    |
+388 |         return combined
+389 |
+390 |     def get_cache_stats(self) -> Dict:
+    |                                  ^^^^
+391 |         """Get cache statistics"""
+392 |         return {
+    |
+
+F401 [*] `dataclasses.asdict` imported but unused
+  --> src\fine_tuning_pipeline.py:10:36
+   |
+ 8 | import json
+ 9 | from typing import Optional
+10 | from dataclasses import dataclass, asdict
+   |                                    ^^^^^^
+11 | from datetime import datetime
+12 | from pathlib import Path
+   |
+help: Remove unused import: `dataclasses.asdict`
+
+F401 [*] `pathlib.Path` imported but unused
+  --> src\fine_tuning_pipeline.py:12:21
+   |
+10 | from dataclasses import dataclass, asdict
+11 | from datetime import datetime
+12 | from pathlib import Path
+   |                     ^^^^
+13 |
+14 | from src.logging_config import get_logger
+   |
+help: Remove unused import: `pathlib.Path`
+
+F821 Undefined name `Dict`
+  --> src\fine_tuning_pipeline.py:66:37
+   |
+64 |             self.llm = get_llm_service()
+65 |
+66 |         self.training_history: list[Dict] = []
+   |                                     ^^^^
+67 |
+68 |     def prepare_training_data(
+   |
+
+F821 Undefined name `Dict`
+  --> src\fine_tuning_pipeline.py:70:34
+   |
+68 |     def prepare_training_data(
+69 |         self,
+70 |         evaluation_records: list[Dict],
+   |                                  ^^^^
+71 |         train_ratio: float = 0.7,
+72 |         val_ratio: float = 0.15,
+   |
+
+F821 Undefined name `Dict`
+   --> src\fine_tuning_pipeline.py:150:10
+    |
+148 |         learning_rate: float = 0.001,
+149 |         num_epochs: int = 3
+150 |     ) -> Dict:
+    |          ^^^^
+151 |         """
+152 |         Fine-tune embedding model on domain-specific data.
+    |
+
+F821 Undefined name `Dict`
+   --> src\fine_tuning_pipeline.py:220:10
+    |
+218 |         dataset: TrainingDataset,
+219 |         max_iterations: int = 5
+220 |     ) -> Dict:
+    |          ^^^^
+221 |         """
+222 |         Optimize LLM prompts through iterative variation testing.
+    |
+
+F841 Local variable `sample_queries` is assigned to but never used
+   --> src\fine_tuning_pipeline.py:236:9
+    |
+235 |         # Sample evaluation queries
+236 |         sample_queries = [d.query for d in dataset.validation[:10]]
+    |         ^^^^^^^^^^^^^^
+237 |
+238 |         best_prompt = "You are a helpful assistant. Answer based on provided context."
+    |
+help: Remove assignment to unused variable `sample_queries`
+
+F821 Undefined name `Dict`
+   --> src\fine_tuning_pipeline.py:274:10
+    |
+272 |         dataset: TrainingDataset,
+273 |         model_type: str = "linear"
+274 |     ) -> Dict:
+    |          ^^^^
+275 |         """
+276 |         Train lightweight reranker on domain data.
+    |
+
+F401 [*] `pathlib.Path` imported but unused
+  --> src\graph_service.py:9:21
+   |
+ 7 | import re
+ 8 | import json
+ 9 | from pathlib import Path
+   |                     ^^^^
+10 | from collections import defaultdict
+   |
+help: Remove unused import: `pathlib.Path`
+
+F401 [*] `dataclasses.field` imported but unused
+  --> src\graph_service.py:94:40
+   |
+92 |         each edge has .source, .target
+93 |     """
+94 |     from dataclasses import dataclass, field
+   |                                        ^^^^^
+95 |     if risk_entities is None: risk_entities = []
+96 |     if simulation_entities is None: simulation_entities = []
+   |
+help: Remove unused import: `dataclasses.field`
+
+E701 Multiple statements on one line (colon)
+  --> src\graph_service.py:95:29
+   |
+93 |     """
+94 |     from dataclasses import dataclass, field
+95 |     if risk_entities is None: risk_entities = []
+   |                             ^
+96 |     if simulation_entities is None: simulation_entities = []
+   |
+
+E701 Multiple statements on one line (colon)
+  --> src\graph_service.py:96:35
+   |
+94 |     from dataclasses import dataclass, field
+95 |     if risk_entities is None: risk_entities = []
+96 |     if simulation_entities is None: simulation_entities = []
+   |                                   ^
+97 |
+98 |     @dataclass
+   |
+
+E701 Multiple statements on one line (colon)
+   --> src\graph_service.py:154:39
+    |
+153 |         for entity in entities:
+154 |             if entity == "ÔÜá´©Å Anomalia": continue
+    |                                      ^
+155 |
+156 |             if entity not in added_node_ids:
+    |
+
+F821 Undefined name `Dict`
+   --> src\graph_service.py:188:58
+    |
+186 |     return nodes, edges
+187 |
+188 | def get_graph_stats(entity_map: dict[str, list[str]]) -> Dict:
+    |                                                          ^^^^
+189 |     """Returns summary statistics about the knowledge graph."""
+190 |     all_entities = defaultdict(int)
+    |
+
+F541 [*] f-string without any placeholders
+   --> src\hardware_optimization.py:103:25
+    |
+101 |             )
+102 |
+103 |             logger.info(f"Ô£ô System Profile Detected:")
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+104 |             logger.info(f"  CPU: {profile.cpu_count} cores @ {profile.cpu_freq_ghz:.1f}GHz")
+105 |             logger.info(f"  RAM: {profile.total_memory_gb:.1f}GB (Available: {profile.available_memory_gb:.1f}GB)")
+    |
+help: Remove extraneous `f` prefix
+
+F821 Undefined name `Dict`
+   --> src\hnsw_indexing.py:185:28
+    |
+183 |         return np.linalg.norm(a - b)
+184 |
+185 |     def get_stats(self) -> Dict:
+    |                            ^^^^
+186 |         """Ritorna statistiche dell'indice"""
+187 |         return {
+    |
+
+F821 Undefined name `Dict`
+   --> src\hnsw_indexing.py:240:34
+    |
+238 |             return [(self.ids[idx], distances[idx]) for idx in top_indices]
+239 |
+240 |     def get_index_stats(self) -> Dict:
+    |                                  ^^^^
+241 |         """Ritorna statistiche dell'indice"""
+242 |         if self.hnsw_index:
+    |
+
+F541 [*] f-string without any placeholders
+   --> src\hnsw_indexing.py:285:17
+    |
+283 |     speedup = exact_time / hnsw_time if hnsw_time > 0 else 1.0
+284 |
+285 |     logger.info(f"\nResults:")
+    |                 ^^^^^^^^^^^^^
+286 |     logger.info(f"  HNSW:  {hnsw_time:.3f}s ({num_queries/hnsw_time:.1f} queries/sec)")
+287 |     logger.info(f"  Exact: {exact_time:.3f}s ({num_queries/exact_time:.1f} queries/sec)")
+    |
+help: Remove extraneous `f` prefix
+
+F401 [*] `pathlib.Path` imported but unused
+ --> src\hybrid_search.py:7:21
+  |
+6 | import numpy as np
+7 | from pathlib import Path
+  |                     ^^^^
+8 | from typing import Optional
+9 | from dataclasses import dataclass
+  |
+help: Remove unused import: `pathlib.Path`
+
+F821 Undefined name `Dict`
+  --> src\hybrid_search.py:22:15
+   |
+20 |     doc_id: str
+21 |     text: str
+22 |     metadata: Dict
+   |               ^^^^
+23 |     bm25_score: float
+24 |     vector_score: float
+   |
+
+F821 Undefined name `Dict`
+   --> src\hybrid_search.py:109:40
+    |
+107 |     """Hybrid Search combining BM25 (keyword) + Vector (semantic) search"""
+108 |
+109 |     def __init__(self, documents: list[Dict], embeddings: Optional[np.ndarray] = None):
+    |                                        ^^^^
+110 |         """
+111 |         Initialize hybrid search engine
+    |
+
+F821 Undefined name `Dict`
+   --> src\hybrid_search.py:194:33
+    |
+192 |         return np.maximum(similarities, 0)  # Clamp to [0, 1]
+193 |
+194 |     def get_statistics(self) -> Dict:
+    |                                 ^^^^
+195 |         """Get search engine statistics"""
+196 |         return {
+    |
+
+F821 Undefined name `Dict`
+   --> src\hybrid_search.py:302:21
+    |
+301 | def get_hybrid_search_engine(
+302 |     documents: list[Dict],
+    |                     ^^^^
+303 |     embeddings: Optional[np.ndarray] = None
+304 | ) -> HybridSearchEngine:
+    |
+
+F401 [*] `dataclasses.field` imported but unused
+  --> src\hyperparameter_optimizer.py:10:36
+   |
+ 8 | import itertools
+ 9 | from typing import Any, Optional
+10 | from dataclasses import dataclass, field
+   |                                    ^^^^^
+11 | import time
+   |
+help: Remove unused import: `dataclasses.field`
+
+F821 Undefined name `Dict`
+   --> src\hyperparameter_optimizer.py:162:42
+    |
+160 |         return [r.config for r in sorted_results[:k]]
+161 |
+162 |     def _create_config(self, param_dict: Dict) -> HyperparameterConfig:
+    |                                          ^^^^
+163 |         """Create config object from parameter dict"""
+164 |         config = HyperparameterConfig()
+    |
+
+F401 [*] `typing.Any` imported but unused
+  --> src\llm_service.py:9:20
+   |
+ 7 | import time
+ 8 | import google.genai as genai
+ 9 | from typing import Any, Optional
+   |                    ^^^
+10 | from google.genai.types import HarmCategory, HarmBlockThreshold
+11 | from requests.exceptions import Timeout, ConnectionError, ReadTimeout
+   |
+help: Remove unused import: `typing.Any`
+
+E402 Module level import not at top of file
+   --> src\logging_config.py:124:1
+    |
+123 | # Auto-configure on import (unless running tests)
+124 | import os
+    | ^^^^^^^^^
+125 | if os.getenv('PYTEST_CURRENT_TEST') is None:
+126 |     _log_level = os.getenv('LOG_LEVEL', 'INFO')
+    |
+
+F401 [*] `collections.Counter` imported but unused
+  --> src\long_context_optimizer.py:10:25
+   |
+ 8 | from typing import Optional
+ 9 | from dataclasses import dataclass
+10 | from collections import Counter
+   |                         ^^^^^^^
+11 |
+12 | from src.logging_config import get_logger
+   |
+help: Remove unused import: `collections.Counter`
+
+F401 [*] `src.async_rag_engine.get_async_rag_engine` imported but unused
+  --> src\main.py:23:34
+   |
+21 | from src.hardware_optimization import get_hardware_optimizer
+22 | from src.performance_profiler import get_profiler, profile_operation
+23 | from src.async_rag_engine import get_async_rag_engine
+   |                                  ^^^^^^^^^^^^^^^^^^^^
+24 |
+25 | # Initialize structured logging (replaces basicConfig)
+   |
+help: Remove unused import: `src.async_rag_engine.get_async_rag_engine`
+
+F401 [*] `typing.Optional` imported but unused
+ --> src\memory_service.py:4:20
+  |
+2 | from datetime import datetime
+3 | from pathlib import Path
+4 | from typing import Optional, Dict, List
+  |                    ^^^^^^^^
+5 | import json
+6 | from src.logging_config import get_logger
+  |
+help: Remove unused import
+
+F401 [*] `typing.List` imported but unused
+ --> src\memory_service.py:4:36
+  |
+2 | from datetime import datetime
+3 | from pathlib import Path
+4 | from typing import Optional, Dict, List
+  |                                    ^^^^
+5 | import json
+6 | from src.logging_config import get_logger
+  |
+help: Remove unused import
+
+F821 Undefined name `Dict`
+  --> src\metrics\_loader.py:13:53
+   |
+11 | logger = logging.getLogger(__name__)
+12 |
+13 | def load_metrics(metrics_file: Path = None) -> list[Dict]:
+   |                                                     ^^^^
+14 |     """
+15 |     Load metrics from JSONL file.
+   |
+
+F821 Undefined name `Dict`
+  --> src\metrics\_loader.py:61:41
+   |
+59 |         return datetime.now()
+60 |
+61 | def get_last_n_hours_metrics(data: list[Dict], hours: int = 24) -> list[Dict]:
+   |                                         ^^^^
+62 |     """
+63 |     Filter metrics to last N hours.
+   |
+
+F821 Undefined name `Dict`
+  --> src\metrics\_loader.py:61:73
+   |
+59 |         return datetime.now()
+60 |
+61 | def get_last_n_hours_metrics(data: list[Dict], hours: int = 24) -> list[Dict]:
+   |                                                                         ^^^^
+62 |     """
+63 |     Filter metrics to last N hours.
+   |
+
+F401 [*] `json` imported but unused
+ --> src\metrics\alerts.py:6:8
+  |
+4 | """
+5 |
+6 | import json
+  |        ^^^^
+7 | import logging
+8 | from dataclasses import dataclass, field
+  |
+help: Remove unused import: `json`
+
+F401 [*] `datetime.timedelta` imported but unused
+  --> src\metrics\alerts.py:10:32
+   |
+ 8 | from dataclasses import dataclass, field
+ 9 | from pathlib import Path
+10 | from datetime import datetime, timedelta
+   |                                ^^^^^^^^^
+11 | from typing import Dict, List, Optional
+12 | from enum import Enum
+   |
+help: Remove unused import: `datetime.timedelta`
+
+E741 Ambiguous variable name: `l`
+   --> src\metrics\alerts.py:139:28
+    |
+138 |         latencies = [m.get('data', {}).get('total_latency_ms', 0) for m in queries]
+139 |         latencies = [l for l in latencies if l > 0]
+    |                            ^
+140 |
+141 |         if not latencies:
+    |
+
+E741 Ambiguous variable name: `l`
+   --> src\metrics\alerts.py:222:28
+    |
+221 |         latencies = [m.get('data', {}).get('total_latency_ms', 0) for m in queries]
+222 |         latencies = [l for l in latencies if l > 0]
+    |                            ^
+223 |
+224 |         if not latencies or len(latencies) < 5:
+    |
+
+F541 [*] f-string without any placeholders
+   --> src\metrics\alerts.py:297:11
+    |
+295 |     active_alerts = alerts.check_all(hours=24)
+296 |
+297 |     print(f"\nAlert Summary:")
+    |           ^^^^^^^^^^^^^^^^^^^
+298 |     summary = alerts.get_alert_summary()
+299 |     print(f"  Total Alerts: {summary['total_alerts']}")
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\metrics\alerts.py:305:15
+    |
+304 |     if active_alerts:
+305 |         print(f"\nActive Alerts:")
+    |               ^^^^^^^^^^^^^^^^^^^
+306 |         for alert in active_alerts:
+307 |             # Use ASCII-safe representation
+    |
+help: Remove extraneous `f` prefix
+
+F401 [*] `json` imported but unused
+ --> src\metrics\charts.py:6:8
+  |
+4 | """
+5 |
+6 | import json
+  |        ^^^^
+7 | import logging
+8 | import numpy as np
+  |
+help: Remove unused import: `json`
+
+F401 [*] `datetime.timedelta` imported but unused
+  --> src\metrics\charts.py:10:32
+   |
+ 8 | import numpy as np
+ 9 | from pathlib import Path
+10 | from datetime import datetime, timedelta
+   |                                ^^^^^^^^^
+11 | from typing import Dict, List, Optional, Tuple
+12 | import plotly.graph_objects as go
+   |
+help: Remove unused import: `datetime.timedelta`
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\metrics\charts.py:11:32
+   |
+ 9 | from pathlib import Path
+10 | from datetime import datetime, timedelta
+11 | from typing import Dict, List, Optional, Tuple
+   |                                ^^^^^^^^
+12 | import plotly.graph_objects as go
+13 | import plotly.express as px
+   |
+help: Remove unused import
+
+F401 [*] `typing.Tuple` imported but unused
+  --> src\metrics\charts.py:11:42
+   |
+ 9 | from pathlib import Path
+10 | from datetime import datetime, timedelta
+11 | from typing import Dict, List, Optional, Tuple
+   |                                          ^^^^^
+12 | import plotly.graph_objects as go
+13 | import plotly.express as px
+   |
+help: Remove unused import
+
+F401 [*] `plotly.express` imported but unused
+  --> src\metrics\charts.py:13:26
+   |
+11 | from typing import Dict, List, Optional, Tuple
+12 | import plotly.graph_objects as go
+13 | import plotly.express as px
+   |                          ^^
+14 | from scipy import stats as scipy_stats
+   |
+help: Remove unused import: `plotly.express`
+
+E741 Ambiguous variable name: `l`
+   --> src\metrics\charts.py:110:28
+    |
+109 |         latencies = [m.get('data', {}).get('total_latency_ms', 0) for m in queries]
+110 |         latencies = [l for l in latencies if l > 0]  # Filter out zeros
+    |                            ^
+111 |
+112 |         if not latencies:
+    |
+
+F401 [*] `time` imported but unused
+ --> src\metrics\core.py:6:8
+  |
+4 | """
+5 |
+6 | import time
+  |        ^^^^
+7 | import logging
+8 | import json
+  |
+help: Remove unused import: `time`
+
+F401 [*] `json` imported but unused
+ --> src\metrics\dashboard.py:6:8
+  |
+4 | """
+5 |
+6 | import json
+  |        ^^^^
+7 | import logging
+8 | from pathlib import Path
+  |
+help: Remove unused import: `json`
+
+F401 [*] `datetime.timedelta` imported but unused
+  --> src\metrics\dashboard.py:9:32
+   |
+ 7 | import logging
+ 8 | from pathlib import Path
+ 9 | from datetime import datetime, timedelta
+   |                                ^^^^^^^^^
+10 | from typing import Dict, List, Optional
+   |
+help: Remove unused import: `datetime.timedelta`
+
+F401 [*] `datetime.datetime` imported but unused
+  --> src\metrics\query_analytics.py:8:22
+   |
+ 6 | import logging
+ 7 | from pathlib import Path
+ 8 | from datetime import datetime, timedelta
+   |                      ^^^^^^^^
+ 9 | from typing import Dict, List, Optional, Tuple
+10 | from collections import defaultdict
+   |
+help: Remove unused import
+
+F401 [*] `datetime.timedelta` imported but unused
+  --> src\metrics\query_analytics.py:8:32
+   |
+ 6 | import logging
+ 7 | from pathlib import Path
+ 8 | from datetime import datetime, timedelta
+   |                                ^^^^^^^^^
+ 9 | from typing import Dict, List, Optional, Tuple
+10 | from collections import defaultdict
+   |
+help: Remove unused import
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\metrics\query_analytics.py:9:32
+   |
+ 7 | from pathlib import Path
+ 8 | from datetime import datetime, timedelta
+ 9 | from typing import Dict, List, Optional, Tuple
+   |                                ^^^^^^^^
+10 | from collections import defaultdict
+   |
+help: Remove unused import
+
+F401 [*] `typing.Tuple` imported but unused
+  --> src\metrics\query_analytics.py:9:42
+   |
+ 7 | from pathlib import Path
+ 8 | from datetime import datetime, timedelta
+ 9 | from typing import Dict, List, Optional, Tuple
+   |                                          ^^^^^
+10 | from collections import defaultdict
+   |
+help: Remove unused import
+
+F401 [*] `src.metrics.charts.MetricsCharts` imported but unused
+  --> src\metrics\ui.py:10:32
+   |
+ 8 | from pathlib import Path
+ 9 | from src.metrics.dashboard import MetricsAnalyzer
+10 | from src.metrics.charts import MetricsCharts
+   |                                ^^^^^^^^^^^^^
+11 | from src.metrics.alerts import MetricsAlerts, AlertSeverity
+12 | from src.metrics.query_analytics import QueryAnalyzer
+   |
+help: Remove unused import: `src.metrics.charts.MetricsCharts`
+
+F401 [*] `src.metrics.alerts.MetricsAlerts` imported but unused
+  --> src\metrics\ui.py:11:32
+   |
+ 9 | from src.metrics.dashboard import MetricsAnalyzer
+10 | from src.metrics.charts import MetricsCharts
+11 | from src.metrics.alerts import MetricsAlerts, AlertSeverity
+   |                                ^^^^^^^^^^^^^
+12 | from src.metrics.query_analytics import QueryAnalyzer
+   |
+help: Remove unused import: `src.metrics.alerts.MetricsAlerts`
+
+F821 Undefined name `get_metrics_charts`
+  --> src\metrics\ui.py:29:22
+   |
+27 |         try:
+28 |             analyzer = MetricsAnalyzer(metrics_file)
+29 |             charts = get_metrics_charts()
+   |                      ^^^^^^^^^^^^^^^^^^
+30 |             alerts_system = get_metrics_alerts()
+   |
+
+F821 Undefined name `get_metrics_alerts`
+  --> src\metrics\ui.py:30:29
+   |
+28 |             analyzer = MetricsAnalyzer(metrics_file)
+29 |             charts = get_metrics_charts()
+30 |             alerts_system = get_metrics_alerts()
+   |                             ^^^^^^^^^^^^^^^^^^
+31 |
+32 |             # Time range selector
+   |
+
+F841 Local variable `trend_period` is assigned to but never used
+   --> src\metrics\ui.py:279:17
+    |
+277 |                 st.subheader("Historical Trends")
+278 |
+279 |                 trend_period = st.selectbox(
+    |                 ^^^^^^^^^^^^
+280 |                     "Aggregation Period",
+281 |                     ["Hourly", "Daily", "Weekly"],
+    |
+help: Remove assignment to unused variable `trend_period`
+
+F821 Undefined name `Dict`
+  --> src\model_registry.py:53:23
+   |
+51 |     environment: str  # "staging", "production"
+52 |     traffic_percent: float  # 0-100 for canary deployments
+53 |     metrics_snapshot: Dict
+   |                       ^^^^
+54 |
+55 | class ModelRegistry:
+   |
+
+F821 Undefined name `Dict`
+   --> src\model_registry.py:270:49
+    |
+268 |         return True
+269 |
+270 |     def get_model_stats(self, model_id: str) -> Dict:
+    |                                                 ^^^^
+271 |         """Get statistics for a model across all versions"""
+272 |         versions = [v for v in self.versions if v.model_id == model_id]
+    |
+
+F821 Undefined name `Dict`
+  --> src\multi_document_analysis.py:67:25
+   |
+65 |     def analyze_all_documents(
+66 |         self,
+67 |         documents: list[Dict],
+   |                         ^^^^
+68 |         analysis_depth: str = "comprehensive"  # "quick", "standard", "comprehensive"
+69 |     ) -> GlobalAnalysis:
+   |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:126:56
+    |
+124 |         return analysis
+125 |
+126 |     def _generate_global_summary(self, documents: list[Dict], depth: str) -> str:
+    |                                                        ^^^^
+127 |         """Generate high-level summary of all documents"""
+128 |         # Format all documents for context
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:158:25
+    |
+156 |     def _identify_themes(
+157 |         self,
+158 |         documents: list[Dict],
+    |                         ^^^^
+159 |         summary: str
+160 |     ) -> list[DocumentCluster]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:219:25
+    |
+217 |     def _find_insights(
+218 |         self,
+219 |         documents: list[Dict],
+    |                         ^^^^
+220 |         themes: list[DocumentCluster]
+221 |     ) -> list[CrossDocumentInsight]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:288:25
+    |
+286 |     def _extract_key_findings(
+287 |         self,
+288 |         documents: list[Dict],
+    |                         ^^^^
+289 |         summary: str,
+290 |         insights: list[CrossDocumentInsight]
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:331:25
+    |
+329 |     def _generate_recommendations(
+330 |         self,
+331 |         documents: list[Dict],
+    |                         ^^^^
+332 |         key_findings: list[str],
+333 |         insights: list[CrossDocumentInsight]
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:367:46
+    |
+365 |             return []
+366 |
+367 |     def _identify_gaps(self, documents: list[Dict], findings: list[str]) -> list[str]:
+    |                                              ^^^^
+368 |         """Identify gaps or missing information in documentation"""
+369 |         prompt = f"""Basandoti su {len(documents)} documenti analizzati, identifica GAPS di informazione.
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:394:25
+    |
+392 |     def _format_document_context(
+393 |         self,
+394 |         documents: list[Dict],
+    |                         ^^^^
+395 |         max_docs: Optional[int] = None
+396 |     ) -> str:
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:413:49
+    |
+411 |         return "\n".join(context_parts)
+412 |
+413 |     def _sample_documents(self, documents: list[Dict], max_sample: int = 50) -> list[Dict]:
+    |                                                 ^^^^
+414 |         """Sample documents if token limit exceeded"""
+415 |         import random
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:413:86
+    |
+411 |         return "\n".join(context_parts)
+412 |
+413 |     def _sample_documents(self, documents: list[Dict], max_sample: int = 50) -> list[Dict]:
+    |                                                                                      ^^^^
+414 |         """Sample documents if token limit exceeded"""
+415 |         import random
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:438:25
+    |
+436 |     def analyze_document_relationships(
+437 |         self,
+438 |         documents: list[Dict]
+    |                         ^^^^
+439 |     ) -> Dict:
+440 |         """Analyze relationships and dependencies between documents"""
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analysis.py:439:10
+    |
+437 |         self,
+438 |         documents: list[Dict]
+439 |     ) -> Dict:
+    |          ^^^^
+440 |         """Analyze relationships and dependencies between documents"""
+441 |         context = self._format_document_context(documents, max_docs=min(20, len(documents)))
+    |
+
+F401 [*] `typing.Any` imported but unused
+ --> src\multi_document_analyzer_long.py:7:20
+  |
+5 | """
+6 |
+7 | from typing import Any, Optional
+  |                    ^^^
+8 | from dataclasses import dataclass
+9 | from datetime import datetime
+  |
+help: Remove unused import
+
+F401 [*] `typing.Optional` imported but unused
+ --> src\multi_document_analyzer_long.py:7:25
+  |
+5 | """
+6 |
+7 | from typing import Any, Optional
+  |                         ^^^^^^^^
+8 | from dataclasses import dataclass
+9 | from datetime import datetime
+  |
+help: Remove unused import
+
+F821 Undefined name `Dict`
+  --> src\multi_document_analyzer_long.py:24:29
+   |
+22 |     confidence_score: float         # 0-1
+23 |     cited_documents: list[str]      # Document IDs cited in answer
+24 |     supporting_quotes: list[Dict]   # {doc_id, text, page}
+   |                             ^^^^
+25 |     contradictions: list[Dict]      # {topic, sources} if any conflicts found
+26 |     processing_time: float          # Seconds
+   |
+
+F821 Undefined name `Dict`
+  --> src\multi_document_analyzer_long.py:25:26
+   |
+23 |     cited_documents: list[str]      # Document IDs cited in answer
+24 |     supporting_quotes: list[Dict]   # {doc_id, text, page}
+25 |     contradictions: list[Dict]      # {topic, sources} if any conflicts found
+   |                          ^^^^
+26 |     processing_time: float          # Seconds
+27 |     token_usage: int
+   |
+
+F821 Undefined name `Dict`
+  --> src\multi_document_analyzer_long.py:38:43
+   |
+37 |     def analyze_comparison(self,
+38 |                           documents: list[Dict],
+   |                                           ^^^^
+39 |                           comparison_topic: str,
+40 |                           llm_service) -> AnalysisResult:
+   |
+
+F841 Local variable `prompt` is assigned to but never used
+  --> src\multi_document_analyzer_long.py:58:9
+   |
+56 |         context = self._build_document_context(documents, "comparison")
+57 |
+58 |         prompt = f"""Analyze and compare the following topic across the provided documents:
+   |         ^^^^^^
+59 |
+60 | Topic: {comparison_topic}
+   |
+help: Remove assignment to unused variable `prompt`
+
+F821 Undefined name `Dict`
+  --> src\multi_document_analyzer_long.py:89:42
+   |
+88 |     def analyze_synthesis(self,
+89 |                          documents: list[Dict],
+   |                                          ^^^^
+90 |                          synthesis_question: str,
+91 |                          llm_service) -> AnalysisResult:
+   |
+
+F841 Local variable `prompt` is assigned to but never used
+   --> src\multi_document_analyzer_long.py:108:9
+    |
+106 |         context = self._build_document_context(documents, "synthesis")
+107 |
+108 |         prompt = f"""Based on the provided documents, answer the following question by synthesizing information across all sources:
+    |         ^^^^^^
+109 |
+110 | Question: {synthesis_question}
+    |
+help: Remove assignment to unused variable `prompt`
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:138:48
+    |
+137 |     def extract_structured_data(self,
+138 |                                documents: list[Dict],
+    |                                                ^^^^
+139 |                                extraction_schema: dict[str, str],
+140 |                                llm_service) -> AnalysisResult:
+    |
+
+F841 Local variable `prompt` is assigned to but never used
+   --> src\multi_document_analyzer_long.py:160:9
+    |
+158 |                                for field, description in extraction_schema.items()])
+159 |
+160 |         prompt = f"""Extract the following information from the provided documents:
+    |         ^^^^^^
+161 |
+162 | Schema:
+    |
+help: Remove assignment to unused variable `prompt`
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:190:46
+    |
+189 |     def analyze_relationships(self,
+190 |                              documents: list[Dict],
+    |                                              ^^^^
+191 |                              relationship_type: str,
+192 |                              llm_service) -> AnalysisResult:
+    |
+
+F841 Local variable `prompt` is assigned to but never used
+   --> src\multi_document_analyzer_long.py:209:9
+    |
+207 |         context = self._build_document_context(documents, "relationships")
+208 |
+209 |         prompt = f"""Analyze {relationship_type} relationships across the provided documents:
+    |         ^^^^^^
+210 |
+211 | Documents context:
+    |
+help: Remove assignment to unused variable `prompt`
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:237:46
+    |
+236 |     def detect_contradictions(self,
+237 |                              documents: list[Dict],
+    |                                              ^^^^
+238 |                              topic: str,
+239 |                              llm_service) -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:239:51
+    |
+237 |                              documents: list[Dict],
+238 |                              topic: str,
+239 |                              llm_service) -> list[Dict]:
+    |                                                   ^^^^
+240 |         """
+241 |         Detect contradictions or conflicts across documents
+    |
+
+F841 Local variable `prompt` is assigned to but never used
+   --> src\multi_document_analyzer_long.py:256:9
+    |
+254 |         context = self._build_document_context(documents, "contradiction_detection")
+255 |
+256 |         prompt = f"""Analyze the provided documents for contradictions or conflicts regarding: {topic}
+    |         ^^^^^^
+257 |
+258 | Documents context:
+    |
+help: Remove assignment to unused variable `prompt`
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:274:49
+    |
+273 |     def find_supporting_evidence(self,
+274 |                                 documents: list[Dict],
+    |                                                 ^^^^
+275 |                                 claim: str,
+276 |                                 llm_service) -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:276:54
+    |
+274 |                                 documents: list[Dict],
+275 |                                 claim: str,
+276 |                                 llm_service) -> list[Dict]:
+    |                                                      ^^^^
+277 |         """
+278 |         Find supporting evidence for a claim across documents
+    |
+
+F841 Local variable `prompt` is assigned to but never used
+   --> src\multi_document_analyzer_long.py:293:9
+    |
+291 |         context = self._build_document_context(documents, "evidence")
+292 |
+293 |         prompt = f"""Find supporting evidence for the following claim across the provided documents:
+    |         ^^^^^^
+294 |
+295 | Claim: {claim}
+    |
+help: Remove assignment to unused variable `prompt`
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:312:40
+    |
+311 |     def identify_themes(self,
+312 |                        documents: list[Dict],
+    |                                        ^^^^
+313 |                        num_themes: int = 5,
+314 |                        llm_service = None) -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:314:52
+    |
+312 |                        documents: list[Dict],
+313 |                        num_themes: int = 5,
+314 |                        llm_service = None) -> list[Dict]:
+    |                                                    ^^^^
+315 |         """
+316 |         Identify major themes across documents
+    |
+
+F841 Local variable `prompt` is assigned to but never used
+   --> src\multi_document_analyzer_long.py:331:9
+    |
+329 |         context = self._build_document_context(documents, "themes")
+330 |
+331 |         prompt = f"""Identify the {num_themes} major themes across the provided documents:
+    |         ^^^^^^
+332 |
+333 | Documents context:
+    |
+help: Remove assignment to unused variable `prompt`
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:348:48
+    |
+347 |     def _build_document_context(self,
+348 |                                documents: list[Dict],
+    |                                                ^^^^
+349 |                                analysis_type: str) -> str:
+350 |         """
+    |
+
+F821 Undefined name `Dict`
+   --> src\multi_document_analyzer_long.py:380:54
+    |
+379 |     def estimate_tokens_for_analysis(self,
+380 |                                      documents: list[Dict],
+    |                                                      ^^^^
+381 |                                      analysis_type: str) -> int:
+382 |         """
+    |
+
+F401 [*] `google.genai` imported but unused
+ --> src\multimodal_ingestion.py:2:24
+  |
+1 | import fitz  # PyMuPDF
+2 | import google.genai as genai
+  |                        ^^^^^
+3 | from PIL import Image
+4 | import io
+  |
+help: Remove unused import: `google.genai`
+
+F401 [*] `os` imported but unused
+ --> src\multimodal_ingestion.py:5:8
+  |
+3 | from PIL import Image
+4 | import io
+5 | import os
+  |        ^^
+6 | import json
+7 | from pathlib import Path
+  |
+help: Remove unused import: `os`
+
+F401 [*] `json` imported but unused
+ --> src\multimodal_ingestion.py:6:8
+  |
+4 | import io
+5 | import os
+6 | import json
+  |        ^^^^
+7 | from pathlib import Path
+8 | from typing import List, Dict, Any
+  |
+help: Remove unused import: `json`
+
+F401 [*] `src.config.config` imported but unused
+  --> src\multimodal_ingestion.py:10:24
+   |
+ 8 | from typing import List, Dict, Any
+ 9 |
+10 | from src.config import config
+   |                        ^^^^^^
+11 | from src.vision_service import get_vision_service
+   |
+help: Remove unused import: `src.config.config`
+
+F821 Undefined name `Dict`
+   --> src\multimodal_retrieval.py:143:10
+    |
+141 |         document_id: str,
+142 |         max_visuals: int = 10
+143 |     ) -> Dict:
+    |          ^^^^
+144 |         """
+145 |         Generate summary highlighting visual elements
+    |
+
+F821 Undefined name `Dict`
+   --> src\multimodal_retrieval.py:204:52
+    |
+202 |         return any(keyword in query_lower for keyword in self.VISUAL_KEYWORDS)
+203 |
+204 |     def extract_visual_intent(self, query: str) -> Dict:
+    |                                                    ^^^^
+205 |         """
+206 |         Extract what visual content user is looking for
+    |
+
+F401 [*] `time` imported but unused
+  --> src\multimodal_search.py:10:8
+   |
+ 8 | from dataclasses import dataclass, field
+ 9 | from pathlib import Path
+10 | import time
+   |        ^^^^
+11 |
+12 | from src.hybrid_search import HybridSearchEngine, SearchResult
+   |
+help: Remove unused import: `time`
+
+F401 [*] `src.hybrid_search.SearchResult` imported but unused
+  --> src\multimodal_search.py:12:51
+   |
+10 | import time
+11 |
+12 | from src.hybrid_search import HybridSearchEngine, SearchResult
+   |                                                   ^^^^^^^^^^^^
+13 | from src.vision_service import get_vision_service
+14 | from src.pdf_image_extraction import ExtractedImage
+   |
+help: Remove unused import: `src.hybrid_search.SearchResult`
+
+F821 Undefined name `Dict`
+  --> src\multimodal_search.py:45:15
+   |
+43 |     image_path: Optional[str] = None
+44 |     confidence: float = 1.0
+45 |     metadata: Dict = field(default_factory=dict)
+   |               ^^^^
+46 |     rank: int = 0
+   |
+
+F821 Undefined name `Dict`
+  --> src\multimodal_search.py:53:25
+   |
+51 |     def __init__(
+52 |         self,
+53 |         documents: list[Dict],
+   |                         ^^^^
+54 |         embeddings: Optional[np.ndarray] = None,
+55 |         extracted_images: Optional[list[ExtractedImage]] = None
+   |
+
+F821 Undefined name `Dict`
+   --> src\multimodal_search.py:264:39
+    |
+262 |         logger.info(f"Added {len(extracted_images)} images to search engine")
+263 |
+264 |     def get_image_statistics(self) -> Dict:
+    |                                       ^^^^
+265 |         """Get statistics about indexed images"""
+266 |         return {
+    |
+
+F821 Undefined name `Dict`
+   --> src\multimodal_search.py:276:44
+    |
+274 |         }
+275 |
+276 |     def get_multimodal_statistics(self) -> Dict:
+    |                                            ^^^^
+277 |         """Get comprehensive multimodal statistics"""
+278 |         text_stats = self.hybrid_engine.get_statistics()
+    |
+
+F821 Undefined name `Dict`
+   --> src\multimodal_search.py:299:21
+    |
+298 | def get_multimodal_search_engine(
+299 |     documents: list[Dict],
+    |                     ^^^^
+300 |     embeddings: Optional[np.ndarray] = None,
+301 |     extracted_images: Optional[list[ExtractedImage]] = None
+    |
+
+F821 Undefined name `Dict`
+  --> src\multithread_pdf_parser.py:35:21
+   |
+33 |         pdf_path: str,
+34 |         num_pages: int = None
+35 |     ) -> tuple[str, Dict]:
+   |                     ^^^^
+36 |         """
+37 |         Estrae testo da PDF usando multi-threading per pagine
+   |
+
+F821 Undefined name `Dict`
+   --> src\multithread_pdf_parser.py:115:29
+    |
+113 |         self,
+114 |         pdf_path: str
+115 |     ) -> tuple[list[bytes], Dict]:
+    |                             ^^^^
+116 |         """Estrae immagini da PDF in parallelo"""
+117 |         logger.info(f"Extracting images from: {Path(pdf_path).name} (parallel)")
+    |
+
+F401 [*] `tempfile` imported but unused
+   --> src\multithread_pdf_parser.py:158:12
+    |
+156 | def benchmark_pdf_parsing():
+157 |     """Benchmark parsing sequenziale vs parallelo"""
+158 |     import tempfile
+    |            ^^^^^^^^
+159 |
+160 |     logger.info(f"\n{'='*60}")
+    |
+help: Remove unused import: `tempfile`
+
+F541 [*] f-string without any placeholders
+   --> src\multithread_pdf_parser.py:161:17
+    |
+160 |     logger.info(f"\n{'='*60}")
+161 |     logger.info(f"PDF Parsing Benchmark (Sequential vs Parallel)")
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+162 |     logger.info(f"{'='*60}")
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\multithread_pdf_parser.py:205:29
+    |
+203 |                 logger.info(f"  Speedup: {speedup:.1f}x")
+204 |             else:
+205 |                 logger.info(f"  (Sequential parsing failed, cannot compare)")
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+206 |
+207 |         except Exception as e:
+    |
+help: Remove extraneous `f` prefix
+
+F401 [*] `src.document_ingestion.Chunk` imported but unused
+  --> src\parallel_ingestion.py:13:55
+   |
+11 | from dataclasses import dataclass
+12 |
+13 | from src.document_ingestion import DocumentProcessor, Chunk
+   |                                                       ^^^^^
+14 | from src.vector_store import get_vector_store
+   |
+help: Remove unused import: `src.document_ingestion.Chunk`
+
+F841 Local variable `elapsed` is assigned to but never used
+   --> src\parallel_ingestion.py:147:9
+    |
+146 |         # Add all chunks to vector store in batch
+147 |         elapsed = time.time() - start_time
+    |         ^^^^^^^
+148 |         documents_added = 0
+149 |         failed_chunks = []
+    |
+help: Remove assignment to unused variable `elapsed`
+
+F821 Undefined name `get_logger`
+  --> src\pdf_image_extraction.py:29:10
+   |
+27 |     raise ImportError("pdf2image not found. Install with: pip install pdf2image")
+28 |
+29 | logger = get_logger(__name__)
+   |          ^^^^^^^^^^
+30 |
+31 | @dataclass
+   |
+
+F821 Undefined name `Dict`
+  --> src\pdf_image_extraction.py:48:26
+   |
+46 |     relevance_score: Optional[float] = None
+47 |
+48 |     def to_dict(self) -> Dict:
+   |                          ^^^^
+49 |         """Convert to dictionary for JSON serialization"""
+50 |         return asdict(self)
+   |
+
+F821 Undefined name `Dict`
+  --> src\pdf_image_extraction.py:53:25
+   |
+52 |     @staticmethod
+53 |     def from_dict(data: Dict) -> "ExtractedImage":
+   |                         ^^^^
+54 |         """Create from dictionary"""
+55 |         return ExtractedImage(**data)
+   |
+
+F821 Undefined name `Dict`
+   --> src\pdf_image_extraction.py:129:82
+    |
+127 |         return extracted_images, metadata
+128 |
+129 |     def _extract_with_pypdf(self, pdf_path: Path) -> tuple[list[ExtractedImage], Dict]:
+    |                                                                                  ^^^^
+130 |         """Extract images directly from PDF using pypdf"""
+131 |         extracted_images = []
+    |
+
+F821 Undefined name `Dict`
+   --> src\pdf_image_extraction.py:249:86
+    |
+247 |             return None
+248 |
+249 |     def _extract_with_pdf2image(self, pdf_path: Path) -> tuple[list[ExtractedImage], Dict]:
+    |                                                                                      ^^^^
+250 |         """Convert PDF pages to images using pdf2image"""
+251 |         extracted_images = []
+    |
+
+F821 Undefined name `Dict`
+   --> src\pdf_image_extraction.py:322:10
+    |
+320 |         images: list[ExtractedImage],
+321 |         output_dir: Optional[Path] = None
+322 |     ) -> Dict:
+    |          ^^^^
+323 |         """
+324 |         Save image metadata to JSON
+    |
+
+F821 Undefined name `Dict`
+   --> src\pdf_image_extraction.py:382:10
+    |
+380 |         self,
+381 |         images: list[ExtractedImage]
+382 |     ) -> Dict:
+    |          ^^^^
+383 |         """Get statistics about extracted images"""
+384 |         if not images:
+    |
+
+F541 [*] f-string without any placeholders
+   --> src\pdf_validator.py:252:19
+    |
+250 |         is_valid, error = validator.validate_strict(pdf_path)
+251 |         if error:
+252 |             print(f"\nError Classification:")
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+253 |             print(f"  Type: {error.error_type.value}")
+254 |             print(f"  Message: {error.message}")
+    |
+help: Remove extraneous `f` prefix
+
+F401 [*] `typing.Tuple` imported but unused
+ --> src\performance_optimizer.py:7:47
+  |
+6 | import time
+7 | from typing import Dict, List, Optional, Any, Tuple
+  |                                               ^^^^^
+8 | from functools import lru_cache, wraps
+9 | from datetime import datetime, timedelta
+  |
+help: Remove unused import: `typing.Tuple`
+
+F401 [*] `functools.lru_cache` imported but unused
+  --> src\performance_optimizer.py:8:23
+   |
+ 6 | import time
+ 7 | from typing import Dict, List, Optional, Any, Tuple
+ 8 | from functools import lru_cache, wraps
+   |                       ^^^^^^^^^
+ 9 | from datetime import datetime, timedelta
+10 | import threading
+   |
+help: Remove unused import: `functools.lru_cache`
+
+F841 [*] Local variable `e` is assigned to but never used
+   --> src\performance_optimizer.py:247:37
+    |
+245 |                     self.monitor.record_operation(operation_name, elapsed_ms, success=True)
+246 |                     return result
+247 |                 except Exception as e:
+    |                                     ^
+248 |                     elapsed_ms = (time.perf_counter() - start) * 1000
+249 |                     self.monitor.record_operation(operation_name, elapsed_ms, success=False)
+    |
+help: Remove assignment to unused variable `e`
+
+F401 [*] `typing.Callable` imported but unused
+ --> src\progress_callbacks.py:7:30
+  |
+6 | import time
+7 | from typing import Optional, Callable
+  |                              ^^^^^^^^
+8 | from dataclasses import dataclass
+9 | from abc import ABC, abstractmethod
+  |
+help: Remove unused import: `typing.Callable`
+
+F401 [*] `json` imported but unused
+  --> src\quality_evaluator.py:13:8
+   |
+11 | """
+12 |
+13 | import json
+   |        ^^^^
+14 | from typing import Optional
+15 | from dataclasses import dataclass
+   |
+help: Remove unused import: `json`
+
+F821 Undefined name `Dict`
+  --> src\quality_metrics.py:34:31
+   |
+32 |     query: str
+33 |     answer: str
+34 |     retrieved_documents: list[Dict]
+   |                               ^^^^
+35 |     metrics: dict[MetricType, MetricScore] = field(default_factory=dict)
+36 |     metadata: Dict = field(default_factory=dict)
+   |
+
+F821 Undefined name `Dict`
+  --> src\quality_metrics.py:36:15
+   |
+34 |     retrieved_documents: list[Dict]
+35 |     metrics: dict[MetricType, MetricScore] = field(default_factory=dict)
+36 |     metadata: Dict = field(default_factory=dict)
+   |               ^^^^
+37 |     timestamp: datetime = field(default_factory=datetime.now)
+   |
+
+F821 Undefined name `Dict`
+  --> src\quality_metrics.py:62:49
+   |
+61 |     def evaluate_query(self, query_id: str, query: str, answer: str,
+62 |                       retrieved_documents: list[Dict],
+   |                                                 ^^^^
+63 |                       latency: Optional[float] = None) -> QueryEvaluation:
+64 |         evaluation = QueryEvaluation(
+   |
+
+F821 Undefined name `Dict`
+  --> src\quality_metrics.py:87:30
+   |
+85 |         return evaluation
+86 |
+87 |     def get_summary(self) -> Dict:
+   |                              ^^^^
+88 |         if not self.evaluations:
+89 |             return {}
+   |
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\quantization.py:13:20
+   |
+12 | import numpy as np
+13 | from typing import Optional
+   |                    ^^^^^^^^
+14 | from dataclasses import dataclass
+   |
+help: Remove unused import: `typing.Optional`
+
+F541 [*] f-string without any placeholders
+   --> src\quantization.py:101:21
+    |
+ 99 |         )
+100 |
+101 |         logger.info(f"Ô£ô Quantization complete:")
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+102 |         logger.info(f"  Original: {original_bytes:,} bytes ({stats.original_dtype})")
+103 |         logger.info(f"  Quantized: {quantized_bytes:,} bytes ({stats.quantized_dtype})")
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\quantization.py:178:17
+    |
+177 |     logger.info(f"\n{'='*60}")
+178 |     logger.info(f"Quantization Benchmark")
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+179 |     logger.info(f"{'='*60}")
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\quantization.py:208:17
+    |
+207 |     # Benchmark similarity search
+208 |     logger.info(f"\nBenchmarking similarity search...")
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+209 |     query = embeddings[0]
+    |
+help: Remove extraneous `f` prefix
+
+F841 Local variable `dot` is assigned to but never used
+   --> src\quantization.py:214:9
+    |
+212 |     start = time.perf_counter()
+213 |     for candidate in embeddings[1:100]:
+214 |         dot = np.dot(query, candidate)
+    |         ^^^
+215 |     float_time = time.perf_counter() - start
+    |
+help: Remove assignment to unused variable `dot`
+
+F841 Local variable `sim` is assigned to but never used
+   --> src\quantization.py:220:9
+    |
+218 |     start = time.perf_counter()
+219 |     for i, quantized_candidate in enumerate(quantized[1:100]):
+220 |         sim = quantizer.compute_similarity_quantized(
+    |         ^^^
+221 |             query,
+222 |             quantized_candidate,
+    |
+help: Remove assignment to unused variable `sim`
+
+F541 [*] f-string without any placeholders
+   --> src\quantization.py:227:17
+    |
+225 |     quant_search_time = time.perf_counter() - start
+226 |
+227 |     logger.info(f"\nSearch Performance (100 candidates):")
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+228 |     logger.info(f"  Float32: {float_time*1000:.2f}ms")
+229 |     logger.info(f"  Quantized: {quant_search_time*1000:.2f}ms")
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\quantization.py:233:17
+    |
+232 |     # Accuracy test
+233 |     logger.info(f"\nAccuracy Test (10 random candidates)...")
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+234 |     test_indices = np.random.choice(len(embeddings), 10, replace=False)
+    |
+help: Remove extraneous `f` prefix
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\query_expansion.py:8:20
+   |
+ 6 | import json
+ 7 | import re
+ 8 | from typing import Optional
+   |                    ^^^^^^^^
+ 9 | from dataclasses import dataclass
+10 | from datetime import datetime
+   |
+help: Remove unused import: `typing.Optional`
+
+F401 [*] `datetime.datetime` imported but unused
+  --> src\query_expansion.py:10:22
+   |
+ 8 | from typing import Optional
+ 9 | from dataclasses import dataclass
+10 | from datetime import datetime
+   |                      ^^^^^^^^
+11 |
+12 | from src.cache import QueryExpansionCache
+   |
+help: Remove unused import: `datetime.datetime`
+
+F821 Undefined name `Dict`
+   --> src\query_expansion.py:210:34
+    |
+208 |         return entity_extractor.extract_keywords(query, num_keywords, use_llm=True)
+209 |
+210 |     def get_cache_stats(self) -> Dict:
+    |                                  ^^^^
+211 |         """Get cache statistics"""
+212 |         stats = self.expansion_cache.get_stats()
+    |
+
+F821 Undefined name `logging`
+   --> src\query_expansion.py:308:5
+    |
+307 | if __name__ == "__main__":
+308 |     logging.basicConfig(level=logging.INFO)
+    |     ^^^^^^^
+309 |
+310 |     # Test examples
+    |
+
+F821 Undefined name `logging`
+   --> src\query_expansion.py:308:31
+    |
+307 | if __name__ == "__main__":
+308 |     logging.basicConfig(level=logging.INFO)
+    |                               ^^^^^^^
+309 |
+310 |     # Test examples
+    |
+
+F401 [*] `typing.Optional` imported but unused
+ --> src\query_suggestions.py:7:20
+  |
+6 | import re
+7 | from typing import Optional
+  |                    ^^^^^^^^
+8 | from dataclasses import dataclass
+9 | from enum import Enum
+  |
+help: Remove unused import: `typing.Optional`
+
+F541 [*] f-string without any placeholders
+   --> src\query_suggestions.py:207:28
+    |
+206 |         # Ask for counter-evidence
+207 |         suggestions.append(f"Are there any counterarguments to this explanation?")
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+208 |
+209 |         # Ask for related concepts
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\query_suggestions.py:210:28
+    |
+209 |         # Ask for related concepts
+210 |         suggestions.append(f"How does this relate to other similar concepts?")
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+211 |
+212 |         return suggestions
+    |
+help: Remove extraneous `f` prefix
+
+F401 [*] `functools.lru_cache` imported but unused
+  --> src\rag_engine.py:8:23
+   |
+ 6 | import time
+ 7 | from datetime import datetime
+ 8 | from functools import lru_cache
+   |                       ^^^^^^^^^
+ 9 | from typing import Optional
+10 | from dataclasses import dataclass
+   |
+help: Remove unused import: `functools.lru_cache`
+
+F401 [*] `src.performance_profiler.get_profiler` imported but unused
+  --> src\rag_engine.py:18:38
+   |
+17 | # FASE 2: Performance profiling
+18 | from src.performance_profiler import get_profiler, profile_operation
+   |                                      ^^^^^^^^^^^^
+19 |
+20 | # FASE 7: Advanced search filters
+   |
+help: Remove unused import: `src.performance_profiler.get_profiler`
+
+F841 Local variable `query_start` is assigned to but never used
+   --> src\rag_engine.py:180:9
+    |
+178 |         from src.metrics import get_metrics_collector, QueryMetrics
+179 |         metrics_collector = get_metrics_collector()
+180 |         query_start = time.perf_counter()
+    |         ^^^^^^^^^^^
+181 |
+182 |         # Step 1: Retrieval (with caching)
+    |
+help: Remove assignment to unused variable `query_start`
+
+F821 Undefined name `logging`
+   --> src\rag_engine.py:704:5
+    |
+703 | if __name__ == "__main__":
+704 |     logging.basicConfig(level=logging.INFO)
+    |     ^^^^^^^
+705 |     interactive_rag_session()
+    |
+
+F821 Undefined name `logging`
+   --> src\rag_engine.py:704:31
+    |
+703 | if __name__ == "__main__":
+704 |     logging.basicConfig(level=logging.INFO)
+    |                               ^^^^^^^
+705 |     interactive_rag_session()
+    |
+
+F401 [*] `typing.Optional` imported but unused
+ --> src\rag_engine_longcontext.py:7:25
+  |
+6 | import time
+7 | from typing import Any, Optional
+  |                         ^^^^^^^^
+8 | from dataclasses import dataclass, field
+  |
+help: Remove unused import: `typing.Optional`
+
+F401 [*] `src.document_hierarchy.HierarchyNode` imported but unused
+  --> src\rag_engine_longcontext.py:18:55
+   |
+17 | from src.long_context_optimizer import LongContextOptimizer, ContextChunk
+18 | from src.document_hierarchy import DocumentHierarchy, HierarchyNode
+   |                                                       ^^^^^^^^^^^^^
+19 |
+20 | logger = get_logger(__name__)
+   |
+help: Remove unused import: `src.document_hierarchy.HierarchyNode`
+
+F821 Undefined name `get_logger`
+  --> src\rag_engine_longcontext.py:20:10
+   |
+18 | from src.document_hierarchy import DocumentHierarchy, HierarchyNode
+19 |
+20 | logger = get_logger(__name__)
+   |          ^^^^^^^^^^
+21 |
+22 | @dataclass
+   |
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\rag_engine_multimodal.py:8:20
+   |
+ 6 | import time
+ 7 | import numpy as np
+ 8 | from typing import Optional
+   |                    ^^^^^^^^
+ 9 | from dataclasses import dataclass, field
+10 | from pathlib import Path
+   |
+help: Remove unused import: `typing.Optional`
+
+F401 [*] `src.multimodal_search.MultimodalSearchEngine` imported but unused
+  --> src\rag_engine_multimodal.py:13:35
+   |
+12 | from src.rag_engine_v2 import RAGEngineV2, RAGResponse, RetrievalResult
+13 | from src.multimodal_search import MultimodalSearchEngine, MultimodalResult
+   |                                   ^^^^^^^^^^^^^^^^^^^^^^
+14 | from src.pdf_image_extraction import PDFImageExtractor, ExtractedImage
+15 | from src.vision_service import get_vision_service
+   |
+help: Remove unused import: `src.multimodal_search.MultimodalSearchEngine`
+
+F401 [*] `src.pdf_image_extraction.ExtractedImage` imported but unused
+  --> src\rag_engine_multimodal.py:14:57
+   |
+12 | from src.rag_engine_v2 import RAGEngineV2, RAGResponse, RetrievalResult
+13 | from src.multimodal_search import MultimodalSearchEngine, MultimodalResult
+14 | from src.pdf_image_extraction import PDFImageExtractor, ExtractedImage
+   |                                                         ^^^^^^^^^^^^^^
+15 | from src.vision_service import get_vision_service
+16 | from src.llm_service import get_llm_service
+   |
+help: Remove unused import: `src.pdf_image_extraction.ExtractedImage`
+
+F401 [*] `src.llm_service.get_llm_service` imported but unused
+  --> src\rag_engine_multimodal.py:16:29
+   |
+14 | from src.pdf_image_extraction import PDFImageExtractor, ExtractedImage
+15 | from src.vision_service import get_vision_service
+16 | from src.llm_service import get_llm_service
+   |                             ^^^^^^^^^^^^^^^
+17 | from src.vector_store import get_vector_store
+   |
+help: Remove unused import: `src.llm_service.get_llm_service`
+
+F401 [*] `src.vector_store.get_vector_store` imported but unused
+  --> src\rag_engine_multimodal.py:17:30
+   |
+15 | from src.vision_service import get_vision_service
+16 | from src.llm_service import get_llm_service
+17 | from src.vector_store import get_vector_store
+   |                              ^^^^^^^^^^^^^^^^
+18 |
+19 | from src.logging_config import get_logger
+   |
+help: Remove unused import: `src.vector_store.get_vector_store`
+
+F821 Undefined name `Dict`
+   --> src\rag_engine_multimodal.py:400:44
+    |
+398 |             return f"Errore nella generazione della risposta: {str(e)}"
+399 |
+400 |     def get_multimodal_statistics(self) -> Dict:
+    |                                            ^^^^
+401 |         """Get comprehensive multimodal statistics"""
+402 |         if self.multimodal_engine:
+    |
+
+F821 Undefined name `get_logger`
+  --> src\rag_engine_quality.py:22:10
+   |
+20 | from src.ragas_integration import RagasEvaluator
+21 |
+22 | logger = get_logger(__name__)
+   |          ^^^^^^^^^^
+23 |
+24 | @dataclass
+   |
+
+F841 Local variable `prompt` is assigned to but never used
+   --> src\rag_engine_quality.py:334:9
+    |
+332 |         """Regenerate answer focused on coherence"""
+333 |         # In practice, would call LLM with specific prompt
+334 |         prompt = f"""Reformat the following answer to be more coherent and well-structured.
+    |         ^^^^^^
+335 |         Maintain accuracy but improve organization, flow, and clarity.
+    |
+help: Remove assignment to unused variable `prompt`
+
+F841 Local variable `prompt` is assigned to but never used
+   --> src\rag_engine_quality.py:348:9
+    |
+346 |         """Reformulate answer for maximum clarity"""
+347 |         # In practice, would call LLM with specific prompt
+348 |         prompt = f"""Reformulate this answer to be maximally clear and easy to understand.
+    |         ^^^^^^
+349 |         Use simple language, short sentences, and clear structure.
+    |
+help: Remove assignment to unused variable `prompt`
+
+F401 [*] `datetime.datetime` imported but unused
+  --> src\rag_engine_quality_enhanced.py:14:22
+   |
+12 | import time
+13 | from typing import Optional
+14 | from datetime import datetime
+   |                      ^^^^^^^^
+15 |
+16 | from src.rag_engine import RAGEngine, RAGResponse, RetrievalResult
+   |
+help: Remove unused import: `datetime.datetime`
+
+F541 [*] f-string without any placeholders
+  --> src\rag_engine_quality_enhanced.py:53:21
+   |
+52 |         logger.info("­ƒÜÇ Initialized Enhanced RAG Engine with all quality improvements")
+53 |         logger.info(f"  Ô£ô Query Expansion (TASK 2)")
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+54 |         logger.info(f"  Ô£ô Inline Citations (TASK 3)")
+55 |         logger.info(f"  Ô£ô Temporal Metadata (TASK 4)")
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\rag_engine_quality_enhanced.py:54:21
+   |
+52 |         logger.info("­ƒÜÇ Initialized Enhanced RAG Engine with all quality improvements")
+53 |         logger.info(f"  Ô£ô Query Expansion (TASK 2)")
+54 |         logger.info(f"  Ô£ô Inline Citations (TASK 3)")
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+55 |         logger.info(f"  Ô£ô Temporal Metadata (TASK 4)")
+56 |         logger.info(f"  Ô£ô Cross-Encoder Reranking (TASK 5)")
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\rag_engine_quality_enhanced.py:55:21
+   |
+53 |         logger.info(f"  Ô£ô Query Expansion (TASK 2)")
+54 |         logger.info(f"  Ô£ô Inline Citations (TASK 3)")
+55 |         logger.info(f"  Ô£ô Temporal Metadata (TASK 4)")
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+56 |         logger.info(f"  Ô£ô Cross-Encoder Reranking (TASK 5)")
+57 |         logger.info(f"  Ô£ô Multi-Document Analysis (TASK 6)")
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\rag_engine_quality_enhanced.py:56:21
+   |
+54 |         logger.info(f"  Ô£ô Inline Citations (TASK 3)")
+55 |         logger.info(f"  Ô£ô Temporal Metadata (TASK 4)")
+56 |         logger.info(f"  Ô£ô Cross-Encoder Reranking (TASK 5)")
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+57 |         logger.info(f"  Ô£ô Multi-Document Analysis (TASK 6)")
+58 |         logger.info(f"  Ô£ô Self-Correction Prompting (TASK 1) - in system_prompt")
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\rag_engine_quality_enhanced.py:57:21
+   |
+55 |         logger.info(f"  Ô£ô Temporal Metadata (TASK 4)")
+56 |         logger.info(f"  Ô£ô Cross-Encoder Reranking (TASK 5)")
+57 |         logger.info(f"  Ô£ô Multi-Document Analysis (TASK 6)")
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+58 |         logger.info(f"  Ô£ô Self-Correction Prompting (TASK 1) - in system_prompt")
+   |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+  --> src\rag_engine_quality_enhanced.py:58:21
+   |
+56 |         logger.info(f"  Ô£ô Cross-Encoder Reranking (TASK 5)")
+57 |         logger.info(f"  Ô£ô Multi-Document Analysis (TASK 6)")
+58 |         logger.info(f"  Ô£ô Self-Correction Prompting (TASK 1) - in system_prompt")
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |
+60 |     def query(
+   |
+help: Remove extraneous `f` prefix
+
+F841 Local variable `expansion_start` is assigned to but never used
+  --> src\rag_engine_quality_enhanced.py:90:13
+   |
+89 |         if use_enhancements and self.enable_query_expansion:
+90 |             expansion_start = time.perf_counter()
+   |             ^^^^^^^^^^^^^^^
+91 |             try:
+92 |                 expanded_query = self.query_expander.expand_query(user_query, num_variants=3)
+   |
+help: Remove assignment to unused variable `expansion_start`
+
+F541 [*] f-string without any placeholders
+  --> src\rag_engine_quality_enhanced.py:93:29
+   |
+91 |             try:
+92 |                 expanded_query = self.query_expander.expand_query(user_query, num_variants=3)
+93 |                 logger.info(f"­ƒôØ Query Expansion:")
+   |                             ^^^^^^^^^^^^^^^^^^^^^^
+94 |                 logger.info(f"   Intent: {expanded_query.intent}")
+95 |                 logger.info(f"   Keywords: {', '.join(expanded_query.keywords)}")
+   |
+help: Remove extraneous `f` prefix
+
+F821 Undefined name `Dict`
+   --> src\rag_engine_quality_enhanced.py:321:40
+    |
+319 |             return f"Errore durante la generazione della risposta: {e}"
+320 |
+321 |     def analyze_all_documents(self) -> Dict:
+    |                                        ^^^^
+322 |         """
+323 |         TASK 6: Perform global analysis across all documents
+    |
+
+F541 [*] f-string without any placeholders
+   --> src\rag_engine_quality_enhanced.py:353:25
+    |
+351 |             )
+352 |
+353 |             logger.info(f"Ô£ô Multi-Document Analysis Complete")
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+354 |             logger.info(f"  Global Summary: {analysis.global_summary[:100]}...")
+355 |             logger.info(f"  Themes identified: {len(analysis.themes)}")
+    |
+help: Remove extraneous `f` prefix
+
+F821 Undefined name `Dict`
+   --> src\rag_engine_quality_enhanced.py:379:38
+    |
+377 |             return {'error': str(e)}
+378 |
+379 |     def get_quality_metrics(self) -> Dict:
+    |                                      ^^^^
+380 |         """
+381 |         Return quality improvement metrics
+    |
+
+F401 [*] `src.chat_memory.ConversationTurn` imported but unused
+  --> src\rag_engine_ux.py:20:49
+   |
+18 | from src.citation_engine import CitationEngine, Citation
+19 | from src.query_suggestions import QuerySuggestionEngine, QuerySuggestion
+20 | from src.chat_memory import ConversationMemory, ConversationTurn
+   |                                                 ^^^^^^^^^^^^^^^^
+21 |
+22 | logger = get_logger(__name__)
+   |
+help: Remove unused import: `src.chat_memory.ConversationTurn`
+
+F821 Undefined name `get_logger`
+  --> src\rag_engine_ux.py:22:10
+   |
+20 | from src.chat_memory import ConversationMemory, ConversationTurn
+21 |
+22 | logger = get_logger(__name__)
+   |          ^^^^^^^^^^
+23 |
+24 | @dataclass
+   |
+
+F821 Undefined name `Dict`
+  --> src\rag_engine_ux.py:40:30
+   |
+38 |     def __init__(self):
+39 |         self.main_answer: str = ""
+40 |         self.citations: list[Dict] = []
+   |                              ^^^^
+41 |         self.sources: list[Dict] = []
+42 |         self.suggestions: list[Dict] = []
+   |
+
+F821 Undefined name `Dict`
+  --> src\rag_engine_ux.py:41:28
+   |
+39 |         self.main_answer: str = ""
+40 |         self.citations: list[Dict] = []
+41 |         self.sources: list[Dict] = []
+   |                            ^^^^
+42 |         self.suggestions: list[Dict] = []
+43 |         self.metadata: dict[str, Any] = {}
+   |
+
+F821 Undefined name `Dict`
+  --> src\rag_engine_ux.py:42:32
+   |
+40 |         self.citations: list[Dict] = []
+41 |         self.sources: list[Dict] = []
+42 |         self.suggestions: list[Dict] = []
+   |                                ^^^^
+43 |         self.metadata: dict[str, Any] = {}
+   |
+
+F401 [*] `datetime.datetime` imported but unused
+ --> src\rag_engine_v2.py:7:22
+  |
+6 | import time
+7 | from datetime import datetime
+  |                      ^^^^^^^^
+8 | from functools import lru_cache
+9 | from typing import Optional
+  |
+help: Remove unused import: `datetime.datetime`
+
+F401 [*] `functools.lru_cache` imported but unused
+  --> src\rag_engine_v2.py:8:23
+   |
+ 6 | import time
+ 7 | from datetime import datetime
+ 8 | from functools import lru_cache
+   |                       ^^^^^^^^^
+ 9 | from typing import Optional
+10 | from dataclasses import dataclass
+   |
+help: Remove unused import: `functools.lru_cache`
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\rag_engine_v2.py:9:20
+   |
+ 7 | from datetime import datetime
+ 8 | from functools import lru_cache
+ 9 | from typing import Optional
+   |                    ^^^^^^^^
+10 | from dataclasses import dataclass
+   |
+help: Remove unused import: `typing.Optional`
+
+F401 `ragas.evaluate` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> src\ragas_integration.py:16:23
+   |
+14 | # Try to import ragas if available
+15 | try:
+16 |     from ragas import evaluate
+   |                       ^^^^^^^^
+17 |     from ragas.metrics import (
+18 |         faithfulness,
+   |
+help: Remove unused import: `ragas.evaluate`
+
+F401 `ragas.metrics.faithfulness` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> src\ragas_integration.py:18:9
+   |
+16 |     from ragas import evaluate
+17 |     from ragas.metrics import (
+18 |         faithfulness,
+   |         ^^^^^^^^^^^^
+19 |         answer_relevancy,
+20 |         context_relevance,
+   |
+help: Remove unused import
+
+F401 `ragas.metrics.answer_relevancy` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> src\ragas_integration.py:19:9
+   |
+17 |     from ragas.metrics import (
+18 |         faithfulness,
+19 |         answer_relevancy,
+   |         ^^^^^^^^^^^^^^^^
+20 |         context_relevance,
+21 |         summarization_v1
+   |
+help: Remove unused import
+
+F401 `ragas.metrics.context_relevance` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> src\ragas_integration.py:20:9
+   |
+18 |         faithfulness,
+19 |         answer_relevancy,
+20 |         context_relevance,
+   |         ^^^^^^^^^^^^^^^^^
+21 |         summarization_v1
+22 |     )
+   |
+help: Remove unused import
+
+F401 `ragas.metrics.summarization_v1` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> src\ragas_integration.py:21:9
+   |
+19 |         answer_relevancy,
+20 |         context_relevance,
+21 |         summarization_v1
+   |         ^^^^^^^^^^^^^^^^
+22 |     )
+23 |     RAGAS_AVAILABLE = True
+   |
+help: Remove unused import
+
+F401 [*] `dataclasses.field` imported but unused
+  --> src\rate_limiter.py:17:36
+   |
+15 | import threading
+16 | from typing import Optional, Callable
+17 | from dataclasses import dataclass, field
+   |                                    ^^^^^
+18 | from collections import defaultdict
+19 | from functools import wraps
+   |
+help: Remove unused import: `dataclasses.field`
+
+F401 [*] `typing.Optional` imported but unused
+  --> src\reranker.py:8:20
+   |
+ 6 | import json
+ 7 | import re
+ 8 | from typing import Optional
+   |                    ^^^^^^^^
+ 9 | from dataclasses import dataclass
+10 | from datetime import datetime
+   |
+help: Remove unused import: `typing.Optional`
+
+F821 Undefined name `Dict`
+  --> src\reranker.py:23:15
+   |
+21 |     doc_id: str
+22 |     text: str
+23 |     metadata: Dict
+   |               ^^^^
+24 |     relevance_score: float  # 0-1
+25 |     reasoning: str
+   |
+
+F821 Undefined name `Dict`
+  --> src\reranker.py:52:26
+   |
+50 |         self,
+51 |         query: str,
+52 |         candidates: list[Dict],
+   |                          ^^^^
+53 |         top_k: int = 5,
+54 |         use_batching: bool = True
+   |
+
+F821 Undefined name `Dict`
+  --> src\reranker.py:95:26
+   |
+93 |         self,
+94 |         query: str,
+95 |         candidates: list[Dict],
+   |                          ^^^^
+96 |         top_k: int
+97 |     ) -> list[RankedResult]:
+   |
+
+F821 Undefined name `Dict`
+   --> src\reranker.py:131:26
+    |
+129 |         self,
+130 |         query: str,
+131 |         candidates: list[Dict],
+    |                          ^^^^
+132 |         top_k: int
+133 |     ) -> list[RankedResult]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\reranker.py:169:66
+    |
+167 |         return ranked_results[:top_k]
+168 |
+169 |     def _create_rerank_prompt(self, query: str, candidates: list[Dict]) -> str:
+    |                                                                  ^^^^
+170 |         """Create prompt for Gemini to evaluate relevance"""
+171 |         prompt = f"""You are an expert document relevance evaluator.
+    |
+
+F821 Undefined name `Dict`
+   --> src\reranker.py:245:54
+    |
+243 |             return [0.5] * expected_count, ["Parse error"] * expected_count
+244 |
+245 |     def _candidates_to_ranked(self, candidates: list[Dict]) -> list[RankedResult]:
+    |                                                      ^^^^
+246 |         """Convert candidates to RankedResult preserving original order"""
+247 |         results = []
+    |
+
+F821 Undefined name `Dict`
+   --> src\reranker.py:260:33
+    |
+258 |         return results
+259 |
+260 |     def get_statistics(self) -> Dict:
+    |                                 ^^^^
+261 |         """Get re-ranker statistics"""
+262 |         if not self.rerank_history:
+    |
+
+F821 Undefined name `Dict`
+   --> src\reranker.py:282:40
+    |
+280 |     """
+281 |
+282 |     def __init__(self, documents: list[Dict], chunk_size: int = 200):
+    |                                        ^^^^
+283 |         """
+284 |         Initialize parent document retriever
+    |
+
+F541 [*] f-string without any placeholders
+   --> src\reranker.py:292:21
+    |
+290 |         self.documents = documents
+291 |         self.chunk_size = chunk_size
+292 |         logger.info(f"Initialized Parent Document Retriever")
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+293 |
+294 |     def get_parent_document(
+    |
+help: Remove extraneous `f` prefix
+
+F821 Undefined name `Dict`
+   --> src\reranker.py:299:10
+    |
+297 |         chunk_text: str,
+298 |         context_words: int = 150
+299 |     ) -> Dict:
+    |          ^^^^
+300 |         """
+301 |         Get parent document/paragraph containing the chunk
+    |
+
+F821 Undefined name `Dict`
+   --> src\reranker.py:348:42
+    |
+346 |     return _reranker
+347 |
+348 | def get_parent_retriever(documents: list[Dict]) -> ParentDocumentRetriever:
+    |                                          ^^^^
+349 |     """Get or create global parent document retriever"""
+350 |     global _parent_retriever
+    |
+
+F401 [*] `dataclasses.field` imported but unused
+ --> src\search_filters.py:7:36
+  |
+5 | """
+6 |
+7 | from dataclasses import dataclass, field
+  |                                    ^^^^^
+8 | from typing import Optional
+9 | from datetime import datetime
+  |
+help: Remove unused import: `dataclasses.field`
+
+F821 Undefined name `Dict`
+  --> src\search_filters.py:48:26
+   |
+46 |         )
+47 |
+48 |     def to_dict(self) -> Dict:
+   |                          ^^^^
+49 |         """Convert filter to dictionary representation."""
+50 |         return {
+   |
+
+F821 Undefined name `Dict`
+  --> src\search_filters.py:66:65
+   |
+65 |     @staticmethod
+66 |     def build_metadata_filter(filter: SearchFilter) -> Optional[Dict]:
+   |                                                                 ^^^^
+67 |         """
+68 |         Build ChromaDB metadata filter (where_filter) from SearchFilter criteria.
+   |
+
+F821 Undefined name `List`
+   --> src\search_filters.py:135:18
+    |
+133 |     @staticmethod
+134 |     def apply_similarity_threshold(
+135 |         results: List, threshold: float = 0.0
+    |                  ^^^^
+136 |     ) -> List:
+137 |         """
+    |
+
+F821 Undefined name `List`
+   --> src\search_filters.py:136:10
+    |
+134 |     def apply_similarity_threshold(
+135 |         results: List, threshold: float = 0.0
+136 |     ) -> List:
+    |          ^^^^
+137 |         """
+138 |         Filter search results by similarity threshold.
+    |
+
+F401 [*] `sqlite3` imported but unused
+  --> src\security_hardening.py:14:8
+   |
+12 | import re
+13 | import html
+14 | import sqlite3
+   |        ^^^^^^^
+15 | from typing import Optional, Any, Dict, List
+16 | from urllib.parse import quote, unquote
+   |
+help: Remove unused import: `sqlite3`
+
+F401 [*] `typing.List` imported but unused
+  --> src\security_hardening.py:15:41
+   |
+13 | import html
+14 | import sqlite3
+15 | from typing import Optional, Any, Dict, List
+   |                                         ^^^^
+16 | from urllib.parse import quote, unquote
+17 | from functools import wraps
+   |
+help: Remove unused import: `typing.List`
+
+F401 [*] `urllib.parse.quote` imported but unused
+  --> src\security_hardening.py:16:26
+   |
+14 | import sqlite3
+15 | from typing import Optional, Any, Dict, List
+16 | from urllib.parse import quote, unquote
+   |                          ^^^^^
+17 | from functools import wraps
+   |
+help: Remove unused import
+
+F401 [*] `urllib.parse.unquote` imported but unused
+  --> src\security_hardening.py:16:33
+   |
+14 | import sqlite3
+15 | from typing import Optional, Any, Dict, List
+16 | from urllib.parse import quote, unquote
+   |                                 ^^^^^^^
+17 | from functools import wraps
+   |
+help: Remove unused import
+
+F541 [*] f-string without any placeholders
+   --> src\security_hardening.py:147:28
+    |
+146 |         if len(filename) > cls.MAX_LENGTHS["filename"]:
+147 |             logger.warning(f"[VALIDATION] Filename exceeds max length")
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+148 |             return False
+    |
+help: Remove extraneous `f` prefix
+
+F541 [*] f-string without any placeholders
+   --> src\security_hardening.py:332:28
+    |
+330 |         """Validate session is active and not expired"""
+331 |         if session_id not in self.active_sessions:
+332 |             logger.warning(f"[SESSION] Invalid session ID")
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+333 |             return False
+    |
+help: Remove extraneous `f` prefix
+
+E713 [*] Test for membership should be `not in`
+   --> src\security_hardening.py:413:24
+    |
+411 |         "filename_valid": InputValidator.validate_filename(filename) if filename else True,
+412 |         "no_sql_injection": not SQLInjectionPrevention.is_suspicious(query) if query else True,
+413 |         "no_xss": not ("<script" in query.lower()) if query else True,
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+414 |     }
+    |
+help: Convert to `not in`
+
+F401 [*] `time` imported but unused
+  --> src\semantic_query_clustering.py:11:8
+   |
+ 9 | """
+10 |
+11 | import time
+   |        ^^^^
+12 | import numpy as np
+13 | from collections import deque
+   |
+help: Remove unused import: `time`
+
+F821 Undefined name `RAGResponse`
+   --> src\semantic_query_clustering.py:231:68
+    |
+229 |         return None
+230 |
+231 |     def add_to_cache(self, query: str, cluster_id: str, response: 'RAGResponse') -> None:
+    |                                                                    ^^^^^^^^^^^
+232 |         """
+233 |         Cache RAGResponse for a cluster.
+    |
+
+F821 Undefined name `Dict`
+  --> src\smart_retrieval_long.py:25:30
+   |
+23 | class RetrievalResult:
+24 |     """Result of document retrieval"""
+25 |     selected_documents: list[Dict]
+   |                              ^^^^
+26 |     total_tokens: int
+27 |     relevance_scores: dict[str, float]
+   |
+
+F821 Undefined name `Dict`
+  --> src\smart_retrieval_long.py:51:33
+   |
+50 |     def retrieve(self,
+51 |                 documents: list[Dict],
+   |                                 ^^^^
+52 |                 query: str,
+53 |                 strategy: RetrievalStrategy = RetrievalStrategy.HYBRID,
+   |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:114:48
+    |
+113 |     def _retrieve_by_relevance(self,
+114 |                                documents: list[Dict],
+    |                                                ^^^^
+115 |                                relevance_scores: dict[str, float],
+116 |                                min_documents: int) -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:116:60
+    |
+114 |                                documents: list[Dict],
+115 |                                relevance_scores: dict[str, float],
+116 |                                min_documents: int) -> list[Dict]:
+    |                                                            ^^^^
+117 |         """
+118 |         Retrieve highest-relevance documents within token budget
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:151:42
+    |
+150 |     def _retrieve_by_size(self,
+151 |                          documents: list[Dict],
+    |                                          ^^^^
+152 |                          relevance_scores: dict[str, float],
+153 |                          min_documents: int) -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:153:54
+    |
+151 |                          documents: list[Dict],
+152 |                          relevance_scores: dict[str, float],
+153 |                          min_documents: int) -> list[Dict]:
+    |                                                      ^^^^
+154 |         """
+155 |         Retrieve smallest documents first (fit more content)
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:191:47
+    |
+190 |     def _retrieve_by_diversity(self,
+191 |                               documents: list[Dict],
+    |                                               ^^^^
+192 |                               relevance_scores: dict[str, float],
+193 |                               min_documents: int) -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:193:59
+    |
+191 |                               documents: list[Dict],
+192 |                               relevance_scores: dict[str, float],
+193 |                               min_documents: int) -> list[Dict]:
+    |                                                           ^^^^
+194 |         """
+195 |         Retrieve diverse documents across topics
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:237:41
+    |
+236 |     def _retrieve_hybrid(self,
+237 |                         documents: list[Dict],
+    |                                         ^^^^
+238 |                         relevance_scores: dict[str, float],
+239 |                         min_documents: int) -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:239:53
+    |
+237 |                         documents: list[Dict],
+238 |                         relevance_scores: dict[str, float],
+239 |                         min_documents: int) -> list[Dict]:
+    |                                                     ^^^^
+240 |         """
+241 |         Hybrid retrieval: balance relevance, size, and diversity
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:301:52
+    |
+299 |         return selected
+300 |
+301 |     def _calculate_diversity(self, documents: list[Dict]) -> float:
+    |                                                    ^^^^
+302 |         """
+303 |         Calculate diversity score for document set (0-1)
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:332:44
+    |
+331 |     def reorder_for_context(self,
+332 |                            documents: list[Dict],
+    |                                            ^^^^
+333 |                            query: str,
+334 |                            order_by: str = "relevance") -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\smart_retrieval_long.py:334:65
+    |
+332 |                            documents: list[Dict],
+333 |                            query: str,
+334 |                            order_by: str = "relevance") -> list[Dict]:
+    |                                                                 ^^^^
+335 |         """
+336 |         Reorder documents for optimal reading in context
+    |
+
+F401 [*] `typing.Any` imported but unused
+  --> src\structured_logging.py:12:20
+   |
+10 | import sys
+11 | from datetime import datetime
+12 | from typing import Any
+   |                    ^^^
+13 | from pathlib import Path
+   |
+help: Remove unused import: `typing.Any`
+
+F821 Undefined name `Dict`
+   --> src\tag_manager.py:280:70
+    |
+278 |         return tag if tag else ""
+279 |
+280 |     def build_tag_filter(self, selected_tags: list[str]) -> Optional[Dict]:
+    |                                                                      ^^^^
+281 |         """
+282 |         Build a metadata filter for vector store search by tags.
+    |
+
+F401 [*] `calendar` imported but unused
+  --> src\temporal_metadata.py:12:8
+   |
+10 | from dataclasses import dataclass
+11 | from pathlib import Path
+12 | import calendar
+   |        ^^^^^^^^
+13 |
+14 | from src.logging_config import get_logger
+   |
+help: Remove unused import: `calendar`
+
+F821 Undefined name `Dict`
+  --> src\temporal_metadata.py:28:26
+   |
+26 |     extraction_method: str = "filename"  # filename, content, metadata, hybrid
+27 |
+28 |     def to_dict(self) -> Dict:
+   |                          ^^^^
+29 |         """Convert to dictionary for storage"""
+30 |         return {
+   |
+
+F601 Dictionary key literal `'may'` repeated
+  --> src\temporal_metadata.py:73:9
+   |
+71 |         'september': 9, 'october': 10, 'november': 11, 'december': 12,
+72 |         'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4,
+73 |         'may': 5, 'jun': 6, 'jul': 7, 'aug': 8,
+   |         ^^^^^
+74 |         'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12
+75 |     }
+   |
+help: Remove repeated key literal `'may'`
+
+F601 Dictionary key literal `'latest'` repeated
+  --> src\temporal_metadata.py:83:9
+   |
+81 |         'current': 0.85,
+82 |         'recent': 0.8,
+83 |         'latest': 1.0,
+   |         ^^^^^^^^
+84 |         # Italian
+85 |         'ultimo': 1.0,
+   |
+help: Remove repeated key literal `'latest'`
+
+F821 Undefined name `Dict`
+  --> src\upload_manager.py:38:35
+   |
+36 |         """
+37 |         self.vector_store = vector_store
+38 |         self.upload_history: list[Dict] = []
+   |                                   ^^^^
+39 |
+40 |     def validate_file(self, file_obj) -> tuple[bool, Optional[str]]:
+   |
+
+F821 Undefined name `List`
+   --> src\upload_manager.py:149:16
+    |
+147 |     def process_batch_upload(
+148 |         self,
+149 |         files: List,
+    |                ^^^^
+150 |         vector_store,
+151 |         folder: Optional[str] = None,
+    |
+
+F821 Undefined name `Dict`
+   --> src\upload_manager.py:154:10
+    |
+152 |         skip_duplicates: bool = True,
+153 |         callback=None
+154 |     ) -> Dict:
+    |          ^^^^
+155 |         """
+156 |         Process batch upload of multiple files.
+    |
+
+F821 Undefined name `Dict`
+   --> src\upload_manager.py:250:59
+    |
+248 |         return results
+249 |
+250 |     def get_upload_history(self, limit: int = 10) -> list[Dict]:
+    |                                                           ^^^^
+251 |         """
+252 |         Get recent upload history.
+    |
+
+F821 Undefined name `Dict`
+   --> src\upload_manager.py:272:36
+    |
+270 |         self.upload_history = []
+271 |
+272 |     def get_storage_stats(self) -> Dict:
+    |                                    ^^^^
+273 |         """
+274 |         Get upload storage statistics.
+    |
+
+F821 Undefined name `Dict`
+  --> src\ux_enhancements.py:49:15
+   |
+47 |     quality_score: float = 0.0
+48 |     timestamp: datetime = field(default_factory=datetime.now)
+49 |     metadata: Dict = field(default_factory=dict)
+   |               ^^^^
+50 |
+51 | @dataclass
+   |
+
+F821 Undefined name `Dict`
+  --> src\ux_enhancements.py:73:30
+   |
+71 |         return "\n\n".join(context_parts)
+72 |
+73 |     def get_summary(self) -> Dict:
+   |                              ^^^^
+74 |         """Get conversation summary"""
+75 |         return {
+   |
+
+F821 Undefined name `Dict`
+   --> src\ux_enhancements.py:106:52
+    |
+104 |     def extract_citations(self,
+105 |                          answer: str,
+106 |                          retrieved_documents: list[Dict],
+    |                                                    ^^^^
+107 |                          relevance_scores: Optional[dict[str, float]] = None) -> list[Citation]:
+108 |         """
+    |
+
+F821 Undefined name `Dict`
+   --> src\ux_enhancements.py:170:59
+    |
+168 |         return formatted, citations
+169 |
+170 |     def get_citation_preview(self, citation: Citation) -> Dict:
+    |                                                           ^^^^
+171 |         """Get preview of citation for UI display"""
+172 |         return {
+    |
+
+F821 Undefined name `Dict`
+   --> src\ux_enhancements.py:190:55
+    |
+188 |                             query: str,
+189 |                             answer: str,
+190 |                             retrieved_documents: list[Dict]) -> list[QuerySuggestion]:
+    |                                                       ^^^^
+191 |         """
+192 |         Generate follow-up query suggestions
+    |
+
+F821 Undefined name `Dict`
+   --> src\ux_enhancements.py:286:63
+    |
+284 |         return conversation.get_context(max_turns)
+285 |
+286 |     def summarize_conversation(self, conversation_id: str) -> Dict:
+    |                                                               ^^^^
+287 |         """Get conversation summary"""
+288 |         conversation = self.get_conversation(conversation_id)
+    |
+
+F821 Undefined name `Dict`
+   --> src\ux_enhancements.py:306:51
+    |
+304 |                         query: str,
+305 |                         answer: str,
+306 |                         retrieved_documents: list[Dict],
+    |                                                   ^^^^
+307 |                         quality_score: float = 0.0) -> Dict:
+308 |         """
+    |
+
+F821 Undefined name `Dict`
+   --> src\ux_enhancements.py:307:56
+    |
+305 |                         answer: str,
+306 |                         retrieved_documents: list[Dict],
+307 |                         quality_score: float = 0.0) -> Dict:
+    |                                                        ^^^^
+308 |         """
+309 |         Enhance response with all UX features
+    |
+
+F401 [*] `pathlib.Path` imported but unused
+  --> src\vector_store.py:8:21
+   |
+ 6 | import pickle
+ 7 | import numpy as np
+ 8 | from pathlib import Path
+   |                     ^^^^
+ 9 | from typing import Any, Optional
+10 | from dataclasses import dataclass, asdict
+   |
+help: Remove unused import: `pathlib.Path`
+
+F401 [*] `dataclasses.asdict` imported but unused
+  --> src\vector_store.py:10:36
+   |
+ 8 | from pathlib import Path
+ 9 | from typing import Any, Optional
+10 | from dataclasses import dataclass, asdict
+   |                                    ^^^^^^
+11 | import time
+12 | from datetime import datetime
+   |
+help: Remove unused import: `dataclasses.asdict`
+
+F401 [*] `time` imported but unused
+  --> src\vector_store.py:11:8
+   |
+ 9 | from typing import Any, Optional
+10 | from dataclasses import dataclass, asdict
+11 | import time
+   |        ^^^^
+12 | from datetime import datetime
+   |
+help: Remove unused import: `time`
+
+F811 [*] Redefinition of unused `time` from line 11
+   --> src\vector_store.py:179:16
+    |
+177 |         Mantiene cache size <= _query_cache_max_size per evitare memory leak.
+178 |         """
+179 |         import time
+    |                ^^^^ `time` redefined here
+180 |         self._query_embedding_cache[query_cache_key] = embedding
+181 |         self._query_cache_access_times[query_cache_key] = time.time()
+    |
+   ::: src\vector_store.py:11:8
+    |
+  9 | from typing import Any, Optional
+ 10 | from dataclasses import dataclass, asdict
+ 11 | import time
+    |        ---- previous definition of `time` here
+ 12 | from datetime import datetime
+    |
+help: Remove definition: `time`
+
+F811 [*] Redefinition of unused `time` from line 11
+   --> src\vector_store.py:201:16
+    |
+199 |         PHASE 2 OPTIMIZATION: Recupera embedding query da cache con update del timestamp LRU.
+200 |         """
+201 |         import time
+    |                ^^^^ `time` redefined here
+202 |         if query_cache_key in self._query_embedding_cache:
+203 |             # Update access time per LRU tracking
+    |
+   ::: src\vector_store.py:11:8
+    |
+  9 | from typing import Any, Optional
+ 10 | from dataclasses import dataclass, asdict
+ 11 | import time
+    |        ---- previous definition of `time` here
+ 12 | from datetime import datetime
+    |
+help: Remove definition: `time`
+
+F821 Undefined name `Dict`
+   --> src\vector_store.py:232:34
+    |
+230 |         self,
+231 |         documents: list[str],
+232 |         metadatas: Optional[list[Dict]] = None,
+    |                                  ^^^^
+233 |         ids: Optional[list[str]] = None,
+234 |         rebuild_matrix: bool = True,
+    |
+
+F821 Undefined name `Dict`
+   --> src\vector_store.py:353:32
+    |
+351 |         query: str,
+352 |         top_k: int = 5,
+353 |         where_filter: Optional[Dict] = None,
+    |                                ^^^^
+354 |         query_embedding: Optional[np.ndarray] = None
+355 |     ) -> list[Dict]:
+    |
+
+F821 Undefined name `Dict`
+   --> src\vector_store.py:355:15
+    |
+353 |         where_filter: Optional[Dict] = None,
+354 |         query_embedding: Optional[np.ndarray] = None
+355 |     ) -> list[Dict]:
+    |               ^^^^
+356 |         """
+357 |         Cerca documenti per similarit├á coseno (OTTIMIZZATO con matrice pre-calcolata).
+    |
+
+F821 Undefined name `Dict`
+   --> src\vector_store.py:495:28
+    |
+493 |             return set()
+494 |
+495 |     def get_stats(self) -> Dict:
+    |                            ^^^^
+496 |         return {
+497 |             "total_documents": len(self.documents),
+    |
+
+F821 Undefined name `Dict`
+   --> src\vector_store.py:501:41
+    |
+499 |         }
+500 |
+501 |     def get_all_documents(self) -> list[Dict]:
+    |                                         ^^^^
+502 |         """Ritorna TUTTI i documenti in libreria (non solo top-k)"""
+503 |         # Raggruppa chunk per documento (source)
+    |
+
+F821 Undefined name `Dict`
+   --> src\vector_store.py:616:51
+    |
+614 |             return False
+615 |
+616 |     def get_document_summaries(self) -> dict[str, Dict]:
+    |                                                   ^^^^
+617 |         """
+618 |         Get summaries and key points for all documents.
+    |
+
+F821 Undefined name `logging`
+   --> src\vector_store.py:680:5
+    |
+678 | if __name__ == "__main__":
+679 |     # Test
+680 |     logging.basicConfig(level=logging.INFO)
+    |     ^^^^^^^
+681 |     vs = get_vector_store()
+682 |     print("Store initialized.")
+    |
+
+F821 Undefined name `logging`
+   --> src\vector_store.py:680:31
+    |
+678 | if __name__ == "__main__":
+679 |     # Test
+680 |     logging.basicConfig(level=logging.INFO)
+    |                               ^^^^^^^
+681 |     vs = get_vector_store()
+682 |     print("Store initialized.")
+    |
+
+F401 [*] `dataclasses.asdict` imported but unused
+  --> src\vector_store_sqlite.py:12:36
+   |
+10 | from pathlib import Path
+11 | from typing import Any, Optional
+12 | from dataclasses import dataclass, asdict
+   |                                    ^^^^^^
+13 | import threading
+   |
+help: Remove unused import: `dataclasses.asdict`
+
+F401 `PIL.Image` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> src\vision_service.py:14:21
+   |
+13 | try:
+14 |     from PIL import Image
+   |                     ^^^^^
+15 | except ImportError:
+16 |     raise ImportError("PIL not found. Install with: pip install pillow")
+   |
+help: Remove unused import: `PIL.Image`
+
+F821 Undefined name `logging`
+   --> src\vision_service.py:449:5
+    |
+448 | if __name__ == "__main__":
+449 |     logging.basicConfig(level=logging.INFO)
+    |     ^^^^^^^
+450 |
+451 |     # Test
+    |
+
+F821 Undefined name `logging`
+   --> src\vision_service.py:449:31
+    |
+448 | if __name__ == "__main__":
+449 |     logging.basicConfig(level=logging.INFO)
+    |                               ^^^^^^^
+450 |
+451 |     # Test
+    |
+
+F401 [*] `pathlib.Path` imported but unused
+  --> src\visual_document_processor.py:11:21
+   |
+ 9 | from typing import Optional
+10 | from dataclasses import dataclass
+11 | from pathlib import Path
+   |                     ^^^^
+12 | import threading
+   |
+help: Remove unused import: `pathlib.Path`
+
+F821 Undefined name `Dict`
+   --> src\visual_document_processor.py:213:10
+    |
+211 |         page_number: int,
+212 |         image_base64: str
+213 |     ) -> Dict:
+    |          ^^^^
+214 |         """
+215 |         Analyze chart and extract key data points
+    |
+
+F821 Undefined name `Dict`
+   --> src\visual_document_processor.py:359:10
+    |
+357 |         pdf_path: str,
+358 |         document_id: str
+359 |     ) -> Dict:
+    |          ^^^^
+360 |         """
+361 |         Process PDF with visual analysis
+    |
+
+F821 Undefined name `Dict`
+   --> src\visual_document_processor.py:420:10
+    |
+418 |         page_analyses: list[PageAnalysis],
+419 |         visual_index: list[VisualElement]
+420 |     ) -> Dict:
+    |          ^^^^
+421 |         """Store analysis results in vector store"""
+422 |         try:
+    |
+
+F841 Local variable `stored_elements` is assigned to but never used
+   --> src\visual_document_processor.py:424:13
+    |
+422 |         try:
+423 |             stored_pages = 0
+424 |             stored_elements = 0
+    |             ^^^^^^^^^^^^^^^
+425 |
+426 |             for analysis in page_analyses:
+    |
+help: Remove assignment to unused variable `stored_elements`
+
+Found 363 errors.
+[*] 133 fixable with the `--fix` option (24 hidden fixes can be enabled with the `--unsafe-fixes` option).

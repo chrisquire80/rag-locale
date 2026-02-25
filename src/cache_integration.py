@@ -23,11 +23,9 @@ from dataclasses import dataclass
 from src.cache import (
     get_query_expansion_cache,
     get_query_result_cache,
-    get_embedding_cache,
-    CacheManager
+    get_embedding_cache
 )
 from src.logging_config import get_logger
-from src.config import config
 
 logger = get_logger(__name__)
 
@@ -120,7 +118,7 @@ class CacheIntegration:
         Returns:
             Cached embedding vector or None
         """
-        cache_key = hashlib.md5(text.encode()).hexdigest()
+        cache_key = hashlib.sha256(text.encode()).hexdigest()
 
         try:
             cached = self.embedding_cache.get(cache_key)
@@ -137,7 +135,7 @@ class CacheIntegration:
     def cache_embedding(self, text: str, embedding: list[float]) -> None:
         """Cache an embedding result"""
         try:
-            cache_key = hashlib.md5(text.encode()).hexdigest()
+            cache_key = hashlib.sha256(text.encode()).hexdigest()
             self.embedding_cache.set(cache_key, embedding)
         except Exception as e:
             logger.warning(f"Error caching embedding: {e}")

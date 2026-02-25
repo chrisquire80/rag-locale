@@ -14,7 +14,7 @@ Features:
 
 import re
 import json
-from typing import Optional
+from typing import Optional, Dict, List, Tuple, Any
 from dataclasses import dataclass
 from collections import Counter
 

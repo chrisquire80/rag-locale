@@ -7,9 +7,12 @@ REM ============================================================================
 setlocal enabledelayedexpansion
 color 0A
 
+REM Ensure we are in the script's directory (handles Admin mode)
+cd /d "%~dp0"
+
 REM Configuration
 set PORT=8503
-set APP_FILE=src/app_ui.py
+set APP_FILE=app_streamlit_real_docs.py
 set PYTHON_PATH=python
 set MAX_RETRIES=3
 

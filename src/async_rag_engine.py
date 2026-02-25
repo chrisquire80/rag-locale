@@ -6,9 +6,8 @@ Consente di processare più query contemporaneamente senza blocking
 
 import asyncio
 import time
-from datetime import datetime
+import logging
 from typing import Optional
-from dataclasses import dataclass
 
 from src.config import config
 from src.vector_store import get_vector_store
@@ -81,7 +80,6 @@ class AsyncRAGEngine:
         logger.info("Step 1: Retrieval (async)...")
         cache_key = self._get_cache_key(user_query, metadata_filter)
         retrieval_results = self._get_cached_result(cache_key)
-        cache_hit = retrieval_results is not None
 
         search_start = time.perf_counter()
         if retrieval_results is None:

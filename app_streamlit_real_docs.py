@@ -23,6 +23,8 @@ from src.cross_encoder_reranking import GeminiCrossEncoderReranker
 from src.llm_service import get_llm_service
 from src.memory_service import get_memory_service
 from src.quality_metrics import get_quality_evaluator
+from src.context_deduplicator import get_context_deduplicator
+from src.semantic_query_clustering import get_semantic_query_clusterer
 from src.ux_enhancements import get_response_enhancer, get_conversation_manager
 from src.vector_store import get_vector_store
 from src.vision_service import get_vision_service
@@ -463,6 +465,10 @@ def initialize_session() -> None:
         st.session_state.vision_service = get_vision_service()
     if "reranker" not in st.session_state:
         st.session_state.reranker = _get_reranker()
+    if "deduplicator" not in st.session_state:
+        st.session_state.deduplicator = get_context_deduplicator()
+    if "clusterer" not in st.session_state:
+        st.session_state.clusterer = get_semantic_query_clusterer()
 
 
 # ============================================================================
@@ -770,6 +776,12 @@ def _render_sidebar_model_config() -> Dict:
             if enable_vision
             else 0.5
         )
+        st.divider()
+        st.markdown("**Parametri LLM**")
+        llm_model = st.selectbox("Modello", ["gemini-2.0-flash", "gemini-2.0-pro-exp-02-05"], index=0)
+        llm_temp = st.slider("Temperatura", 0.0, 1.0, 0.3, 0.1)
+        llm_max_tokens = st.number_input("Max Tokens", 128, 4096, 1024, 128)
+        enable_dedup = st.checkbox("Deduplicazione Contesto", value=True, help="Rimuove chunk ridondanti per risparmiare token.")
     return {
         "show_citations": show_citations,
         "show_suggestions": show_suggestions,
@@ -778,6 +790,10 @@ def _render_sidebar_model_config() -> Dict:
         "rerank_alpha": rerank_alpha,
         "enable_vision": enable_vision,
         "min_image_relevance": min_image_relevance,
+        "llm_model": llm_model,
+        "llm_temp": llm_temp,
+        "llm_max_tokens": llm_max_tokens,
+        "enable_dedup": enable_dedup,
     }
 
 
@@ -916,6 +932,7 @@ def retrieve_relevant_documents(
     query: str,
     enable_reranking: bool = True,
     rerank_alpha: float = 0.3,
+    enable_dedup: bool = True,
 ) -> List[Dict]:
     """Retrieve relevant documents using the indexed vector store singleton."""
     fallback_docs = st.session_state.documents[:2] if st.session_state.documents else []
@@ -964,6 +981,33 @@ def retrieve_relevant_documents(
                     }
                     for ranked in reranked
                 ]
+                if enable_dedup and len(retrieved) > 1:
+                    try:
+                        from src.cross_encoder_reranking import RankedResult
+                        # Convert back to a format that looks like RetrievalResult for deduplicator
+                        # or just pass as is if deduplicator is flexible. 
+                        # Looking at ContextDeduplicator.deduplicate_chunks, it expects RetrievalResult or similar objects with .document
+                        # retrieved is a list of dicts. Let's make a mock class for the deduplicator
+                        class RetrievalResult:
+                            def __init__(self, doc_dict):
+                                self.document = doc_dict["text"]
+                                self.source = doc_dict["metadata"].get("source", "")
+                                self.score = doc_dict["similarity"]
+                        
+                        wrapped = [RetrievalResult(d) for d in retrieved]
+                        deduped_wrapped = st.session_state.deduplicator.deduplicate_chunks(wrapped)
+                        
+                        # Find original dicts that matches deduped content
+                        final_retrieved = []
+                        for dw in deduped_wrapped:
+                            for d in retrieved:
+                                if d["text"] == dw.document:
+                                    final_retrieved.append(d)
+                                    break
+                        retrieved = final_retrieved
+                    except Exception as dedup_err:
+                        logger.warning(f"Deduplication failed: {dedup_err}")
+
                 return retrieved if retrieved else fallback_docs
             except Exception as e:
                 st.warning(f"Re-ranking fallito: {str(e)[:80]}. Uso risultati originali.")
@@ -1003,6 +1047,9 @@ def generate_answer_stream_from_docs(
     enable_vision: bool = False,
     min_image_relevance: float = 0.5,
     enable_search: bool = False,
+    model: str = "gemini-2.0-flash",
+    temperature: float = 0.3,
+    max_tokens: int = 1024,
 ):
     """Generate answer stream from retrieved documents using Gemini LLM."""
     if not documents:
@@ -1035,8 +1082,9 @@ def generate_answer_stream_from_docs(
         for chunk in llm.completion_stream(
             prompt=prompt,
             system_prompt=system_prompt,
-            max_tokens=1024,
-            temperature=0.3,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            model=model,
             enable_search=enable_search,
         ):
             yield chunk
@@ -1059,37 +1107,55 @@ def process_query_real(query: str, settings: Dict) -> None:
     try:
         memory = get_memory_service()
 
-        # 1. Retrieve relevant documents
-        documents = retrieve_relevant_documents(
-            query,
-            enable_reranking=settings.get("enable_reranking", True),
-            rerank_alpha=settings.get("rerank_alpha", 0.3),
-        )
-        if not documents:
-            st.warning("Nessun documento rilevante trovato per la tua query.")
-            return
+        # 0. Check Semantic Cache
+        cluster_id = st.session_state.clusterer.cluster_query(query)
+        cached_response = st.session_state.clusterer.get_cluster_results(cluster_id)
+        
+        if cached_response and not settings.get("enable_web_search") and not settings.get("enable_vision"):
+            st.info(f"✨ Risposta recuperata dalla cache semantica (Cluster: {cluster_id})")
+            full_answer = cached_response.get("answer", "")
+            documents = cached_response.get("documents", [])
+            with st.chat_message("assistant"):
+                st.markdown(full_answer)
+        else:
+            # 1. Retrieve relevant documents
+            documents = retrieve_relevant_documents(
+                query,
+                enable_reranking=settings.get("enable_reranking", True),
+                rerank_alpha=settings.get("rerank_alpha", 0.3),
+                enable_dedup=settings.get("enable_dedup", True),
+            )
+            if not documents:
+                st.warning("Nessun documento rilevante trovato per la tua query.")
+                return
 
-        # 2. Augment query with memory context
-        memory_context = memory.search_memories(query, limit=2)
-        augmented_query = query
-        if memory_context:
-            augmented_query = f"[Contesto da sessioni precedenti: {memory_context[:300]}]\n\n{query}"
+            # 2. Augment query with memory context
+            memory_context = memory.search_memories(query, limit=2)
+            augmented_query = query
+            if memory_context:
+                augmented_query = f"[Contesto da sessioni precedenti: {memory_context[:300]}]\n\n{query}"
 
-        # 3. Stream answer
-        with st.chat_message("assistant"):
-            stream_placeholder = st.empty()
-            full_answer = ""
-            for chunk in generate_answer_stream_from_docs(
-                augmented_query,
-                documents,
-                enable_vision=settings.get("enable_vision", False),
-                min_image_relevance=settings.get("min_image_relevance", 0.5),
-                enable_search=settings.get("enable_web_search", False),
-            ):
-                if isinstance(chunk, str):
-                    full_answer += chunk
-                    stream_placeholder.markdown(full_answer + "|")
-            stream_placeholder.markdown(full_answer)
+            # 3. Stream answer
+            with st.chat_message("assistant"):
+                stream_placeholder = st.empty()
+                full_answer = ""
+                for chunk in generate_answer_stream_from_docs(
+                    augmented_query,
+                    documents,
+                    enable_vision=settings.get("enable_vision", False),
+                    min_image_relevance=settings.get("min_image_relevance", 0.5),
+                    enable_search=settings.get("enable_web_search", False),
+                    model=settings.get("llm_model", "gemini-2.0-flash"),
+                    temperature=settings.get("llm_temp", 0.3),
+                    max_tokens=settings.get("llm_max_tokens", 1024),
+                ):
+                    if isinstance(chunk, str):
+                        full_answer += chunk
+                        stream_placeholder.markdown(full_answer + "|")
+                stream_placeholder.markdown(full_answer)
+            
+            # Update cache
+            st.session_state.clusterer.add_to_cache(query, cluster_id, {"answer": full_answer, "documents": documents})
 
         # 4. Save to memory
         found_anomaly = "anomalia" in full_answer.lower()
@@ -1102,7 +1168,15 @@ def process_query_real(query: str, settings: Dict) -> None:
         )
 
         # 5. Add to local conversation history
-        quality_score = 0.927
+        # Real-time Quality Evaluation
+        evaluation = st.session_state.evaluator.evaluate_query(
+            query_id=st.session_state.conversation_id,
+            query=query,
+            answer=full_answer,
+            retrieved_documents=[{"document": d["text"], "metadata": d["metadata"]} for d in documents]
+        )
+        quality_score = evaluation.get_overall_score()
+        
         st.session_state.conversation_history.append({
             "query": query,
             "answer": full_answer,

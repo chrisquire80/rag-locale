@@ -3,7 +3,7 @@ Context Window Manager - FASE 18
 Manages 1M token context window allocation for Gemini 2.0 Flash
 """
 
-from typing import Optional
+from typing import Optional, Dict
 from dataclasses import dataclass
 import re
 

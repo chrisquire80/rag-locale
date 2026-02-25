@@ -5,9 +5,8 @@ Systematic comparison of two configurations.
 Supports statistical significance testing and sample size calculation.
 """
 
-import random
-import math
-from typing import List, Dict, Optional, Tuple
+import secrets
+from typing import List, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -91,7 +90,7 @@ class ABTestRunner:
 
     def route_request(self) -> str:
         """Randomly route request to A or B based on split ratio"""
-        return 'A' if random.random() < self.split_ratio else 'B'
+        return 'A' if secrets.SystemRandom().random() < self.split_ratio else 'B'
 
     def record_request(
         self,
@@ -287,7 +286,7 @@ class ABTestRunner:
         t_stat = (mean_a - mean_b) / se
 
         # Degrees of freedom (Welch's approximation)
-        df = (
+        _ = (
             ((std_a ** 2 / n_a + std_b ** 2 / n_b) ** 2) /
             ((std_a ** 2 / n_a) ** 2 / (n_a - 1) + (std_b ** 2 / n_b) ** 2 / (n_b - 1))
         )

@@ -1,0 +1,191 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0
+rootdir: C:\Users\ChristianRobecchi\Downloads\RAG LOCALE
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 477 items / 10 errors
+
+=================================== ERRORS ====================================
+_______________ ERROR collecting test_all_fases_integration.py ________________
+test_all_fases_integration.py:17: in <module>
+    from rag_engine_longcontext import LongContextRAGEngine
+src\rag_engine_longcontext.py:11: in <module>
+    from src.rag_engine_multimodal import MultimodalRAGEngine, MultimodalRAGResponse
+src\rag_engine_multimodal.py:13: in <module>
+    from src.multimodal_search import MultimodalSearchEngine, MultimodalResult
+src\multimodal_search.py:14: in <module>
+    from src.pdf_image_extraction import ExtractedImage
+src\pdf_image_extraction.py:29: in <module>
+    logger = get_logger(__name__)
+             ^^^^^^^^^^
+E   NameError: name 'get_logger' is not defined
+------------------------------- Captured stdout -------------------------------
+{"timestamp": "2026-02-24T13:26:34.380017Z", "level": "INFO", "module": "src.logging_config", "function": "<module>", "line": 134, "message": "Logging configured", "log_level": "INFO", "log_file": "logs/app.jsonl", "log_format": "json"}
+_________________ ERROR collecting test_e2e_complete_flow.py __________________
+ImportError while importing test module 'C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_e2e_complete_flow.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_e2e_complete_flow.py:19: in <module>
+    from src.metrics_dashboard import MetricsAnalyzer
+E   ModuleNotFoundError: No module named 'src.metrics_dashboard'
+___________________ ERROR collecting test_fase10_metrics.py ___________________
+ImportError while importing test module 'C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_fase10_metrics.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_fase10_metrics.py:24: in <module>
+    from metrics_dashboard import MetricsAnalyzer
+E   ModuleNotFoundError: No module named 'metrics_dashboard'
+_______________ ERROR collecting test_fase15_metrics_charts.py ________________
+ImportError while importing test module 'C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_fase15_metrics_charts.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_fase15_metrics_charts.py:18: in <module>
+    from src.metrics_charts import MetricsCharts, get_metrics_charts
+E   ModuleNotFoundError: No module named 'src.metrics_charts'
+_________________ ERROR collecting test_fase17_multimodal.py __________________
+test_fase17_multimodal.py:19: in <module>
+    from pdf_image_extraction import (
+src\pdf_image_extraction.py:29: in <module>
+    logger = get_logger(__name__)
+             ^^^^^^^^^^
+E   NameError: name 'get_logger' is not defined
+_________________ ERROR collecting test_fase18_longcontext.py _________________
+test_fase18_longcontext.py:22: in <module>
+    from rag_engine_longcontext import (
+src\rag_engine_longcontext.py:11: in <module>
+    from src.rag_engine_multimodal import MultimodalRAGEngine, MultimodalRAGResponse
+src\rag_engine_multimodal.py:13: in <module>
+    from src.multimodal_search import MultimodalSearchEngine, MultimodalResult
+src\multimodal_search.py:14: in <module>
+    from src.pdf_image_extraction import ExtractedImage
+src\pdf_image_extraction.py:29: in <module>
+    logger = get_logger(__name__)
+             ^^^^^^^^^^
+E   NameError: name 'get_logger' is not defined
+___________________ ERROR collecting test_fase19_quality.py ___________________
+ImportError while importing test module 'C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_fase19_quality.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_fase19_quality.py:13: in <module>
+    from quality_metrics import (
+E   ImportError: cannot import name 'QualityMetrics' from 'quality_metrics' (C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\src\quality_metrics.py)
+_____________________ ERROR collecting test_fase20_ux.py ______________________
+test_fase20_ux.py:27: in <module>
+    from rag_engine_ux import (
+src\rag_engine_ux.py:10: in <module>
+    from src.rag_engine_quality import (
+src\rag_engine_quality.py:11: in <module>
+    from src.rag_engine_longcontext import (
+src\rag_engine_longcontext.py:11: in <module>
+    from src.rag_engine_multimodal import MultimodalRAGEngine, MultimodalRAGResponse
+src\rag_engine_multimodal.py:13: in <module>
+    from src.multimodal_search import MultimodalSearchEngine, MultimodalResult
+src\multimodal_search.py:14: in <module>
+    from src.pdf_image_extraction import ExtractedImage
+src\pdf_image_extraction.py:29: in <module>
+    logger = get_logger(__name__)
+             ^^^^^^^^^^
+E   NameError: name 'get_logger' is not defined
+________________ ERROR collecting test_performance_baseline.py ________________
+ImportError while importing test module 'C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_performance_baseline.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_performance_baseline.py:18: in <module>
+    from src.metrics_dashboard import MetricsAnalyzer
+E   ModuleNotFoundError: No module named 'src.metrics_dashboard'
+__________________ ERROR collecting test_sistema_completo.py __________________
+ImportError while importing test module 'C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_sistema_completo.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_sistema_completo.py:20: in <module>
+    from src.metrics_dashboard import MetricsAnalyzer
+E   ModuleNotFoundError: No module named 'src.metrics_dashboard'
+============================== warnings summary ===============================
+src\logging_config.py:38
+src\logging_config.py:38
+src\logging_config.py:38
+src\logging_config.py:38
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\src\logging_config.py:38: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.utcnow().isoformat() + "Z",
+
+src\config.py:26
+src\config.py:26
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\src\config.py:26: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class GeminiConfig(BaseSettings):
+
+src\config.py:53
+src\config.py:53
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\src\config.py:53: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class ChromaDBConfig(BaseSettings):
+
+src\config.py:94
+src\config.py:94
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\src\config.py:94: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class RAGConfig(BaseSettings):
+
+src\config.py:148
+src\config.py:148
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\src\config.py:148: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class PerformanceConfig(BaseSettings):
+
+src\config.py:247
+src\config.py:247
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\src\config.py:247: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class AppConfig(BaseSettings):
+
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\genai\types.py:43
+  C:\Users\ChristianRobecchi\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\genai\types.py:43: DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+    VersionedUnionType = Union[builtin_types.UnionType, _UnionGenericAlias]
+
+test_complete_system_final.py:23
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_complete_system_final.py:23: PytestCollectionWarning: cannot collect test class 'TestSuite' because it has a __init__ constructor (from: test_complete_system_final.py)
+    class TestSuite:
+
+test_fase13_14_integration.py:39
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_fase13_14_integration.py:39: PytestCollectionWarning: cannot collect test class 'TestProgressCallback' because it has a __init__ constructor (from: test_fase13_14_integration.py)
+    class TestProgressCallback:
+
+test_fase16_activation.py:28
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_fase16_activation.py:28: PytestCollectionWarning: cannot collect test class 'TestFASE16Activation' because it has a __init__ constructor (from: test_fase16_activation.py)
+    class TestFASE16Activation:
+
+test_fase5_fixes.py:33
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_fase5_fixes.py:33: PytestCollectionWarning: cannot collect test class 'TestFase5' because it has a __init__ constructor (from: test_fase5_fixes.py)
+    class TestFase5:
+
+test_fase6_fixes.py:27
+  C:\Users\ChristianRobecchi\Downloads\RAG LOCALE\test_fase6_fixes.py:27: PytestCollectionWarning: cannot collect test class 'TestFase6' because it has a __init__ constructor (from: test_fase6_fixes.py)
+    class TestFase6:
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR test_all_fases_integration.py - NameError: name 'get_logger' is not def...
+ERROR test_e2e_complete_flow.py
+ERROR test_fase10_metrics.py
+ERROR test_fase15_metrics_charts.py
+ERROR test_fase17_multimodal.py - NameError: name 'get_logger' is not defined
+ERROR test_fase18_longcontext.py - NameError: name 'get_logger' is not defined
+ERROR test_fase19_quality.py
+ERROR test_fase20_ux.py - NameError: name 'get_logger' is not defined
+ERROR test_performance_baseline.py
+ERROR test_sistema_completo.py
+!!!!!!!!!!!!!!!!!! Interrupted: 10 errors during collection !!!!!!!!!!!!!!!!!!!
+======================= 20 warnings, 10 errors in 4.77s =======================

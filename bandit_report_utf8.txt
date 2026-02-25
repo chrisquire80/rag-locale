@@ -1,0 +1,232 @@
+﻿Run started:2026-02-24 13:26:33.317546+00:00
+
+Test results:
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_calls.html#b311-random
+   Location: src/ab_test_framework.py:94:22
+93	        """Randomly route request to A or B based on split ratio"""
+94	        return 'A' if random.random() < self.split_ratio else 'B'
+95	
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: src/api.py:170:26
+169	    # Run on port 5000 to match frontend's expected default
+170	    uvicorn.run(app, host="0.0.0.0", port=5000)
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b324_hashlib.html
+   Location: src/cache_integration.py:123:20
+122	        """
+123	        cache_key = hashlib.md5(text.encode()).hexdigest()
+124	
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b324_hashlib.html
+   Location: src/cache_integration.py:140:24
+139	        try:
+140	            cache_key = hashlib.md5(text.encode()).hexdigest()
+141	            self.embedding_cache.set(cache_key, embedding)
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: src/document_ingestion.py:132:8
+131	        """Estrai testo da PDF usando subprocess isolato (anti-crash)"""
+132	        import subprocess
+133	        import json
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: src/document_ingestion.py:142:21
+141	            logger.info(f"ðŸš€ Avvio analisi sicura per: {file_path.name}")
+142	            result = subprocess.run(
+143	                [sys.executable, str(worker_script), str(file_path)],
+144	                capture_output=True,
+145	                text=True,
+146	                timeout=300  # Aumentato a 300s per PDF grandi + Gemini embedding (FIX FASE 5)
+147	            )
+148	            
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: src/hardware_optimization.py:129:12
+128	        try:
+129	            import subprocess
+130	            result = subprocess.run(
+
+--------------------------------------------------
+>> Issue: [B607:start_process_with_partial_path] Starting a process with a partial executable path
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b607_start_process_with_partial_path.html
+   Location: src/hardware_optimization.py:130:21
+129	            import subprocess
+130	            result = subprocess.run(
+131	                ["wmic", "computersystem", "get", "model"],
+132	                capture_output=True,
+133	                text=True,
+134	                timeout=5
+135	            )
+136	            return "ProBook" in result.stdout
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: src/hardware_optimization.py:130:21
+129	            import subprocess
+130	            result = subprocess.run(
+131	                ["wmic", "computersystem", "get", "model"],
+132	                capture_output=True,
+133	                text=True,
+134	                timeout=5
+135	            )
+136	            return "ProBook" in result.stdout
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_calls.html#b311-random
+   Location: src/multi_document_analysis.py:432:27
+431	        for _ in range(max_sample - len(sampled)):
+432	            sampled.append(random.choice(documents))
+433	
+
+--------------------------------------------------
+>> Issue: [B102:exec_used] Use of exec detected.
+   Severity: Medium   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b102_exec_used.html
+   Location: src/performance_optimizer.py:278:20
+277	                try:
+278	                    exec(f"import {module_path}")
+279	                    self.modules[module_name] = eval(module_path)
+
+--------------------------------------------------
+>> Issue: [B307:blacklist] Use of possibly insecure function - consider using safer ast.literal_eval.
+   Severity: Medium   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_calls.html#b307-eval
+   Location: src/performance_optimizer.py:279:48
+278	                    exec(f"import {module_path}")
+279	                    self.modules[module_name] = eval(module_path)
+280	                except ImportError as e:
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '128'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b105_hardcoded_password_string.html
+   Location: src/security_hardening.py:115:8
+114	        "email": 254,
+115	        "password": 128,
+116	        "username": 50,
+117	        "url": 2048,
+118	    }
+119	
+120	    @classmethod
+121	    def validate_query(cls, query: str, max_length: int = 5000) -> bool:
+122	        """Validate search query"""
+123	        if not query or not isinstance(query, str):
+
+--------------------------------------------------
+>> Issue: [B403:blacklist] Consider possible security implications associated with pickle module.
+   Severity: Low   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_imports.html#b403-import-pickle
+   Location: src/vector_store.py:6:0
+5	
+6	import pickle
+7	import numpy as np
+
+--------------------------------------------------
+>> Issue: [B403:blacklist] Consider possible security implications associated with pickle module.
+   Severity: Low   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_imports.html#b403-import-pickle
+   Location: src/vector_store.py:85:20
+84	                    # Security: Restrict pickle to safe classes only
+85	                    import pickle
+86	                    data = pickle.load(f)
+
+--------------------------------------------------
+>> Issue: [B301:blacklist] Pickle and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue.
+   Severity: Medium   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_calls.html#b301-pickle
+   Location: src/vector_store.py:86:27
+85	                    import pickle
+86	                    data = pickle.load(f)
+87	                    if not isinstance(data, dict) or "documents" not in data:
+
+--------------------------------------------------
+>> Issue: [B403:blacklist] Consider possible security implications associated with pickle module.
+   Severity: Low   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_imports.html#b403-import-pickle
+   Location: src/vector_store_sqlite.py:341:8
+340	    try:
+341	        import pickle
+342	
+
+--------------------------------------------------
+>> Issue: [B301:blacklist] Pickle and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue.
+   Severity: Medium   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/blacklists/blacklist_calls.html#b301-pickle
+   Location: src/vector_store_sqlite.py:346:19
+345	        with open(pickle_file, "rb") as f:
+346	            data = pickle.load(f)
+347	
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b324_hashlib.html
+   Location: src/vision_service.py:225:24
+224	            # Use MD5 hash of normalized query to keep key reasonable length
+225	            query_key = hashlib.md5(query.lower().encode()).hexdigest()[:8]
+226	            cache_key = f"relevance_{image_hash}_{query_key}"
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 21574
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 11
+		Medium: 5
+		High: 3
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 2
+		High: 17
+Files skipped (0):

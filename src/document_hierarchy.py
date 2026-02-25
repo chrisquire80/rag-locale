@@ -4,7 +4,7 @@ Organizes documents into hierarchical structures for efficient long-context retr
 """
 
 import re
-from typing import Optional
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 

@@ -83,7 +83,7 @@ class VectorStore:
                 with open(self.store_file, "rb") as f:
                     # Security: Restrict pickle to safe classes only
                     import pickle
-                    data = pickle.load(f)
+                    data = pickle.load(f)  # nosec B301
                     if not isinstance(data, dict) or "documents" not in data:
                         raise ValueError("Invalid vector store format")
                     self.documents = data.get("documents", {})

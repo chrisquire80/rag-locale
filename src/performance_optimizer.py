@@ -8,6 +8,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from functools import lru_cache, wraps
 from datetime import datetime, timedelta
 import threading
+import importlib
 
 from src.logging_config import get_logger
 
@@ -273,11 +274,10 @@ class LazyLoader:
         """
         with self.lock:
             if module_name not in self.modules:
-                logger.info(f"Lazy loading: {module_name}")
                 try:
-                    exec(f"import {module_path}")
-                    self.modules[module_name] = eval(module_path)
-                except ImportError as e:
+                    module = importlib.import_module(module_path)
+                    self.modules[module_name] = module
+                except (ImportError, AttributeError) as e:
                     logger.error(f"Failed to lazy load {module_name}: {e}")
                     return None
 

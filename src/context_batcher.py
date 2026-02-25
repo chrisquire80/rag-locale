@@ -4,7 +4,7 @@ Batches multiple documents and queries to maximize 1M token context usage
 Reduces API calls by 90-95% through intelligent batching
 """
 
-from typing import Optional
+from typing import Optional, List, Any, Dict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

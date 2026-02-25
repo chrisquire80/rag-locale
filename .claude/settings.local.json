@@ -79,7 +79,10 @@
       "Bash(wsl:*)",
       "Bash(python3:*)",
       "Bash(chmod:*)",
-      "Bash(bash \"./.claude/setup-automation.sh\")"
+      "Bash(bash \"./.claude/setup-automation.sh\")",
+      "Bash(\"/c/Users/ChristianRobecchi/Downloads/RAG LOCALE/SESSION_FINAL_SUMMARY.md\":*)",
+      "Bash(Get-Content \"C:\\\\Users\\\\CHRIST~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-ChristianRobecchi-Downloads-RAG-LOCALE\\\\tasks\\\\be55d92.output\" -Tail 30)",
+      "Bash(test:*)"
     ]
   }
 }

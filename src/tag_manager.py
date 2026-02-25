@@ -5,7 +5,7 @@ Tags are stored in chunk metadata for filtering and organization.
 """
 
 import re
-from typing import Optional
+from typing import List, Dict, Any, Optional
 from collections import defaultdict
 
 from src.logging_config import get_logger

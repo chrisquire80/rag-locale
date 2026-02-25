@@ -5,7 +5,7 @@ Handles batch uploads, validation, duplicate detection, and folder organization.
 
 import io
 import re
-from typing import Optional
+from typing import List, Any, Optional, Dict
 from pathlib import Path
 import time
 

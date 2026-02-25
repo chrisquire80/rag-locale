@@ -4,7 +4,7 @@ Generates proper citations and attribution for sources
 """
 
 import re
-from typing import Optional
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 

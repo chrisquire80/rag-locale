@@ -18,6 +18,7 @@ except ImportError:
 from src.citation_engine import CitationEngine, Citation
 from src.query_suggestions import QuerySuggestionEngine, QuerySuggestion
 from src.chat_memory import ConversationMemory, ConversationTurn
+from src.logging_config import get_logger
 
 logger = get_logger(__name__)
 

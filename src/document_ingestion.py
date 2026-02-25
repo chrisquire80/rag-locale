@@ -7,7 +7,8 @@ Utilizza RegEx-based chunking per preservare struttura
 import re
 import time
 from pathlib import Path
-from typing import Optional
+import logging
+from typing import Any, Optional, Dict, List
 from dataclasses import dataclass
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import os

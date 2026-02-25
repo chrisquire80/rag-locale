@@ -5,7 +5,7 @@ Provides clustering, related documents suggestions, and interactive visualizatio
 """
 
 import numpy as np
-from typing import Optional
+from typing import Any, Optional, Dict
 import json
 import os
 from datetime import datetime

@@ -222,7 +222,7 @@ If there are tables or structured data, preserve the structure."""
         if image_hash:
             # Create cache key that includes both image hash and query
             # Use MD5 hash of normalized query to keep key reasonable length
-            query_key = hashlib.md5(query.lower().encode()).hexdigest()[:8]
+            query_key = hashlib.sha256(query.lower().encode()).hexdigest()[:16]
             cache_key = f"relevance_{image_hash}_{query_key}"
             cached = self._cache.get_by_hash(cache_key)
             if cached is not None:

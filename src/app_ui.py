@@ -804,7 +804,7 @@ if engine:
                             )
 
                         # Add to history
-                        st.session_state.messages.append({"role": "assistant", "content": full_response + sources_md})
+                        st.session_state.messages.append({"role": "assistant", "content": full_response})
 
                     except TimeoutError as e:
                         error_msg = f"❌ Timeout durante la generazione della risposta (riprova, il sistema ritenta automaticamente): {e}"

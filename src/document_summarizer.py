@@ -6,7 +6,7 @@ Provides efficient caching and batch processing capabilities.
 
 import hashlib
 import json
-from typing import Optional
+from typing import List, Dict, Any, Optional
 from datetime import datetime
 import time
 

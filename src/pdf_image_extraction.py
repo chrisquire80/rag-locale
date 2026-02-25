@@ -5,10 +5,11 @@ Extracts images from PDF documents and manages image metadata
 
 import tempfile
 from pathlib import Path
-from typing import Optional
+import json
+from src.logging_config import get_logger
+from typing import Optional, Dict
 from dataclasses import dataclass, asdict
 from datetime import datetime
-import json
 
 try:
     from PIL import Image

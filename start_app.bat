@@ -18,6 +18,6 @@ echo.
 echo ================================================================================
 echo.
 
-streamlit run app_streamlit_real_docs.py
+python -m streamlit run app_streamlit_real_docs.py --server.port 8503
 
 pause

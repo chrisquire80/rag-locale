@@ -4,7 +4,7 @@ Calculates answer confidence based on source quality and relevance
 """
 
 import statistics
-from typing import Optional
+from typing import Optional, List
 
 from src.logging_config import get_logger
 

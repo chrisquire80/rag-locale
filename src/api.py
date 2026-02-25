@@ -167,4 +167,5 @@ async def upload_document(file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     # Run on port 5000 to match frontend's expected default
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    # Run on localhost for security; use "0.0.0.0" only when deploying in Docker
+    uvicorn.run(app, host="127.0.0.1", port=5000)

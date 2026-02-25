@@ -5,7 +5,7 @@ Implements semantic-based reranking without requiring additional embedding calls
 """
 
 import numpy as np
-from typing import Optional
+from typing import Optional, Dict
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 

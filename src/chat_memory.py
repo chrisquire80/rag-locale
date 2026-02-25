@@ -4,7 +4,7 @@ Manages conversation context and history
 """
 
 import json
-from typing import Any, Optional
+from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
 from collections import deque

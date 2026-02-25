@@ -4,7 +4,7 @@ Intelligent retrieval optimization for 1M token context window
 Selects and orders documents for maximum relevance within token budget
 """
 
-from typing import Optional
+from typing import List, Optional, Any, Dict
 from dataclasses import dataclass
 from enum import Enum
 
