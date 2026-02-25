@@ -6,44 +6,44 @@
         "ncalls": "13/11",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 1.853,
-        "percall_cumtime": 0.168,
+        "cumtime": 1.8,
+        "percall_cumtime": 0.164,
         "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\rate_limiter.py:317(wrapper)"
+      },
+      {
+        "ncalls": "1",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 1.699,
+        "percall_cumtime": 1.699,
+        "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\vector_store.py:672(get_vector_store)"
+      },
+      {
+        "ncalls": "1",
+        "tottime": 0.0,
+        "percall_tottime": 0.0,
+        "cumtime": 1.699,
+        "percall_cumtime": 1.699,
+        "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\vector_store.py:36(__init__)"
       },
       {
         "ncalls": "2",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 1.698,
-        "percall_cumtime": 0.849,
+        "cumtime": 1.574,
+        "percall_cumtime": 0.787,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\models.py:4332(embed_content)"
       },
       {
         "ncalls": "2",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 1.638,
-        "percall_cumtime": 0.819,
+        "cumtime": 1.484,
+        "percall_cumtime": 0.742,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\_api_client.py:1386(request)"
-      },
-      {
-        "ncalls": "2",
-        "tottime": 0.0,
-        "percall_tottime": 0.0,
-        "cumtime": 1.637,
-        "percall_cumtime": 0.819,
-        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\_api_client.py:1214(_request)"
-      },
-      {
-        "ncalls": "2",
-        "tottime": 0.0,
-        "percall_tottime": 0.0,
-        "cumtime": 1.637,
-        "percall_cumtime": 0.819,
-        "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\tenacity\\__init__.py:460(__call__)"
       }
     ],
-    "total_calls": 176985,
+    "total_calls": 181553,
     "total_time": 0.0
   },
   {
@@ -53,44 +53,44 @@
         "ncalls": "9",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 3.576,
-        "percall_cumtime": 0.397,
+        "cumtime": 3.307,
+        "percall_cumtime": 0.367,
         "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\rate_limiter.py:317(wrapper)"
       },
       {
         "ncalls": "9",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 3.575,
-        "percall_cumtime": 0.397,
+        "cumtime": 3.307,
+        "percall_cumtime": 0.367,
         "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\llm_service.py:43(get_embedding)"
       },
       {
         "ncalls": "9",
-        "tottime": 0.0,
+        "tottime": 0.001,
         "percall_tottime": 0.0,
-        "cumtime": 3.575,
-        "percall_cumtime": 0.397,
+        "cumtime": 3.306,
+        "percall_cumtime": 0.367,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\models.py:4332(embed_content)"
       },
       {
         "ncalls": "9",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 3.547,
-        "percall_cumtime": 0.394,
+        "cumtime": 3.278,
+        "percall_cumtime": 0.364,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\_api_client.py:1386(request)"
       },
       {
         "ncalls": "9",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 3.545,
-        "percall_cumtime": 0.394,
+        "cumtime": 3.276,
+        "percall_cumtime": 0.364,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\google\\genai\\_api_client.py:1214(_request)"
       }
     ],
-    "total_calls": 82925,
+    "total_calls": 82875,
     "total_time": 0.0
   },
   {
@@ -98,17 +98,17 @@
     "top_functions": [
       {
         "ncalls": "20",
-        "tottime": 0.0,
+        "tottime": 0.001,
         "percall_tottime": 0.0,
-        "cumtime": 0.145,
-        "percall_cumtime": 0.007,
+        "cumtime": 0.122,
+        "percall_cumtime": 0.006,
         "function": "C:\\Users\\ChristianRobecchi\\Downloads\\RAG LOCALE\\src\\memory_service.py:105(save_interaction)"
       },
       {
         "ncalls": "20",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 0.008,
+        "cumtime": 0.009,
         "percall_cumtime": 0.0,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py:1510(info)"
       },
@@ -116,7 +116,7 @@
         "ncalls": "20",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 0.008,
+        "cumtime": 0.009,
         "percall_cumtime": 0.0,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py:1641(_log)"
       },
@@ -124,7 +124,7 @@
         "ncalls": "20",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 0.005,
+        "cumtime": 0.006,
         "percall_cumtime": 0.0,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py:1667(handle)"
       },
@@ -132,7 +132,7 @@
         "ncalls": "20",
         "tottime": 0.0,
         "percall_tottime": 0.0,
-        "cumtime": 0.005,
+        "cumtime": 0.006,
         "percall_cumtime": 0.0,
         "function": "C:\\Users\\ChristianRobecchi\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py:1721(callHandlers)"
       }

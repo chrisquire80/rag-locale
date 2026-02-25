@@ -643,23 +643,20 @@ if engine:
                         # Simulate streaming for UX (since synchronous)
                         full_response = response.answer
 
-                        # ===== PHASE 11.1: Enhanced Response Visualization =====
-                        # Extract confidence metrics
-                        confidence_score = getattr(response, 'confidence_score', 0.0)
+                        # ===== PHASE 11.1: Enhanced Response Visualization with Phase 2 Confidence Metrics =====
+                        # Extract confidence metrics (Phase 2 enhanced version)
+                        confidence_score = getattr(response, 'confidence_score', 0.5)
+                        confidence_level = getattr(response, 'confidence_level', 'Medium')
+                        confidence_emoji = getattr(response, 'confidence_emoji', '🟡')
+                        confidence_explanation = getattr(response, 'confidence_explanation', '')
 
-                        # Calculate confidence level and emoji
-                        if confidence_score >= 75:
-                            confidence_level = "High"
-                            emoji = "🟢"
-                            color = "green"
-                        elif confidence_score >= 50:
-                            confidence_level = "Medium"
-                            emoji = "🟡"
-                            color = "orange"
-                        else:
-                            confidence_level = "Low"
-                            emoji = "🔴"
-                            color = "red"
+                        # Map confidence level to color for visual feedback
+                        color_map = {
+                            "High": "green",
+                            "Medium": "orange",
+                            "Low": "red"
+                        }
+                        color = color_map.get(confidence_level, "orange")
 
                         # ==== CARD-BASED LAYOUT WITH VISUAL HIERARCHY ====
                         with st.container(border=True):
@@ -670,7 +667,8 @@ if engine:
                                 st.markdown(f"### 📝 Risposta")
 
                             with col2:
-                                st.markdown(f"**{emoji} {confidence_level} Confidence** ({confidence_score:.0f}%)")
+                                # Display Phase 2 confidence metrics with emoji and level
+                                st.markdown(f"**{confidence_emoji} {confidence_level} Confidence** ({confidence_score:.0%})")
 
                             with col3:
                                 # Show latency metadata
@@ -679,6 +677,10 @@ if engine:
                                 st.caption(f"⏱️ {search_ms:.0f}ms search + {llm_ms:.0f}ms LLM")
 
                             st.divider()
+
+                            # Display confidence explanation (Phase 2 feature)
+                            if confidence_explanation:
+                                st.info(f"💬 {confidence_explanation}")
 
                             # ==== EMBED CITATIONS IN ANSWER TEXT ====
                             # Create citation markers and map to sources
@@ -712,9 +714,9 @@ if engine:
                             # Display answer with embedded citations
                             st.markdown(answer_with_citations)
 
-                            # Show confidence explanation
-                            if confidence_score < 50:
-                                st.warning(f"⚠️ **Low confidence** ({confidence_score:.0f}%) - Please verify with sources below")
+                            # Show confidence warning if Low (Phase 2 feature)
+                            if confidence_level == "Low":
+                                st.warning(f"⚠️ **Low confidence ({confidence_score:.0%})** - Please verify with sources below")
 
                         # ==== SOURCES CARD WITH PREVIEWS ====
                         if ranked_sources:
